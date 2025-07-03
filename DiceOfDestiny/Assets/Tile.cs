@@ -2,18 +2,31 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    private string tileColor;
-    private string obstacle;
+    private TileColor tileColor;
+    private ObstacleType obstacle;
 
-    public string TileColor
+    SpriteRenderer sr;
+
+
+    public TileColor TileColor
     {
         get => tileColor;
         set => tileColor = value;
     }
 
-    public string Obstacle
+    public ObstacleType Obstacle
     {
         get => obstacle;
         set => obstacle = value;
+    }
+
+    private void Awake()
+    {
+        sr = GetComponent<SpriteRenderer>();
+    }
+
+    public void SetTileColor(Color color)
+    {
+        sr.color = color;
     }
 }
