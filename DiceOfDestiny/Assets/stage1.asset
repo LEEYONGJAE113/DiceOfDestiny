@@ -20,5 +20,11 @@ MonoBehaviour:
   yellowWeight: 1
   purpleWeight: 1
   orangeWeight: 1
-  availableObstacle: 0000000001000000020000000500000009000000
-  obstacleWeight: 0.2
+  availableObstacle:
+  - type: 0
+    weight: 3
+  - type: 1
+    weight: 15
+  - type: 2
+    weight: 14
+  obstacleDensity: 0.2

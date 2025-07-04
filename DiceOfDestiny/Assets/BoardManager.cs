@@ -47,6 +47,7 @@ public class BoardManager : MonoBehaviour
     };
 
     List<int> colorIndices = new List<int>();
+    List<ObstacleType> obstacleIndices = new List<ObstacleType>();
 
 
     void Start()
@@ -87,7 +88,7 @@ public class BoardManager : MonoBehaviour
                 colorIndices.Add(color);
         }
 
-        int[] weights = new int[]
+        int[] colorWeights = new int[]
         {
         profile.redWeight * profile.weightPower,
         profile.greenWeight * profile.weightPower,
@@ -97,11 +98,11 @@ public class BoardManager : MonoBehaviour
         profile.orangeWeight * profile.weightPower
         };
 
-        int[] cumulativeWeights = new int[weights.Length];
-        cumulativeWeights[0] = weights[0];
+        int[] cumulativeWeights = new int[colorWeights.Length];
+        cumulativeWeights[0] = colorWeights[0];
 
-        for (int i = 1; i < weights.Length; i++)
-            cumulativeWeights[i] = cumulativeWeights[i - 1] + weights[i];
+        for (int i = 1; i < colorWeights.Length; i++)
+            cumulativeWeights[i] = cumulativeWeights[i - 1] + colorWeights[i];
 
         int total = cumulativeWeights[cumulativeWeights.Length - 1];
 
@@ -157,26 +158,52 @@ public class BoardManager : MonoBehaviour
             }
         }
 
+
         // 장애물 배치 부분
+        obstacleIndices = new List<ObstacleType>();
+        int tileCount = boardSize * boardSize;
+        int obstacleCount = Mathf.RoundToInt(tileCount * profile.obstacleDensity);
+        for (int i = 0; i < tileCount - obstacleCount; i++) // 장애물이 없는 타일 추가
+        {
+            obstacleIndices.Add(ObstacleType.None);
+        }
+
+        List<ObstacleType> availableObstacleWeight = new List<ObstacleType>();
+        for (int i = 0; i < profile.availableObstacle.Count; i++) // 장애물 타입을 인덱스에 추가
+        {
+            for(int j = 0; j < profile.availableObstacle[i].weight * 10; j++)
+            {
+                availableObstacleWeight.Add(profile.availableObstacle[i].type);
+            }
+        }
+
+        for (int i = 0; i < obstacleCount; i++) // 장애물이 있는 타일
+        {
+            int randIndex = Random.Range(0, availableObstacleWeight.Count);
+            obstacleIndices.Add(availableObstacleWeight[randIndex]);
+        }
+
+        for (int i = obstacleIndices.Count - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i + 1);
+            (obstacleIndices[i], obstacleIndices[j]) = (obstacleIndices[j], obstacleIndices[i]);
+        }
+
+        idx = 0;    
         for (int x = 0; x < boardSize; x++)
         {
             for (int y = 0; y < boardSize; y++)
             {
-                if (Random.Range(0f, 1f) < profile.obstacleWeight)
+                Board[x, y].Obstacle = obstacleIndices[idx];
+                // 장애물 생성
+                if (obstacleIndices[idx] != ObstacleType.None)
                 {
-                    int obstacleIndex = Random.Range(0, profile.availableObstacle.Count);
-                    Board[x, y].Obstacle = profile.availableObstacle[obstacleIndex];
-                    // 장애물 생성
-                    GameObject Obstacle = Instantiate(ObstacleManager.Instance.obstaclePrefabs[profile.availableObstacle[obstacleIndex]],
+                    GameObject Obstacle = Instantiate(ObstacleManager.Instance.obstaclePrefabs[obstacleIndices[idx]],
                         new Vector3(boardTransform.position.x + x, boardTransform.position.y + y, 0), Quaternion.identity, boardTransform);
                     ObstacleManager.Instance.SetObstacle(Obstacle);
                 }
-                else
-                {
-                    Board[x, y].Obstacle = ObstacleType.None;
-                }
-            }
+                idx++;
+            }            
         }
-
     }
 }

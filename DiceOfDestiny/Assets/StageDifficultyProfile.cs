@@ -16,6 +16,13 @@ public class StageDifficultyProfile : ScriptableObject
     [Range(1, 20)] public int orangeWeight = 0;
 
     [Header("Obstacle Settings")]
-    public List<ObstacleType> availableObstacle;
-    [Range(0,1)] public float obstacleWeight;
+    public List<ObstacleWeight> availableObstacle;
+    [Range(0,1)] public float obstacleDensity = 0.2f;
+}
+
+[System.Serializable]
+public class ObstacleWeight
+{
+    public ObstacleType type;
+    [Range(1, 20)] public int weight;
 }
