@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class SettingUIController : MonoBehaviour
@@ -21,6 +23,14 @@ public class SettingUIController : MonoBehaviour
     [SerializeField] private Dropdown fpsDropdown;
     [SerializeField] private Toggle vsyncToggle;
 
+    [Header("Audio Settings")]
+    [SerializeField] private AudioMixer audioMixer;
+    [SerializeField] private Slider masterSlider;
+    [SerializeField] private Slider bgmSlider;
+    [SerializeField] private Slider sfxSlider;
+    [SerializeField] private Toggle muteToggle;
+
+
 
     private Resolution[] resolutions;
 
@@ -39,6 +49,8 @@ public class SettingUIController : MonoBehaviour
 
         InitResolutionOptions();
         InitFPSDropdown();
+        InitAudioSettings();
+
         fullscreenToggle.onValueChanged.AddListener(SetFullScreen);
         fpsDropdown.onValueChanged.AddListener(SetFPSLimit);
         vsyncToggle.onValueChanged.AddListener(SetVSync);
@@ -50,6 +62,7 @@ public class SettingUIController : MonoBehaviour
         ShowPanel(displayPanel); // 디스플레이 탭 기본 활성화
         LoadFPSLimit(); // FPS 제한 로드
     }
+      
 
     private void Update()
     {
@@ -73,6 +86,8 @@ public class SettingUIController : MonoBehaviour
         audioPanel.SetActive(panelToShow == audioPanel);
         controlsPanel.SetActive(panelToShow == controlsPanel);
     }
+
+    #region Display Settings
 
     private void InitResolutionOptions()
     {
@@ -122,7 +137,6 @@ public class SettingUIController : MonoBehaviour
             Screen.SetResolution(w, h, Screen.fullScreen);
         });
     }
-
 
     private void ChangeResolution(int index)
     {
@@ -197,7 +211,7 @@ public class SettingUIController : MonoBehaviour
 
         // 드롭다운 항목 텍스트 생성
         List<string> labels = availableFpsList.Select(fps =>
-            fps == -1 ? "Unlimited" : $"{fps} FPS").ToList();
+            fps == -1 ? "무제한" : $"{fps} FPS").ToList();
 
         fpsDropdown.ClearOptions();
         fpsDropdown.AddOptions(labels);
@@ -215,4 +229,86 @@ public class SettingUIController : MonoBehaviour
         SetFPSLimit(savedIndex);
     }
 
+    #endregion
+
+
+    #region Audio Settings
+    private void InitAudioSettings()
+    {
+        masterSlider.onValueChanged.AddListener(value =>
+        {
+            AudioManager.Instance.SetVolume("MasterVolume", value);
+            PlayerPrefs.SetFloat("MasterVolume", value);
+        });
+
+        bgmSlider.onValueChanged.AddListener(value =>
+        {
+            AudioManager.Instance.SetVolume("BGMVolume", value);
+            PlayerPrefs.SetFloat("BGMVolume", value);
+        });
+
+        sfxSlider.onValueChanged.AddListener(value =>
+        {
+            AudioManager.Instance.SetVolume("SFXVolume", value);
+            PlayerPrefs.SetFloat("SFXVolume", value);
+        });
+
+        // 불러오기
+        float master = PlayerPrefs.GetFloat("MasterVolume", 1f);
+        float bgm = PlayerPrefs.GetFloat("BGMVolume", 1f);
+        float sfx = PlayerPrefs.GetFloat("SFXVolume", 1f);
+
+        masterSlider.value = master;
+        bgmSlider.value = bgm;
+        sfxSlider.value = sfx;
+
+        AudioManager.Instance.SetVolume("MasterVolume", master);
+        AudioManager.Instance.SetVolume("BGMVolume", bgm);
+        AudioManager.Instance.SetVolume("SFXVolume", sfx);
+
+        bool isMuted = PlayerPrefs.GetInt("Muted", 0) == 1;
+        muteToggle.isOn = isMuted;
+        ApplyMuteState(isMuted);
+
+        muteToggle.onValueChanged.AddListener(OnMuteToggled);
+    }
+
+    private void SetMasterVolume(float value)
+    {
+        audioMixer.SetFloat("MasterVolume", ToDecibel(value));
+        PlayerPrefs.SetFloat("MasterVolume", value);
+    }
+
+    private void SetBGMVolume(float value)
+    {
+        audioMixer.SetFloat("BGMVolume", ToDecibel(value));
+        PlayerPrefs.SetFloat("BGMVolume", value);
+    }
+
+    private void SetSFXVolume(float value)
+    {
+        audioMixer.SetFloat("SFXVolume", ToDecibel(value));
+        PlayerPrefs.SetFloat("SFXVolume", value);
+    }
+
+    private void OnMuteToggled(bool isMuted)
+    {
+        PlayerPrefs.SetInt("Muted", isMuted ? 1 : 0);
+        ApplyMuteState(isMuted);
+    }
+
+    private void ApplyMuteState(bool isMuted)
+    {
+        if (AudioManager.Instance == null) return;
+
+        AudioManager.Instance.SetMasterMute(isMuted);
+    }
+
+
+    private float ToDecibel(float linear)
+    {
+        return Mathf.Approximately(linear, 0f) ? -80f : Mathf.Log10(linear) * 20f;
+    }
+
+    #endregion
 }
