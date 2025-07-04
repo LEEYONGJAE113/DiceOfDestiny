@@ -29,9 +29,9 @@ public class MainUIController : MonoBehaviour
 
     private void OnNewGameClicked()
     {
-        PlayerPrefs.SetString("LastScene", "GameScene");
+        PlayerPrefs.SetString("LastScene", "Doho_GameScene");
         PlayerPrefs.SetInt("SaveExists", 1);
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene("Doho_GameScene");
     }
     private void OnSettingsClicked()
     {
