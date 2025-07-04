@@ -1,8 +1,17 @@
+using NUnit.Framework;
 using UnityEngine;
 
 public class StageManger : MonoBehaviour
 {
     public static StageManger Instance { get; private set; }
+
+    [Header("Stage Settings")]
+    [SerializeField] private int stageIndex = 0;
+    [SerializeField] private StageDifficultyProfile[] stageProfiles;
+
+    StageDifficultyProfile currentProfile;
+
+
     private void Awake()
     {
         if (Instance == null)
@@ -16,7 +25,13 @@ public class StageManger : MonoBehaviour
         }
     }
 
-    // 스테이지 상세
-    int[] colcorWieight = new int[6]; 
+    private void Start()
+    {
+        currentProfile = stageProfiles[stageIndex];
+    }
 
+    public void StartStage()
+    {
+        BoardManager.Instance.SetBoard(currentProfile);
+    }
 }

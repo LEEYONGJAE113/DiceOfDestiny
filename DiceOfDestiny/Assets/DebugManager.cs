@@ -4,15 +4,18 @@ using UnityEngine.UI;
 public class DebugManager : MonoBehaviour
 {
     [Header("Stage Debug Settings")]
-    [SerializeField] private Button ReColorBoardButton;
+    [SerializeField] private Button reColorBoardButton;
+    [SerializeField] private Button regenerateButton;
+    [SerializeField] private Button nextStepButton;
+
 
     private void Start()
     {
-        ReColorBoardButton.onClick.AddListener(onClickReColorBoardButton);
+        reColorBoardButton.onClick.AddListener(onClickReColorBoardButton);
     }
 
     public void onClickReColorBoardButton()
     {
-        BoardManager.Instance.SetBoard();
+        StageManger.Instance.StartStage();
     }
 }
