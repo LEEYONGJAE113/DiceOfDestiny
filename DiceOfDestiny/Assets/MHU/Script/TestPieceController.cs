@@ -15,12 +15,21 @@ public class TestPieceController : MonoBehaviour
     {
         gridPosition = new Vector2Int(0, 0);
         UpdateWorldPosition();
-        PieceManager.Instance.UpdateAllFacesVisual(); // 초기 시각적 업데이트
+        if (PieceManager.Instance != null)
+        {
+            PieceManager.Instance.UpdateAllFacesVisual(); // 초기 시각적 업데이트
+        }
+        else
+        {
+            Debug.LogError("PieceManager.Instance is null in Start!");
+        }
     }
 
     void Update()
     {
         if (Time.time - lastMoveTime < moveCooldown)
+            return;
+        if (SkillManager.Instance.IsSkillActive())
             return;
 
         Vector2Int moveDirection = Vector2Int.zero;
@@ -39,11 +48,40 @@ public class TestPieceController : MonoBehaviour
             if (newPosition.x >= 0 && newPosition.x < boardSize &&
                 newPosition.y >= 0 && newPosition.y < boardSize)
             {
+                if (PieceManager.Instance == null)
+                {
+                    Debug.LogError("PieceManager.Instance is null!");
+                    return;
+                }
+
+                Piece piece = PieceManager.Instance.GetPiece();
+                if (piece == null)
+                {
+                    Debug.LogError("Piece is null!");
+                    return;
+                }
+
                 gridPosition = newPosition;
-                PieceManager.Instance.GetPiece().UpdateTopFace(moveDirection); // 윗면 업데이트
+                piece.UpdateTopFace(moveDirection); // 윗면 업데이트
                 UpdateWorldPosition();
                 PieceManager.Instance.UpdateAllFacesVisual(); // 시각적 업데이트
+
+                // 스킬 발동 확인
+                if (SkillManager.Instance != null)
+                {
+                    Face topFace = piece.GetFace(piece.GetTopFaceIndex());
+                    SkillManager.Instance.TryActivateSkill(gridPosition, topFace);
+                }
+                else
+                {
+                    Debug.LogError("SkillManager.Instance is null!");
+                }
+
                 lastMoveTime = Time.time;
+            }
+            else
+            {
+                Debug.LogWarning($"Invalid move to position: {newPosition}");
             }
         }
     }

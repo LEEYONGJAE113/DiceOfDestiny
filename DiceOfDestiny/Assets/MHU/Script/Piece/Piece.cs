@@ -11,24 +11,40 @@ public struct Face
 public class Piece : MonoBehaviour
 {
     [SerializeField] private Face[] faces = new Face[6]; // 6개 면 데이터
-    [SerializeField] private int topFaceIndex = 2; // 현재 윗면 인덱스 (기본: 2)
+    private readonly int topFaceIndex = 2; // 현재 윗면 인덱스 (고정: 2)
 
     // 전개도 데이터 (십자형: 0:바닥, 1:앞, 2:위, 3:뒤, 4:왼쪽, 5:오른쪽)
-    private readonly int[] upTransition = new int[] { 1, 2, 3, 0, 4, 5 }; // 위로 이동: 0→1, 1→2, 2→3, 3→0
-    private readonly int[] downTransition = new int[] { 3, 0, 1, 2, 4, 5 }; // 아래로 이동: 0→3, 1→0, 2→1, 3→2
-    private readonly int[] leftTransition = new int[] { 4, 1, 5, 3, 2, 0 }; // 왼쪽으로 이동: 0→4, 2→5, 4→2, 5→0
-    private readonly int[] rightTransition = new int[] { 5, 1, 4, 3, 0, 2 }; // 오른쪽으로 이동: 0→5, 2→4, 4→0, 5→2
+    private readonly int[] upTransition = new int[] { 1, 2, 3, 0, 4, 5 }; // 위로 이동
+    private readonly int[] downTransition = new int[] { 3, 0, 1, 2, 4, 5 }; // 아래로 이동
+    private readonly int[] leftTransition = new int[] { 4, 1, 5, 3, 2, 0 }; // 왼쪽으로 이동
+    private readonly int[] rightTransition = new int[] { 5, 1, 4, 3, 0, 2 }; // 오른쪽으로 이동
 
-    public Piece()
+    void Awake()
     {
-        faces = new Face[6];
-        topFaceIndex = 2;
+        if (faces == null || faces.Length != 6)
+        {
+            faces = new Face[6];
+            Debug.LogWarning("Faces array initialized.");
+        }
+
+        for (int i = 0; i < faces.Length; i++)
+        {
+            if (faces[i].classData == null || faces[i].colorData == null)
+            {
+                faces[i].classData = new ClassData();
+                faces[i].colorData = new ColorData();
+                Debug.LogWarning($"Face {i} initialized with default values.");
+            }
+        }
+
+        
     }
 
     public Face GetFace(int index)
     {
         if (index >= 0 && index < 6)
             return faces[index];
+        Debug.LogError($"Invalid face index: {index}");
         return default;
     }
 
@@ -39,6 +55,10 @@ public class Piece : MonoBehaviour
             faces[index].classData = classData;
             faces[index].colorData = colorData;
         }
+        else
+        {
+            Debug.LogError($"Invalid face index for SetFace: {index}");
+        }
     }
 
     public int GetTopFaceIndex()
@@ -48,13 +68,46 @@ public class Piece : MonoBehaviour
 
     public void UpdateTopFace(Vector2Int direction)
     {
+        Face[] newFaces = new Face[6];
+
+        // 이동 방향에 따라 faces 배열 재배치
         if (direction == Vector2Int.up)
-            topFaceIndex = upTransition[topFaceIndex];
+        {
+            for (int i = 0; i < 6; i++)
+                newFaces[i] = faces[upTransition[i]];
+            
+        }
         else if (direction == Vector2Int.down)
-            topFaceIndex = downTransition[topFaceIndex];
+        {
+            for (int i = 0; i < 6; i++)
+                newFaces[i] = faces[downTransition[i]];
+            
+        }
         else if (direction == Vector2Int.left)
-            topFaceIndex = leftTransition[topFaceIndex];
+        {
+            for (int i = 0; i < 6; i++)
+                newFaces[i] = faces[leftTransition[i]];
+            
+        }
         else if (direction == Vector2Int.right)
-            topFaceIndex = rightTransition[topFaceIndex];
+        {
+            for (int i = 0; i < 6; i++)
+                newFaces[i] = faces[rightTransition[i]];
+            
+        }
+        else
+        {
+            Debug.LogWarning($"Invalid move direction: {direction}");
+            return;
+        }
+
+        // faces 배열 업데이트
+        faces = newFaces;
+
+        // 디버깅: 회전 후 각 면의 상태 출력
+        //for (int i = 0; i < 6; i++)
+        //{
+        //    Debug.Log($"Face {i}: ClassData={faces[i].classData}, ColorData={faces[i].colorData}");
+        //}
     }
 }

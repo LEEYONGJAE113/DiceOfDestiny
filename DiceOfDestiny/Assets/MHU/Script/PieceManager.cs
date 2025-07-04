@@ -50,13 +50,13 @@ public class PieceManager : MonoBehaviour
         }
     }
 
-    //public void ChangeFaceColor(int faceIndex, ColorData newColorData)
-    //{
-    //    if (piece != null)
-    //    {
-    //        Face face = piece.GetFace(faceIndex);
-    //        piece.SetFace(faceIndex, face.classData, newColorData);
-    //        UpdateAllFacesVisual();
-    //    }
-    //}
+    public void ChangeFaceColor(int faceIndex, ColorData newColorData)
+    {
+        if (piece != null)
+        {
+            Face face = piece.GetFace(faceIndex);
+            piece.SetFace(faceIndex, face.classData, newColorData);
+            UpdateAllFacesVisual();
+        }
+    }
 }
