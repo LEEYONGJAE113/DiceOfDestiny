@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af88d6d9c3747b44a898d965c4fa54b5, type: 3}
   m_Name: stage1
   m_EditorClassIdentifier: 
-  minimumColorEnsure: 14
+  minimumColorEnsure: 18
   weightPower: 10
-  redWeight: 18
+  redWeight: 1
   greenWeight: 1
   blueWeight: 1
   yellowWeight: 1

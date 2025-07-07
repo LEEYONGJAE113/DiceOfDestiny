@@ -198,12 +198,56 @@ public class BoardManager : MonoBehaviour
                 // 장애물 생성
                 if (obstacleIndices[idx] != ObstacleType.None)
                 {
-                    GameObject Obstacle = Instantiate(ObstacleManager.Instance.obstaclePrefabs[obstacleIndices[idx]],
+                    GameObject obstacle = Instantiate(ObstacleManager.Instance.obstaclePrefabs[obstacleIndices[idx]],
                         new Vector3(boardTransform.position.x + x, boardTransform.position.y + y, 0), Quaternion.identity, boardTransform);
-                    ObstacleManager.Instance.SetObstacle(Obstacle);
+                    obstacle.GetComponent<Obstacle>().obstaclePosition = new Vector2Int(x, y);
+                    ObstacleManager.Instance.SetObstacle(obstacle);
                 }
                 idx++;
             }            
         }
+    }
+
+
+
+    public Obstacle ReturnObstacleByPosition(Vector2Int position)
+    {
+        if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
+        {
+            Debug.LogError("Position out of bounds");
+            return null;
+        }
+        Tile tile = Board[position.x, position.y];
+        if (tile.Obstacle == ObstacleType.None)
+        {
+            return null;
+        }
+        foreach (GameObject obstacle in ObstacleManager.Instance.currentObstacles)
+        {
+            if (obstacle.GetComponent<Obstacle>().obstaclePosition == position)
+            {
+                return obstacle.GetComponent<Obstacle>();
+            }
+        }
+        return null;
+    }
+
+    public bool IsEmptyTile(Vector2Int position)
+    {
+        if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
+        {
+            // Debug.LogError("Position out of bounds");
+            return false;
+        }
+        return Board[position.x, position.y].Obstacle == ObstacleType.None;
+    }
+
+    public void MoveObstacle(Obstacle obstacle, Vector2Int nextPos)
+    {
+        Vector2Int currentPos = obstacle.obstaclePosition;
+        Board[currentPos.x, currentPos.y].Obstacle = ObstacleType.None; // 현재 타일의 장애물 제거
+        Board[nextPos.x, nextPos.y].Obstacle = obstacle.obstacleType; // 다음 타일에 장애물 설정
+        obstacle.obstaclePosition = nextPos; // 장애물의 위치 업데이트
+        obstacle.transform.position = new Vector3(boardTransform.position.x + nextPos.x, boardTransform.position.y + nextPos.y, 0); // 장애물 위치 이동
     }
 }

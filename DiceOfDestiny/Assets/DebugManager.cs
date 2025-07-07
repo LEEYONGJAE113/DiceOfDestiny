@@ -12,10 +12,16 @@ public class DebugManager : MonoBehaviour
     private void Start()
     {
         reColorBoardButton.onClick.AddListener(onClickReColorBoardButton);
+        nextStepButton.onClick.AddListener(onClickNextStepButton);
     }
 
     public void onClickReColorBoardButton()
     {
         StageManger.Instance.StartStage();
+    }
+
+    public void onClickNextStepButton()
+    {
+        ObstacleManager.Instance.UpdateObstacleStep();
     }
 }

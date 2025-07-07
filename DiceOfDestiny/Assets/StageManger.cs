@@ -32,6 +32,7 @@ public class StageManger : MonoBehaviour
 
     public void StartStage()
     {
+        ObstacleManager.Instance.RemoveAllObstacle();
         BoardManager.Instance.SetBoard(currentProfile);
     }
 }

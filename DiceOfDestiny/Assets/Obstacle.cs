@@ -26,9 +26,8 @@ public enum NextStep
 
 public class Obstacle : MonoBehaviour
 {
-    [SerializeField] private ObstacleType obstacleType;
+    public ObstacleType obstacleType;
 
-    private NextStep nextStep;
-
-
+    public NextStep nextStep = NextStep.None;
+    public Vector2Int obstaclePosition;
 }
