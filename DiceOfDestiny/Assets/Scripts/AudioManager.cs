@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.EventSystems;
 
-public class AudioManager : MonoBehaviour
+public class AudioManager : Singletone<AudioManager>
 {
-    public static AudioManager Instance { get; private set; }
+    // public static AudioManager Instance { get; private set; }
 
     [Header("Audio Sources")]
     [SerializeField] private AudioSource bgmSource;
@@ -29,14 +29,14 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        // if (Instance != null)
+        // {
+        //     Destroy(gameObject);
+        //     return;
+        // }
 
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+        // Instance = this;
+        // DontDestroyOnLoad(gameObject);
 
         bgmDict = bgmClips.ToDictionary(c => c.name, c => c);
         sfxDict = sfxClips.ToDictionary(c => c.name, c => c);

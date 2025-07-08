@@ -5,9 +5,9 @@ using UnityEngine.Rendering;
 [System.Serializable]
 
 
-public class SkillManager : MonoBehaviour
+public class SkillManager : Singletone<SkillManager>
 {
-    public static SkillManager Instance { get; private set; }
+    // public static SkillManager Instance { get; private set; }
     private bool isSkillActive; // 스킬 이펙트 중 움직임 금지 하기 위한 플래그
 
     public bool IsSkillActive()
@@ -15,18 +15,18 @@ public class SkillManager : MonoBehaviour
         return isSkillActive;
     }
 
-    void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+    // void Awake()
+    // {
+    //     if (Instance == null)
+    //     {
+    //         Instance = this;
+    //         DontDestroyOnLoad(gameObject);
+    //     }
+    //     else
+    //     {
+    //         Destroy(gameObject);
+    //     }
+    // }
 
     public void TryActivateSkill(Vector2Int position, Face topFace)
     {
