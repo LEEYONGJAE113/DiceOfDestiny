@@ -5,9 +5,9 @@ using UnityEngine.Rendering;
 [System.Serializable]
 
 
-public class SkillManager : MonoBehaviour
+public class SkillManager : Singletone<SkillManager>
 {
-    public static SkillManager Instance { get; private set; }
+    // public static SkillManager Instance { get; private set; }
     private bool isSkillActive; // 스킬 이펙트 중 움직임 금지 하기 위한 플래그
 
     public bool IsSkillActive()
@@ -15,29 +15,29 @@ public class SkillManager : MonoBehaviour
         return isSkillActive;
     }
 
-    void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+    // void Awake()
+    // {
+    //     if (Instance == null)
+    //     {
+    //         Instance = this;
+    //         DontDestroyOnLoad(gameObject);
+    //     }
+    //     else
+    //     {
+    //         Destroy(gameObject);
+    //     }
+    // }
 
     public void TryActivateSkill(Vector2Int position, Face topFace)
     {
-        if (topFace.colorData == null || topFace.classData == null)
+        if (/*topFace.tileColor == null || */topFace.classData == null)
         {
             Debug.LogError("Top face has invalid data!");
             return;
         }
 
         // 주변 8칸 중 상단 컬러와 일치하는 칸 수 확인
-        int matchCount = TestBoardManager.Instance.CountMatchingColors(position, topFace.colorData);
+        int matchCount = BoardManager.Instance.CountMatchingColors(position, topFace.tileColor);
         if (matchCount >= 3)
         {
             ActivateSkill(topFace.classData);
