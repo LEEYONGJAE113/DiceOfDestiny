@@ -30,20 +30,20 @@ public class BoardManager : Singletone<BoardManager>
     // }
 
     [Header("Board Size Settings")]
-    [SerializeField] private int boardSize = 11;
+    [SerializeField] public int boardSize = 11;
     [SerializeField] private GameObject tilePrefab;
-    [SerializeField] private Transform boardTransform;
+    [SerializeField] public Transform boardTransform;
     public Tile[,] Board { get; set; }
 
     [Header("Tile Colors Settings")]
     [SerializeField]
-    private Color[] tileColors = new Color[] {
-        new Color(1f, 0f, 0f), // ����
-        new Color(0f, 1f, 0f), // �ʷ�
-        new Color(0f, 0f, 1f), // �Ķ�
-        new Color(1f, 1f, 0f), // ���
-        new Color(1f, 0f, 1f), // ����
-        new Color(0.9f, 0.9f, 0.9f) // ȸ��
+    public Color[] tileColors = new Color[] {
+        new Color(1f, 0f, 0f), // 빨강
+        new Color(0f, 1f, 0f), // 초록
+        new Color(0f, 0f, 1f), // 파랑
+        new Color(1f, 1f, 0f), // 노랑
+        new Color(1f, 0f, 1f), // 보라
+        new Color(0.9f, 0.9f, 0.9f) // 회색
     };
 
     List<int> colorIndices = new List<int>();
@@ -80,7 +80,7 @@ public class BoardManager : Singletone<BoardManager>
 
     public void SetBoard(StageDifficultyProfile profile)
     {
-        // ����ġ�� �°� ���� �����ϴ� �κ�
+        // 가중치에 맞게 색을 설정하는 부분
         colorIndices = new List<int>();
         for (int color = 0; color < tileColors.Length; color++)
         {
@@ -126,7 +126,7 @@ public class BoardManager : Singletone<BoardManager>
             (colorIndices[i], colorIndices[j]) = (colorIndices[j], colorIndices[i]);
         }
 
-        // ��ĥ�ϴ� �κ�
+        // 색칠하는 부분
         int idx = 0;
         for (int x = 0; x < boardSize; x++)
         {
@@ -135,22 +135,22 @@ public class BoardManager : Singletone<BoardManager>
                 Board[x, y].SetTileColor(tileColors[colorIndices[idx]]);
                 switch (colorIndices[idx])
                 {
-                    case 0: // ����
+                    case 0: // 빨강
                         Board[x, y].TileColor = TileColor.Red;
                         break;
-                    case 1: // �ʷ�
+                    case 1: // 초록
                         Board[x, y].TileColor = TileColor.Green;
                         break;
-                    case 2: // �Ķ�
+                    case 2: // 파랑
                         Board[x, y].TileColor = TileColor.Blue;
                         break;
-                    case 3: // ���
+                    case 3: // 노랑
                         Board[x, y].TileColor = TileColor.Yellow;
                         break;
-                    case 4: // ����
+                    case 4: // 보라
                         Board[x, y].TileColor = TileColor.Purple;
                         break;
-                    case 5: // ȸ��
+                    case 5: // 회색
                         Board[x, y].TileColor = TileColor.Gray;
                         break;
                 }
@@ -159,17 +159,17 @@ public class BoardManager : Singletone<BoardManager>
         }
 
 
-        // ��ֹ� ��ġ �κ�
+        // 장애물 배치 부분
         obstacleIndices = new List<ObstacleType>();
         int tileCount = boardSize * boardSize;
         int obstacleCount = Mathf.RoundToInt(tileCount * profile.obstacleDensity);
-        for (int i = 0; i < tileCount - obstacleCount; i++) // ��ֹ��� ���� Ÿ�� �߰�
+        for (int i = 0; i < tileCount - obstacleCount; i++) // 장애물이 없는 타일 추가
         {
             obstacleIndices.Add(ObstacleType.None);
         }
 
         List<ObstacleType> availableObstacleWeight = new List<ObstacleType>();
-        for (int i = 0; i < profile.availableObstacle.Count; i++) // ��ֹ� Ÿ���� �ε����� �߰�
+        for (int i = 0; i < profile.availableObstacle.Count; i++) // 장애물 타입을 인덱스에 추가
         {
             for (int j = 0; j < profile.availableObstacle[i].weight * 10; j++)
             {
@@ -177,7 +177,7 @@ public class BoardManager : Singletone<BoardManager>
             }
         }
 
-        for (int i = 0; i < obstacleCount; i++) // ��ֹ��� �ִ� Ÿ��
+        for (int i = 0; i < obstacleCount; i++) // 장애물이 있는 타일
         {
             int randIndex = Random.Range(0, availableObstacleWeight.Count);
             obstacleIndices.Add(availableObstacleWeight[randIndex]);
@@ -195,7 +195,7 @@ public class BoardManager : Singletone<BoardManager>
             for (int y = 0; y < boardSize; y++)
             {
                 Board[x, y].Obstacle = obstacleIndices[idx];
-                // ��ֹ� ����
+                // 장애물 생성
                 if (obstacleIndices[idx] != ObstacleType.None)
                 {
                     GameObject obstacle = Instantiate(ObstacleManager.Instance.obstaclePrefabs[obstacleIndices[idx]],
@@ -245,20 +245,14 @@ public class BoardManager : Singletone<BoardManager>
     public void MoveObstacle(Obstacle obstacle, Vector2Int nextPos)
     {
         Vector2Int currentPos = obstacle.obstaclePosition;
-        Board[currentPos.x, currentPos.y].Obstacle = ObstacleType.None; // ���� Ÿ���� ��ֹ� ����
-        Board[nextPos.x, nextPos.y].Obstacle = obstacle.obstacleType; // ���� Ÿ�Ͽ� ��ֹ� ����
-        obstacle.obstaclePosition = nextPos; // ��ֹ��� ��ġ ������Ʈ
-        obstacle.transform.position = new Vector3(boardTransform.position.x + nextPos.x, boardTransform.position.y + nextPos.y, 0); // ��ֹ� ��ġ �̵�
+        Board[currentPos.x, currentPos.y].Obstacle = ObstacleType.None; // 현재 타일의 장애물 제거
+        Board[nextPos.x, nextPos.y].Obstacle = obstacle.obstacleType; // 다음 타일에 장애물 설정
+        obstacle.obstaclePosition = nextPos; // 장애물의 위치 업데이트
+        obstacle.transform.position = new Vector3(boardTransform.position.x + nextPos.x, boardTransform.position.y + nextPos.y, 0); // 장애물 위치 이동
     }
-    
+
     public int CountMatchingColors(Vector2Int position, TileColor targetColor)
     {
-        // if (targetColor == null)
-        // {
-        //     Debug.LogError("Target ColorData is null!");
-        //     return 0;
-        // }
-
         int matchCount = 0;
         Vector2Int[] directions = new Vector2Int[]
         {
