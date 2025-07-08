@@ -30,14 +30,14 @@ public class SkillManager : Singletone<SkillManager>
 
     public void TryActivateSkill(Vector2Int position, Face topFace)
     {
-        if (topFace.colorData == null || topFace.classData == null)
+        if (/*topFace.tileColor == null || */topFace.classData == null)
         {
             Debug.LogError("Top face has invalid data!");
             return;
         }
 
         // 주변 8칸 중 상단 컬러와 일치하는 칸 수 확인
-        int matchCount = TestBoardManager.Instance.CountMatchingColors(position, topFace.colorData);
+        int matchCount = BoardManager.Instance.CountMatchingColors(position, topFace.tileColor);
         if (matchCount >= 3)
         {
             ActivateSkill(topFace.classData);
