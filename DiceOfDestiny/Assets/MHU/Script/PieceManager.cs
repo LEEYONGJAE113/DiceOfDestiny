@@ -41,14 +41,35 @@ public class PieceManager : Singletone<PieceManager>
         if (piece == null) return;
         int topFaceIndex = piece.GetTopFaceIndex();
         Face topFace = piece.GetFace(topFaceIndex);
-        if (topClassRenderer != null && topFace.colorData != null && topFace.classData != null)
+        if (topClassRenderer != null /*&& topFace.tileColor != null*/ && topFace.classData != null)
         {
             topClassRenderer.sprite = topFace.classData.sprite;
-            topColorRenderer.color = topFace.colorData.color;
+            // topColorRenderer.color = topFace.tileColor.color;
+            switch (topFace.tileColor) // temp
+            {
+                case TileColor.Red:
+                    topColorRenderer.color = Color.red;
+                    break;
+                case TileColor.Blue:
+                    topColorRenderer.color = Color.blue;
+                    break;
+                case TileColor.Yellow:
+                    topColorRenderer.color = Color.yellow;
+                    break;
+                case TileColor.Green:
+                    topColorRenderer.color = Color.green;
+                    break;
+                case TileColor.Gray:
+                    topColorRenderer.color = Color.gray;
+                    break;
+                case TileColor.Purple:
+                    topColorRenderer.color = Color.magenta;
+                    break;
+            }
         }
     }
 
-    public void ChangeFaceColor(int faceIndex, ColorData newColorData)
+    public void ChangeFaceColor(int faceIndex, TileColor newColorData)
     {
         if (piece != null)
         {
