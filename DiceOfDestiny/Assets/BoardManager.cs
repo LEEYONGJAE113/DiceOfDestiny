@@ -12,22 +12,22 @@ public enum TileColor
     None
 }
 
-public class BoardManager : MonoBehaviour
+public class BoardManager : Singletone<BoardManager>
 {
-    public static BoardManager Instance { get; private set; }
+    // public static BoardManager Instance { get; private set; }
 
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+    // private void Awake()
+    // {
+    //     if (Instance == null)
+    //     {
+    //         Instance = this;
+    //         DontDestroyOnLoad(gameObject);
+    //     }
+    //     else
+    //     {
+    //         Destroy(gameObject);
+    //     }
+    // }
 
     [Header("Board Size Settings")]
     [SerializeField] public int boardSize = 11;
@@ -171,7 +171,7 @@ public class BoardManager : MonoBehaviour
         List<ObstacleType> availableObstacleWeight = new List<ObstacleType>();
         for (int i = 0; i < profile.availableObstacle.Count; i++) // 장애물 타입을 인덱스에 추가
         {
-            for(int j = 0; j < profile.availableObstacle[i].weight * 10; j++)
+            for (int j = 0; j < profile.availableObstacle[i].weight * 10; j++)
             {
                 availableObstacleWeight.Add(profile.availableObstacle[i].type);
             }
@@ -189,7 +189,7 @@ public class BoardManager : MonoBehaviour
             (obstacleIndices[i], obstacleIndices[j]) = (obstacleIndices[j], obstacleIndices[i]);
         }
 
-        idx = 0;    
+        idx = 0;
         for (int x = 0; x < boardSize; x++)
         {
             for (int y = 0; y < boardSize; y++)
@@ -204,7 +204,7 @@ public class BoardManager : MonoBehaviour
                     ObstacleManager.Instance.SetObstacle(obstacle);
                 }
                 idx++;
-            }            
+            }
         }
     }
 
@@ -275,6 +275,7 @@ public class BoardManager : MonoBehaviour
                 if (Board[checkPos.x, checkPos.y] != null &&
                     Board[checkPos.x, checkPos.y].TileColor == targetColor)
                 {
+                    // 체크된게 어느 타일인지 보여주면 굿.
                     matchCount++;
                 }
             }

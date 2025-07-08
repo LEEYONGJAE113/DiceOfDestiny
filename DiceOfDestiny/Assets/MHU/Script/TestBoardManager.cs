@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class TestBoardManager : MonoBehaviour
+public class TestBoardManager : Singletone<TestBoardManager>
 {
-    public static TestBoardManager Instance { get; private set; }
+    // public static TestBoardManager Instance { get; private set; }
 
     [SerializeField] private int boardSize = 13;
     [SerializeField] private float gridSize = 1f; // 칸 크기
@@ -15,16 +15,16 @@ public class TestBoardManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
+        // if (Instance == null)
+        // {
+        //     Instance = this;
+        //     DontDestroyOnLoad(gameObject);
+        // }
+        // else
+        // {
+        //     Destroy(gameObject);
+        //     return;
+        // }
 
         // 보드 초기화
         board = new ColorData[boardSize, boardSize];

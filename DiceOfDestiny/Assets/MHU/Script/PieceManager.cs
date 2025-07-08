@@ -7,3 +7,4 @@ public class PieceManager : Singletone<PieceManager>
 
     public GameObject piecePrefab;
 }
+    
