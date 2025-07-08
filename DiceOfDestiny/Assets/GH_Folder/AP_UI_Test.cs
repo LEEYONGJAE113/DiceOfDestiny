@@ -43,12 +43,13 @@ public class AP_UI_Test : MonoBehaviour
                 break;
             case TestGameState.Action:
                 currentState.text = "State : Action";
+                TurnOff();
                 if (Input.GetKeyDown(KeyCode.Space)) // 말이 이동하면 ===============================================================================
                 {
                     PlayerMove();
                     GameManager.Instance.actionPointManager.RemoveAP(1);
                     AP.text = "AP : " + GameManager.Instance.actionPointManager.currentAP.ToString();
-                    
+
                     if (!GameManager.Instance.actionPointManager.TryUseAP())
                     {
                         testGameState = TestGameState.TurnOff;
@@ -58,12 +59,7 @@ public class AP_UI_Test : MonoBehaviour
                 break;
             case TestGameState.TurnOff:
                 currentState.text = "State : TurnOff";
-                if (Input.GetKeyDown(KeyCode.T))
-                {
-                    currentTurnNum++;
-                    currentTurn.text = "Turn : " + currentTurnNum;
-                    testGameState = TestGameState.Dice;
-                }
+                TurnOff();
                 break;
             default:
                 Debug.Log("상태 오류");
@@ -74,5 +70,17 @@ public class AP_UI_Test : MonoBehaviour
     private void PlayerMove()
     {
         player.transform.position += new Vector3(0, 0.5f, 0);
+    }
+
+    private void TurnOff()
+    {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            GameManager.Instance.actionPointManager.Init();
+            
+            currentTurnNum++;
+            currentTurn.text = "Turn : " + currentTurnNum;
+            testGameState = TestGameState.Dice;
+        }
     }
 }

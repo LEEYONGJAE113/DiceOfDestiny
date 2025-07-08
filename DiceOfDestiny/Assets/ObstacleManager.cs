@@ -70,39 +70,44 @@ public class ObstacleManager : MonoBehaviour
         foreach (GameObject obstacle in currentObstacles)
         {
             Obstacle obstacleComponent = obstacle.GetComponent<Obstacle>();
-            
-            if(obstacleComponent.obstacleType == ObstacleType.Zombie)
+
+            if (obstacleComponent.obstacleType == ObstacleType.Zombie)
             {
-                if(obstacleComponent.nextStep == NextStep.None)
-                {        
+                if (obstacleComponent.nextStep == NextStep.None)
+                {
                     obstacleComponent.nextStep = Random.Range(0, 2) == 1 ? NextStep.Left : NextStep.Right;
                 }
-                
-                if(obstacleComponent.nextStep == NextStep.Right)
+
+                if (obstacleComponent.nextStep == NextStep.Right)
                 {
-                    Vector2Int nextPosition = obstacleComponent.obstaclePosition + Vector2Int.right;
-                    if (BoardManager.Instance.IsEmptyTile(nextPosition))
-                    {
-                        BoardManager.Instance.MoveObstacle(obstacleComponent, nextPosition);
-                    }
-                    else
-                    {
-                        obstacleComponent.nextStep = NextStep.Left; // ´ÙÀ½¿¡´Â ¿ÞÂÊÀ¸·Î ÀÌµ¿
-                    }
+                    MoveObstacle(obstacleComponent, Vector2Int.right, NextStep.Left);
                 }
                 else // if(obstacleComponent.nextStep == NextStep.Left)
                 {
-                    Vector2Int nextPosition = obstacleComponent.obstaclePosition + Vector2Int.left;
-                    if (BoardManager.Instance.IsEmptyTile(nextPosition))
-                    {
-                        BoardManager.Instance.MoveObstacle(obstacleComponent, nextPosition);
-                    }
-                    else
-                    {
-                        obstacleComponent.nextStep = NextStep.Right; // ´ÙÀ½¿¡´Â ¿ÞÂÊÀ¸·Î ÀÌµ¿
-                    }
+                    MoveObstacle(obstacleComponent, Vector2Int.left, NextStep.Right);
                 }
+
             }
+        }
+    }
+
+    private void MoveObstacle(Obstacle _obstacleComponent, Vector2Int _vector2Int, NextStep _nextStep)
+    {
+        Vector2Int nextPosition = _obstacleComponent.obstaclePosition + _vector2Int;
+
+        if (BoardManager.Instance.Board[nextPosition.x, nextPosition.y].Obstacle != ObstacleType.None)
+        {
+            nextPosition = _obstacleComponent.obstaclePosition;
+            return;
+        }
+
+        if (BoardManager.Instance.IsEmptyTile(nextPosition))
+        {
+            BoardManager.Instance.MoveObstacle(_obstacleComponent, nextPosition);
+        }
+        else
+        {
+            _obstacleComponent.nextStep = _nextStep; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
         }
     }
 }

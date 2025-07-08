@@ -273,7 +273,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &19322245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,17 +288,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   faces:
   - classData: {fileID: 11400000, guid: 2d6146874d908d64c9510daae785a67b, type: 2}
-    colorData: {fileID: 11400000, guid: 1ac55871688e39248ac057a14cdf3588, type: 2}
+    tileColor: 0
   - classData: {fileID: 11400000, guid: ba1dd072c7a6dc44e8c1b1993c1736b1, type: 2}
-    colorData: {fileID: 11400000, guid: a23b857030804ae4cb490e38e6723ac5, type: 2}
+    tileColor: 0
   - classData: {fileID: 11400000, guid: 6e7c4891a27f85a4fbc9a095d863d071, type: 2}
-    colorData: {fileID: 11400000, guid: da9e62f43045aa045a6b3b4f3de402f6, type: 2}
+    tileColor: 0
   - classData: {fileID: 11400000, guid: 384c756a026c75446866dfb53aa3372d, type: 2}
-    colorData: {fileID: 11400000, guid: 190e7f9ec4c5f7b4cbf93dd04c49d736, type: 2}
+    tileColor: 0
   - classData: {fileID: 11400000, guid: 9c312822faaf6604abb60e06cf95e37d, type: 2}
-    colorData: {fileID: 11400000, guid: 261d46b55f719d148a9ad04d48674a52, type: 2}
+    tileColor: 0
   - classData: {fileID: 11400000, guid: c46d4b0574e7b9b42a12e7262c15b141, type: 2}
-    colorData: {fileID: 11400000, guid: e7e1a556d46c2fe49bf31d2e7b420491, type: 2}
+    tileColor: 0
 --- !u!114 &19322246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -947,7 +947,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &975229367
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1190,7 +1190,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1164692903
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1402,7 +1402,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1608577048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1513,7 +1513,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &1749857385
 SpriteRenderer:
   m_ObjectHideFlags: 0
