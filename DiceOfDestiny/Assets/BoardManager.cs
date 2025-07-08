@@ -12,22 +12,22 @@ public enum TileColor
     None
 }
 
-public class BoardManager : MonoBehaviour
+public class BoardManager : Singletone<BoardManager>
 {
-    public static BoardManager Instance { get; private set; }
+    // public static BoardManager Instance { get; private set; }
 
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+    // private void Awake()
+    // {
+    //     if (Instance == null)
+    //     {
+    //         Instance = this;
+    //         DontDestroyOnLoad(gameObject);
+    //     }
+    //     else
+    //     {
+    //         Destroy(gameObject);
+    //     }
+    // }
 
     [Header("Board Size Settings")]
     [SerializeField] private int boardSize = 11;
@@ -37,13 +37,13 @@ public class BoardManager : MonoBehaviour
 
     [Header("Tile Colors Settings")]
     [SerializeField]
-    private Color[] tileColrs = new Color[] {
-        new Color(1f, 0f, 0f), // »¡°­
-        new Color(0f, 1f, 0f), // ÃÊ·Ï
-        new Color(0f, 0f, 1f), // ÆÄ¶û
-        new Color(1f, 1f, 0f), // ³ë¶û
-        new Color(1f, 0f, 1f), // º¸¶ó
-        new Color(0.9f, 0.9f, 0.9f) // È¸»ö
+    private Color[] tileColors = new Color[] {
+        new Color(1f, 0f, 0f), // ï¿½ï¿½ï¿½ï¿½
+        new Color(0f, 1f, 0f), // ï¿½Ê·ï¿½
+        new Color(0f, 0f, 1f), // ï¿½Ä¶ï¿½
+        new Color(1f, 1f, 0f), // ï¿½ï¿½ï¿½
+        new Color(1f, 0f, 1f), // ï¿½ï¿½ï¿½ï¿½
+        new Color(0.9f, 0.9f, 0.9f) // È¸ï¿½ï¿½
     };
 
     List<int> colorIndices = new List<int>();
@@ -80,9 +80,9 @@ public class BoardManager : MonoBehaviour
 
     public void SetBoard(StageDifficultyProfile profile)
     {
-        // °¡ÁßÄ¡¿¡ ¸Â°Ô »öÀ» ¼³Á¤ÇÏ´Â ºÎºÐ
+        // ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Â°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Îºï¿½
         colorIndices = new List<int>();
-        for (int color = 0; color < tileColrs.Length; color++)
+        for (int color = 0; color < tileColors.Length; color++)
         {
             for (int i = 0; i < profile.minimumColorEnsure; i++)
                 colorIndices.Add(color);
@@ -107,7 +107,7 @@ public class BoardManager : MonoBehaviour
         int total = cumulativeWeights[cumulativeWeights.Length - 1];
 
 
-        for (int i = 0; i < (boardSize * boardSize) - (tileColrs.Length * profile.minimumColorEnsure); i++)
+        for (int i = 0; i < (boardSize * boardSize) - (tileColors.Length * profile.minimumColorEnsure); i++)
         {
             int rand = Random.Range(0, total);
             for (int j = 0; j < cumulativeWeights.Length; j++)
@@ -126,31 +126,31 @@ public class BoardManager : MonoBehaviour
             (colorIndices[i], colorIndices[j]) = (colorIndices[j], colorIndices[i]);
         }
 
-        // »öÄ¥ÇÏ´Â ºÎºÐ
+        // ï¿½ï¿½Ä¥ï¿½Ï´ï¿½ ï¿½Îºï¿½
         int idx = 0;
         for (int x = 0; x < boardSize; x++)
         {
             for (int y = 0; y < boardSize; y++)
             {
-                Board[x, y].SetTileColor(tileColrs[colorIndices[idx]]);
+                Board[x, y].SetTileColor(tileColors[colorIndices[idx]]);
                 switch (colorIndices[idx])
                 {
-                    case 0: // »¡°­
+                    case 0: // ï¿½ï¿½ï¿½ï¿½
                         Board[x, y].TileColor = TileColor.Red;
                         break;
-                    case 1: // ÃÊ·Ï
+                    case 1: // ï¿½Ê·ï¿½
                         Board[x, y].TileColor = TileColor.Green;
                         break;
-                    case 2: // ÆÄ¶û
+                    case 2: // ï¿½Ä¶ï¿½
                         Board[x, y].TileColor = TileColor.Blue;
                         break;
-                    case 3: // ³ë¶û
+                    case 3: // ï¿½ï¿½ï¿½
                         Board[x, y].TileColor = TileColor.Yellow;
                         break;
-                    case 4: // º¸¶ó
+                    case 4: // ï¿½ï¿½ï¿½ï¿½
                         Board[x, y].TileColor = TileColor.Purple;
                         break;
-                    case 5: // È¸»ö
+                    case 5: // È¸ï¿½ï¿½
                         Board[x, y].TileColor = TileColor.Gray;
                         break;
                 }
@@ -159,25 +159,25 @@ public class BoardManager : MonoBehaviour
         }
 
 
-        // Àå¾Ö¹° ¹èÄ¡ ºÎºÐ
+        // ï¿½ï¿½Ö¹ï¿½ ï¿½ï¿½Ä¡ ï¿½Îºï¿½
         obstacleIndices = new List<ObstacleType>();
         int tileCount = boardSize * boardSize;
         int obstacleCount = Mathf.RoundToInt(tileCount * profile.obstacleDensity);
-        for (int i = 0; i < tileCount - obstacleCount; i++) // Àå¾Ö¹°ÀÌ ¾ø´Â Å¸ÀÏ Ãß°¡
+        for (int i = 0; i < tileCount - obstacleCount; i++) // ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ß°ï¿½
         {
             obstacleIndices.Add(ObstacleType.None);
         }
 
         List<ObstacleType> availableObstacleWeight = new List<ObstacleType>();
-        for (int i = 0; i < profile.availableObstacle.Count; i++) // Àå¾Ö¹° Å¸ÀÔÀ» ÀÎµ¦½º¿¡ Ãß°¡
+        for (int i = 0; i < profile.availableObstacle.Count; i++) // ï¿½ï¿½Ö¹ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
         {
-            for(int j = 0; j < profile.availableObstacle[i].weight * 10; j++)
+            for (int j = 0; j < profile.availableObstacle[i].weight * 10; j++)
             {
                 availableObstacleWeight.Add(profile.availableObstacle[i].type);
             }
         }
 
-        for (int i = 0; i < obstacleCount; i++) // Àå¾Ö¹°ÀÌ ÀÖ´Â Å¸ÀÏ
+        for (int i = 0; i < obstacleCount; i++) // ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ Å¸ï¿½ï¿½
         {
             int randIndex = Random.Range(0, availableObstacleWeight.Count);
             obstacleIndices.Add(availableObstacleWeight[randIndex]);
@@ -189,13 +189,13 @@ public class BoardManager : MonoBehaviour
             (obstacleIndices[i], obstacleIndices[j]) = (obstacleIndices[j], obstacleIndices[i]);
         }
 
-        idx = 0;    
+        idx = 0;
         for (int x = 0; x < boardSize; x++)
         {
             for (int y = 0; y < boardSize; y++)
             {
                 Board[x, y].Obstacle = obstacleIndices[idx];
-                // Àå¾Ö¹° »ý¼º
+                // ï¿½ï¿½Ö¹ï¿½ ï¿½ï¿½ï¿½ï¿½
                 if (obstacleIndices[idx] != ObstacleType.None)
                 {
                     GameObject obstacle = Instantiate(ObstacleManager.Instance.obstaclePrefabs[obstacleIndices[idx]],
@@ -204,7 +204,7 @@ public class BoardManager : MonoBehaviour
                     ObstacleManager.Instance.SetObstacle(obstacle);
                 }
                 idx++;
-            }            
+            }
         }
     }
 
@@ -245,9 +245,48 @@ public class BoardManager : MonoBehaviour
     public void MoveObstacle(Obstacle obstacle, Vector2Int nextPos)
     {
         Vector2Int currentPos = obstacle.obstaclePosition;
-        Board[currentPos.x, currentPos.y].Obstacle = ObstacleType.None; // ÇöÀç Å¸ÀÏÀÇ Àå¾Ö¹° Á¦°Å
-        Board[nextPos.x, nextPos.y].Obstacle = obstacle.obstacleType; // ´ÙÀ½ Å¸ÀÏ¿¡ Àå¾Ö¹° ¼³Á¤
-        obstacle.obstaclePosition = nextPos; // Àå¾Ö¹°ÀÇ À§Ä¡ ¾÷µ¥ÀÌÆ®
-        obstacle.transform.position = new Vector3(boardTransform.position.x + nextPos.x, boardTransform.position.y + nextPos.y, 0); // Àå¾Ö¹° À§Ä¡ ÀÌµ¿
+        Board[currentPos.x, currentPos.y].Obstacle = ObstacleType.None; // ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ö¹ï¿½ ï¿½ï¿½ï¿½ï¿½
+        Board[nextPos.x, nextPos.y].Obstacle = obstacle.obstacleType; // ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½Ï¿ï¿½ ï¿½ï¿½Ö¹ï¿½ ï¿½ï¿½ï¿½ï¿½
+        obstacle.obstaclePosition = nextPos; // ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
+        obstacle.transform.position = new Vector3(boardTransform.position.x + nextPos.x, boardTransform.position.y + nextPos.y, 0); // ï¿½ï¿½Ö¹ï¿½ ï¿½ï¿½Ä¡ ï¿½Ìµï¿½
+    }
+    
+    public int CountMatchingColors(Vector2Int position, TileColor targetColor)
+    {
+        // if (targetColor == null)
+        // {
+        //     Debug.LogError("Target ColorData is null!");
+        //     return 0;
+        // }
+
+        int matchCount = 0;
+        Vector2Int[] directions = new Vector2Int[]
+        {
+            new Vector2Int(-1, -1), // ì¢Œìƒ
+            new Vector2Int(-1, 0),  // ì¢Œ
+            new Vector2Int(-1, 1),  // ì¢Œí•˜
+            new Vector2Int(0, -1),  // ìƒ
+            new Vector2Int(0, 1),   // í•˜
+            new Vector2Int(1, -1),  // ìš°ìƒ
+            new Vector2Int(1, 0),   // ìš°
+            new Vector2Int(1, 1)    // ìš°í•˜
+        };
+
+        foreach (Vector2Int dir in directions)
+        {
+            Vector2Int checkPos = position + dir;
+            if (checkPos.x >= 0 && checkPos.x < boardSize &&
+                checkPos.y >= 0 && checkPos.y < boardSize)
+            {
+                if (Board[checkPos.x, checkPos.y] != null &&
+                    Board[checkPos.x, checkPos.y].TileColor == targetColor)
+                {
+                    // ì²´í¬ëœê²Œ ì–´ëŠ íƒ€ì¼ì¸ì§€ ë³´ì—¬ì£¼ë©´ êµ¿.
+                    matchCount++;
+                }
+            }
+        }
+
+        return matchCount;
     }
 }

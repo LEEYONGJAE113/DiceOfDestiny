@@ -4,7 +4,8 @@ using UnityEngine;
 public struct Face
 {
     public ClassData classData;
-    public ColorData colorData;
+    // public ColorData tileColor;
+    public TileColor tileColor;
 }
 
 [System.Serializable]
@@ -29,10 +30,10 @@ public class Piece : MonoBehaviour
 
         for (int i = 0; i < faces.Length; i++)
         {
-            if (faces[i].classData == null || faces[i].colorData == null)
+            if (faces[i].classData == null /*|| faces[i].tileColor == null*/)
             {
                 faces[i].classData = new ClassData();
-                faces[i].colorData = new ColorData();
+                faces[i].tileColor = new TileColor();
                 Debug.LogWarning($"Face {i} initialized with default values.");
             }
         }
@@ -48,12 +49,12 @@ public class Piece : MonoBehaviour
         return default;
     }
 
-    public void SetFace(int index, ClassData classData, ColorData colorData)
+    public void SetFace(int index, ClassData classData, TileColor colorData)
     {
         if (index >= 0 && index < 6)
         {
             faces[index].classData = classData;
-            faces[index].colorData = colorData;
+            faces[index].tileColor = colorData;
         }
         else
         {
