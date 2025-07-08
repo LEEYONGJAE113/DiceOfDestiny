@@ -7,6 +7,7 @@ using UnityEngine.Rendering;
 
 public class SkillManager : MonoBehaviour
 {
+<<<<<<< Updated upstream
     public static SkillManager Instance { get; private set; }
     private bool isSkillActive; // 스킬 이펙트 중 움직임 금지 하기 위한 플래그
 
@@ -36,6 +37,10 @@ public class SkillManager : MonoBehaviour
             return;
         }
 
+=======
+    public void TryActivateSkill(Vector2Int position, Face topFace)
+    {
+>>>>>>> Stashed changes
         // 주변 8칸 중 상단 컬러와 일치하는 칸 수 확인
         int matchCount = TestBoardManager.Instance.CountMatchingColors(position, topFace.colorData);
         if (matchCount >= 3)
@@ -45,7 +50,7 @@ public class SkillManager : MonoBehaviour
         }
         else
         {
-            //Debug.Log($"Not enough matching colors ({matchCount}/3) to activate skill.");
+            Debug.Log($"Not enough matching colors ({matchCount}/3) to activate skill.");
         }
     }
 
@@ -54,18 +59,15 @@ public class SkillManager : MonoBehaviour
         switch (classData.className)
         {
             case "Baby":
-                Debug.Log("아기 스킬 발동!");
-                
+                Debug.Log("아기 스킬 발동!");                
 
                 break;
             case "Demon":
-                Debug.Log("악마 스킬 발동!");
-                
+                Debug.Log("악마 스킬 발동!");                
 
                 break;
             case "Fanatic":
-                Debug.Log("광신도 스킬 발동!");
-                
+                Debug.Log("광신도 스킬 발동!");                
 
                 break;
             case "Knight":
@@ -78,13 +80,11 @@ public class SkillManager : MonoBehaviour
                 // 실제 구현: 아군 체력 회복 로직
                 break;
             case "Thief":
-                Debug.Log("도둑 스킬 발동!");
-                
+                Debug.Log("도둑 스킬 발동!");                
 
                 break;
             case "Wizard":
-                Debug.Log("마법사 스킬 발동!");
-                
+                Debug.Log("마법사 스킬 발동!");                
 
                 break;
             default:
@@ -95,7 +95,6 @@ public class SkillManager : MonoBehaviour
 
     private IEnumerator SkillEffectCoroutine()
     {
-        isSkillActive = true;
         if (PieceManager.Instance == null || PieceManager.Instance.GetPiece() == null)
         {
             Debug.LogError("PieceManager or Piece is null!");

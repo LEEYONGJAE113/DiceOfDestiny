@@ -1,9 +1,15 @@
 using UnityEngine;
 
+public class Piece : ScriptableObject
+{
+    [SerializeField] private Face[] faces = new Face[6]; // 6개 면 데이터
+}
+
 [System.Serializable]
 public struct Face
 {
     public ClassData classData;
+<<<<<<< Updated upstream
     public ColorData colorData;
 }
 
@@ -110,4 +116,7 @@ public class Piece : MonoBehaviour
         //    Debug.Log($"Face {i}: ClassData={faces[i].classData}, ColorData={faces[i].colorData}");
         //}
     }
+=======
+    public TileColor tileColor;
+>>>>>>> Stashed changes
 }

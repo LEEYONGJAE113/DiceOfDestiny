@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PieceManager : MonoBehaviour
 {
+<<<<<<< Updated upstream
     public static PieceManager Instance { get; private set; }
 
     [SerializeField] private Piece piece; // 관리할 Piece 데이터
@@ -59,4 +61,10 @@ public class PieceManager : MonoBehaviour
             UpdateAllFacesVisual();
         }
     }
+=======
+    List<PieceController> pieces = new List<PieceController>();
+
+    public GameObject piecePrefab;
+
+>>>>>>> Stashed changes
 }

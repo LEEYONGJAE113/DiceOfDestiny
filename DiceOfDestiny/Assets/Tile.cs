@@ -4,9 +4,9 @@ public class Tile : MonoBehaviour
 {
     private TileColor tileColor;
     private ObstacleType obstacle;
+    private PieceController piece;
 
     SpriteRenderer sr;
-
 
     public TileColor TileColor
     {
@@ -28,5 +28,15 @@ public class Tile : MonoBehaviour
     public void SetTileColor(Color color)
     {
         sr.color = color;
+    }
+
+    public PieceController GetPiece()
+    {
+        return piece;
+    }
+
+    public void SetPiece(PieceController newPiece)
+    {
+        piece = newPiece;
     }
 }
