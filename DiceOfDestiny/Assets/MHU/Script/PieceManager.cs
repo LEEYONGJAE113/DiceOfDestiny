@@ -1,26 +1,24 @@
 using UnityEngine;
 
-public class PieceManager : MonoBehaviour
+public class PieceManager : Singletone<PieceManager>
 {
-    public static PieceManager Instance { get; private set; }
-
     [SerializeField] private Piece piece; // 관리할 Piece 데이터
     [SerializeField] private SpriteRenderer topClassRenderer; // 윗면 직업 렌더러
     [SerializeField] private SpriteRenderer topColorRenderer; // 윗면 색상 렌더러
 
     private void Awake()
     {
-        // 싱글톤 설정
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
+        // // 싱글톤 설정
+        // if (Instance == null)
+        // {
+        //     Instance = this;
+        //     DontDestroyOnLoad(gameObject);
+        // }
+        // else
+        // {
+        //     Destroy(gameObject);
+        //     return;
+        // }
 
         // Piece 초기화
         if (piece == null)

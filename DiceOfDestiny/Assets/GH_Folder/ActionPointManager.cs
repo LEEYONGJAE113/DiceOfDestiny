@@ -5,7 +5,7 @@ public class ActionPointManager : MonoBehaviour
     // 행동력 정보
     public int currentAP { get; private set; } = 0;
 
-    // 현재 주사위의 면 배열
+    // 현재 행동력 주사위의 면 배열
     private int[] diceFaces = new int[] { 1, 1, 2, 2, 3, 3 };
 
     public void Init()
