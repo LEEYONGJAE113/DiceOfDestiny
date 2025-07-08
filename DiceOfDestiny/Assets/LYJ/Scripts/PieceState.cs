@@ -1,15 +1,23 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-public enum UIState { Selectable, Current, CantSelect }
-
-public class PieceUI_LYJ : MonoBehaviour
+public enum States { Selectable, Selecting, CantSelect }
+public class PieceState : MonoBehaviour
 {
-    [Header("상태별 UI")]
-    [SerializeField, Tooltip("선택 가능")] private GameObject UISelectable;
-    [SerializeField, Tooltip("현재 선택 중")] private GameObject UICurrent;
-    [SerializeField, Tooltip("선택 불가")] private GameObject UICantSelect;
-    private bool CanSelect;
+    private bool canSelect;
+    public bool CanSelect => canSelect;
+    private States currentState;
+    public States CurrentState => currentState;
+
+    public void ChangeState(States targetState)
+    {
+        if (currentState == targetState) { return; }
+        currentState = targetState;
+    }
+
+    public void ChangeSelectable(bool value)
+    {
+        canSelect = value;
+    }
 
 
     // private Dictionary<UIState, GameObject> uiDic;
