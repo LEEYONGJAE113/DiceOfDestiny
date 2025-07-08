@@ -38,7 +38,6 @@ public class Piece : MonoBehaviour
             }
         }
 
-        
     }
 
     public Face GetFace(int index)
@@ -76,25 +75,21 @@ public class Piece : MonoBehaviour
         {
             for (int i = 0; i < 6; i++)
                 newFaces[i] = faces[upTransition[i]];
-            
         }
         else if (direction == Vector2Int.down)
         {
             for (int i = 0; i < 6; i++)
                 newFaces[i] = faces[downTransition[i]];
-            
         }
         else if (direction == Vector2Int.left)
         {
             for (int i = 0; i < 6; i++)
                 newFaces[i] = faces[leftTransition[i]];
-            
         }
         else if (direction == Vector2Int.right)
         {
             for (int i = 0; i < 6; i++)
                 newFaces[i] = faces[rightTransition[i]];
-            
         }
         else
         {
