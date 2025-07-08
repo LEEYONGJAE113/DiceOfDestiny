@@ -73,7 +73,7 @@ public class PieceController : MonoBehaviour
                 Debug.LogWarning($"Invalid move to position: {newPosition}");
             }
         }
-    }  
+    }
     public Face GetFace(int index)
     {
         if (index >= 0 && index < 6)
