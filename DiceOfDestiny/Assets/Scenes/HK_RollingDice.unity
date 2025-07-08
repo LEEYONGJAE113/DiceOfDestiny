@@ -129,8 +129,6 @@ GameObject:
   m_Component:
   - component: {fileID: 84830038}
   - component: {fileID: 84830041}
-  - component: {fileID: 84830040}
-  - component: {fileID: 84830039}
   m_Layer: 0
   m_Name: Piece
   m_TagString: Untagged
@@ -155,46 +153,6 @@ Transform:
   - {fileID: 1776693529}
   m_Father: {fileID: 429692958}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &84830039
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 84830037}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 675178a9476353c42882c46a90e39f45, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  faces:
-  - classData: {fileID: 11400000, guid: 2d6146874d908d64c9510daae785a67b, type: 2}
-    tileColor: 0
-  - classData: {fileID: 11400000, guid: ba1dd072c7a6dc44e8c1b1993c1736b1, type: 2}
-    tileColor: 1
-  - classData: {fileID: 11400000, guid: 6e7c4891a27f85a4fbc9a095d863d071, type: 2}
-    tileColor: 2
-  - classData: {fileID: 11400000, guid: 384c756a026c75446866dfb53aa3372d, type: 2}
-    tileColor: 3
-  - classData: {fileID: 11400000, guid: 9c312822faaf6604abb60e06cf95e37d, type: 2}
-    tileColor: 4
-  - classData: {fileID: 11400000, guid: c46d4b0574e7b9b42a12e7262c15b141, type: 2}
-    tileColor: 5
---- !u!114 &84830040
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 84830037}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b43089e4e0212dd43af8ddd5d0a00c81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  piece: {fileID: 84830039}
-  topClassRenderer: {fileID: 779567662}
-  topColorRenderer: {fileID: 1776693530}
 --- !u!114 &84830041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,12 +165,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a37d694702f3c42428861002076ba292, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridPosition: {x: 0, y: 0}
-  gridSize: 1
-  boardSize: 13
-  moveCooldown: 0
-  offsetX: -5.5
-  offsetY: -5.5
+  piece: {fileID: 11400000, guid: 7c184e42357c7bc42921652d84bac1c3, type: 2}
+  classRenderer: {fileID: 779567662}
+  colorRenderer: {fileID: 1776693530}
 --- !u!1 &205407985
 GameObject:
   m_ObjectHideFlags: 0
@@ -1164,9 +1119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b43089e4e0212dd43af8ddd5d0a00c81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  piece: {fileID: 84830039}
-  topClassRenderer: {fileID: 779567662}
-  topColorRenderer: {fileID: 1776693530}
+  piecePrefab: {fileID: 0}
 --- !u!4 &891765193
 Transform:
   m_ObjectHideFlags: 0
@@ -1954,7 +1907,7 @@ MonoBehaviour:
   boardSize: 13
   tilePrefab: {fileID: 2471703998611980718, guid: 23386ab979afcd04f83177db42443585, type: 3}
   boardTransform: {fileID: 975599190}
-  tileColors:
+  tileColrs:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0, g: 1, b: 0, a: 1}
   - {r: 0, g: 0, b: 1, a: 1}
