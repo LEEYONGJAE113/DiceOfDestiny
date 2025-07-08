@@ -34,7 +34,7 @@ public class AP_UI_Test : MonoBehaviour
         {
             case TestGameState.Dice:
                 currentState.text = "State : Dice";
-                if (Input.GetKeyDown(KeyCode.D))
+                if (Input.GetKeyDown(KeyCode.R))
                 {
                     Dice.text = "Dice : " + GameManager.Instance.actionPointManager.RollingDice().ToString();
                     AP.text = "AP : " + GameManager.Instance.actionPointManager.currentAP.ToString();
@@ -43,7 +43,7 @@ public class AP_UI_Test : MonoBehaviour
                 break;
             case TestGameState.Action:
                 currentState.text = "State : Action";
-                if (Input.GetKeyDown(KeyCode.Space))
+                if (Input.GetKeyDown(KeyCode.Space)) // 말이 이동하면 ===============================================================================
                 {
                     PlayerMove();
                     GameManager.Instance.actionPointManager.RemoveAP(1);
