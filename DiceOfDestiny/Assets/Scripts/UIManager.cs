@@ -2,9 +2,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class UIManager : MonoBehaviour
+public class UIManager : Singletone<UIManager>
 {
-    public static UIManager Instance { get; private set; }
+    // public static UIManager Instance { get; private set; }
 
     [Header("UI Modules")]
     [SerializeField] private GameObject mainUI;
@@ -14,14 +14,14 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        // if (Instance != null)
+        // {
+        //     Destroy(gameObject);
+        //     return;
+        // }
 
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+        // Instance = this;
+        // DontDestroyOnLoad(gameObject);
 
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
