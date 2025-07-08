@@ -139,6 +139,7 @@ public class PieceController : MonoBehaviour
 
     void RotateToTopFace()
     {
+        // 애니메이션 추가.
         UpdateTopFace();
     }
 
