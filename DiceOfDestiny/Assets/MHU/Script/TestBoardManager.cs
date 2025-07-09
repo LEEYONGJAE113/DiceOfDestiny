@@ -93,11 +93,13 @@ public class TestBoardManager : Singletone<TestBoardManager>
     // 주사위 위치 주변 8칸의 색상 확인
     public int CountMatchingColors(Vector2Int position, ColorData targetColor)
     {
+        /*
         if (targetColor == null)
         {
             Debug.LogError("Target ColorData is null!");
             return 0;
         }
+        */
 
         int matchCount = 0;
         Vector2Int[] directions = new Vector2Int[]
