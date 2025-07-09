@@ -34,6 +34,21 @@ public class PieceController : MonoBehaviour
         if (moveDirection != Vector2Int.zero)
         {
             Vector2Int newPosition = gridPosition + moveDirection;
+
+            // 이동하는 곳이 보드 밖이면 return
+            if (!ObstacleManager.Instance.IsInsideBoard(newPosition))
+            {
+                return;
+            }
+
+            // 이동하는 곳에 장애물이 있으면 return
+            Debug.Log("Obstacle Name : " + BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle);
+            if (BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle != ObstacleType.None)
+            {
+                //newPosition = gridPosition;
+                return;
+            }
+
             if (newPosition.x >= 0 && newPosition.x < BoardManager.Instance.boardSize &&
                 newPosition.y >= 0 && newPosition.y < BoardManager.Instance.boardSize)
             {
@@ -48,6 +63,11 @@ public class PieceController : MonoBehaviour
                     Debug.LogError("Piece is null!");
                     return;
                 }
+
+                // 이동 확정 시
+                // 이전 타일에 Piece 값을 null로 바꾸고, 다음 타일에 Piece 값을 적용 
+                BoardManager.Instance.Board[gridPosition.x, gridPosition.y].SetPiece(null);
+                BoardManager.Instance.Board[newPosition.x, newPosition.y].SetPiece(this);
 
                 gridPosition = newPosition;
                 transform.position = new Vector3(

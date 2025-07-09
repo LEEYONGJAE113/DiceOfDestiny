@@ -27,6 +27,7 @@ public class ActionPointManager : MonoBehaviour
             return;
         }
         currentAP -= _minusAP;
+        Debug.Log("현재 행동력 : " + currentAP);
 
         // UI Refresh
     }

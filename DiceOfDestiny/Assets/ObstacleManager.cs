@@ -95,6 +95,23 @@ public class ObstacleManager : MonoBehaviour
     {
         Vector2Int nextPosition = _obstacleComponent.obstaclePosition + _vector2Int;
 
+        // 이동하려는 위치가 보드 밖이면 return
+        if (!IsInsideBoard(nextPosition))
+        {
+            return;
+        }
+
+        // 이동하려는 위치에 플레이어가 있으면 return
+        if (BoardManager.Instance.Board[nextPosition.x, nextPosition.y].GetPiece() != null)
+        {
+            Debug.Log("Meet Player to Obstacle");
+            //nextPosition = _obstacleComponent.obstaclePosition;
+            return;
+        }
+
+        // 이동한 위치 기준으로 8칸 내에 플레이어가 있는가?
+        DetectionPlayer(nextPosition);
+
         if (BoardManager.Instance.Board[nextPosition.x, nextPosition.y].Obstacle != ObstacleType.None)
         {
             nextPosition = _obstacleComponent.obstaclePosition;
@@ -109,5 +126,45 @@ public class ObstacleManager : MonoBehaviour
         {
             _obstacleComponent.nextStep = _nextStep; // �������� �������� �̵�
         }
+    }
+
+    private void DetectionPlayer(Vector2Int _nextPosition)
+    {
+        Vector2Int[] directions = new Vector2Int[]
+        {
+            new Vector2Int(-1, -1), // 좌상
+            new Vector2Int(-1, 0),  // 좌
+            new Vector2Int(-1, 1),  // 좌하
+            new Vector2Int(0, -1),  // 상
+            new Vector2Int(0, 1),   // 하
+            new Vector2Int(1, -1),  // 우상
+            new Vector2Int(1, 0),   // 우
+            new Vector2Int(1, 1)    // 우하
+        };
+
+        for (int i = 0; i < directions.Length; i++)
+        {
+            Vector2Int detection = _nextPosition + directions[i];
+
+            // 감지하려는 위치가 밖이면 continue
+            if (!IsInsideBoard(detection))
+            {
+                continue;
+            }
+
+            // 해당 좌표에 피스가 있으면 해당 피스 행동력 1 감소
+            if (BoardManager.Instance.Board[detection.x, detection.y].GetPiece() != null)
+            {
+                Debug.Log("RemoveAP");
+                GameManager.Instance.actionPointManager.RemoveAP(1);
+                return;
+            }
+        }
+    }
+
+    public bool IsInsideBoard(Vector2Int pos)
+    {
+        return pos.x >= 0 && pos.x < BoardManager.Instance.Board.GetLength(0)
+            && pos.y >= 0 && pos.y < BoardManager.Instance.Board.GetLength(1);
     }
 }
