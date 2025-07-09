@@ -96,30 +96,29 @@ public class ObstacleManager : MonoBehaviour
         Vector2Int nextPosition = _obstacleComponent.obstaclePosition + _vector2Int;
 
         // 이동하려는 위치가 보드 밖이면 return
-        if (!IsInsideBoard(nextPosition))
-        {
-            return;
-        }
-
-        // 이동하려는 위치에 플레이어가 있으면 return
-        if (BoardManager.Instance.Board[nextPosition.x, nextPosition.y].GetPiece() != null)
-        {
-            Debug.Log("Meet Player to Obstacle");
-            //nextPosition = _obstacleComponent.obstaclePosition;
-            return;
-        }
-
-        // 이동한 위치 기준으로 8칸 내에 플레이어가 있는가?
-        DetectionPlayer(nextPosition);
-
-        if (BoardManager.Instance.Board[nextPosition.x, nextPosition.y].Obstacle != ObstacleType.None)
-        {
-            nextPosition = _obstacleComponent.obstaclePosition;
-            return;
-        }
+        // if (!IsInsideBoard(nextPosition))
+        // {
+        //     return;
+        // }
 
         if (BoardManager.Instance.IsEmptyTile(nextPosition))
         {
+            // 이동하려는 위치에 장애물 있으면 return
+            if (BoardManager.Instance.Board[nextPosition.x, nextPosition.y].Obstacle != ObstacleType.None)
+            {
+                return;
+            }
+
+            // 이동한 위치 기준으로 8칸 내에 플레이어가 있는가?
+            DetectionPlayer(nextPosition);
+
+            // 이동하려는 위치에 플레이어가 있으면 return
+            if (BoardManager.Instance.Board[nextPosition.x, nextPosition.y].GetPiece() != null)
+            {
+                Debug.Log("Meet Player to Obstacle");
+                return;
+            }
+
             BoardManager.Instance.MoveObstacle(_obstacleComponent, nextPosition);
         }
         else
@@ -139,7 +138,8 @@ public class ObstacleManager : MonoBehaviour
             new Vector2Int(0, 1),   // 하
             new Vector2Int(1, -1),  // 우상
             new Vector2Int(1, 0),   // 우
-            new Vector2Int(1, 1)    // 우하
+            new Vector2Int(1, 1),    // 우하
+            new Vector2Int(0, 0)    // 중앙
         };
 
         for (int i = 0; i < directions.Length; i++)

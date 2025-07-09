@@ -65,9 +65,17 @@ public class PieceController : MonoBehaviour
                 }
 
                 // 이동 확정 시
+                // 행동력이 0이면 행동 불가
+                if (!GameManager.Instance.actionPointManager.TryUseAP())
+                    return;
+
                 // 이전 타일에 Piece 값을 null로 바꾸고, 다음 타일에 Piece 값을 적용 
                 BoardManager.Instance.Board[gridPosition.x, gridPosition.y].SetPiece(null);
                 BoardManager.Instance.Board[newPosition.x, newPosition.y].SetPiece(this);
+
+                GameManager.Instance.actionPointManager.PieceAction();
+
+                ObstacleManager.Instance.UpdateObstacleStep();
 
                 gridPosition = newPosition;
                 transform.position = new Vector3(
