@@ -14,7 +14,7 @@ public class SkillManager : Singletone<SkillManager>
         }
         else
         {
-            Debug.Log($"Not enough matching colors ({matchCount}/3) to activate skill.");
+            //Debug.Log($"Not enough matching colors ({matchCount}/3) to activate skill.");
         }
     }
 
@@ -41,7 +41,8 @@ public class SkillManager : Singletone<SkillManager>
                 break;
             case "Priest":
                 Debug.Log("사제 스킬 발동!");
-                // 실제 구현: 아군 체력 회복 로직
+                ActionPointManager.Instance.AddAP(1);
+                Debug.Log(ActionPointManager.Instance.currentAP);
                 break;
             case "Thief":
                 Debug.Log("도둑 스킬 발동!");
@@ -73,11 +74,11 @@ public class SkillManager : Singletone<SkillManager>
 
         for (int i = 0; i < blinkCount; i++)
         {
-            // 알파 값을 0.2로 낮춤
-            color.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0.2f);
+            // 검정색으로 변경
+            color.color = Color.black;
             yield return new WaitForSeconds(blinkInterval / 2);
 
-            // 알파 값을 원래 값(1.0)으로 복원
+            // 원래 색상으로 복원
             color.color = originalColor;
             yield return new WaitForSeconds(blinkInterval / 2);
 
@@ -93,6 +94,6 @@ public class SkillManager : Singletone<SkillManager>
         // 최종적으로 원래 색상 복원
         color.color = originalColor;
 
-        // isSkillActive = false;
+        //isSkillActive = false;
     }
 }
