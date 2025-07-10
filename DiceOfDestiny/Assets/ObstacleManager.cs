@@ -71,22 +71,85 @@ public class ObstacleManager : MonoBehaviour
         {
             Obstacle obstacleComponent = obstacle.GetComponent<Obstacle>();
 
-            if (obstacleComponent.obstacleType == ObstacleType.Zombie)
+            if (obstacleComponent.obstacleType == ObstacleType.Zombie) // 좀비
             {
-                if (obstacleComponent.nextStep == NextStep.None)
-                {
-                    obstacleComponent.nextStep = Random.Range(0, 2) == 1 ? NextStep.Left : NextStep.Right;
-                }
+                DoZmobieLogic(obstacleComponent);
+            }
+        }
+    }
 
-                if (obstacleComponent.nextStep == NextStep.Right)
-                {
-                    MoveObstacle(obstacleComponent, Vector2Int.right, NextStep.Left);
-                }
-                else // if(obstacleComponent.nextStep == NextStep.Left)
-                {
-                    MoveObstacle(obstacleComponent, Vector2Int.left, NextStep.Right);
-                }
+    private void DoZmobieLogic(Obstacle zombie)
+    {
+        if (zombie.nextStep == NextStep.None)
+        {
+            zombie.nextStep = Random.Range(0, 2) == 1 ? NextStep.Left : NextStep.Right; // 최초 방향 랜덤 지정.
+        }
 
+        if (zombie.nextStep == NextStep.Right)
+        {
+            Vector2Int nextPosition = zombie.obstaclePosition + Vector2Int.right;
+            Tile next = BoardManager.Instance.Board[nextPosition.x, nextPosition.y];
+            if (next == null)
+            {
+                Debug.LogError("Next tile is null at position: " + nextPosition);
+                return;
+            }
+            else
+            {
+                if (next.GetPiece() == null)
+                {
+                    if (next.Obstacle == ObstacleType.None)
+                    {
+                        // 움직이는 애니메이션
+                        BoardManager.Instance.MoveObstacle(zombie, nextPosition);
+                    }
+                    else
+                    {
+                        // 팅기는 애니메이션 후 기절
+                    }
+                }
+                else
+                {
+                    if (true /*기절중인가? */)
+                    {
+
+                    }
+                    else
+                    {
+                        // 공격! 기절시켜
+                    }
+                }
+            }
+        }
+        else // if(obstacleComponent.nextStep == NextStep.Left)
+        {
+            Vector2Int nextPosition = zombie.obstaclePosition + Vector2Int.left;
+            Tile next = BoardManager.Instance.Board[nextPosition.x, nextPosition.y];
+            if (next == null)
+            {
+                Debug.LogError("Next tile is null at position: " + nextPosition);
+                return;
+            }
+            else
+            {
+                if (next.GetPiece() == null)
+                {
+                    if (next.Obstacle == ObstacleType.None)
+                    {
+                        BoardManager.Instance.MoveObstacle(zombie, nextPosition);
+                    }
+                }
+                else
+                {
+                    if (true /*기절중인가? */)
+                    {
+
+                    }
+                    else
+                    {
+                        // 공격! 기절시켜
+                    }
+                }
             }
         }
     }
@@ -110,7 +173,7 @@ public class ObstacleManager : MonoBehaviour
             }
 
             // 이동한 위치 기준으로 8칸 내에 플레이어가 있는가?
-            DetectionPlayer(nextPosition);
+            DetectPlayer(nextPosition);
 
             // 이동하려는 위치에 플레이어가 있으면 return
             if (BoardManager.Instance.Board[nextPosition.x, nextPosition.y].GetPiece() != null)
@@ -123,11 +186,11 @@ public class ObstacleManager : MonoBehaviour
         }
         else
         {
-            _obstacleComponent.nextStep = _nextStep; // �������� �������� �̵�
+            _obstacleComponent.nextStep = _nextStep;
         }
     }
 
-    private void DetectionPlayer(Vector2Int _nextPosition)
+    private void DetectPlayer(Vector2Int _nextPosition)
     {
         Vector2Int[] directions = new Vector2Int[]
         {

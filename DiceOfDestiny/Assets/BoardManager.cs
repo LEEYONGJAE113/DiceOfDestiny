@@ -283,4 +283,17 @@ public class BoardManager : Singletone<BoardManager>
 
         return matchCount;
     }
+
+    public Tile GetTile(Vector2Int position)
+    {
+        if(position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
+        {
+            Debug.LogError("Position out of bounds");
+            return null;
+        }
+        else
+        {
+            return Board[position.x, position.y];
+        }
+    }
 }
