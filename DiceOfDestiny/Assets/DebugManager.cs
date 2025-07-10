@@ -22,7 +22,7 @@ public class DebugManager : MonoBehaviour
 
     public void onClickNextStepButton()
     {
-        //ObstacleManager.Instance.UpdateObstacleStep();
+        ObstacleManager.Instance.UpdateObstacleStep();
 
         GameManager.Instance.actionPointManager.TurnOff();
     }

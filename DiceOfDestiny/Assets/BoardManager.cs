@@ -248,7 +248,7 @@ public class BoardManager : Singletone<BoardManager>
         Board[currentPos.x, currentPos.y].Obstacle = ObstacleType.None; // 현재 타일의 장애물 제거
         Board[nextPos.x, nextPos.y].Obstacle = obstacle.obstacleType; // 다음 타일에 장애물 설정
         obstacle.obstaclePosition = nextPos; // 장애물의 위치 업데이트
-        obstacle.transform.position = new Vector3(boardTransform.position.x + nextPos.x, boardTransform.position.y + nextPos.y, 0); // 장애물 위치 이동
+        // obstacle.transform.position = new Vector3(boardTransform.position.x + nextPos.x, boardTransform.position.y + nextPos.y, 0); // 장애물 위치 이동
     }
 
     public int CountMatchingColors(Vector2Int position, TileColor targetColor)
