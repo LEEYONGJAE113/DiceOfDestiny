@@ -4,6 +4,27 @@ using UnityEngine;
 public class Piece : ScriptableObject
 {
     [SerializeField] public Face[] faces = new Face[6]; // 6개 면 데이터
+    private Buff buff = new Buff();
+    private Debuff debuff = new Debuff();
+
+    private class Buff
+    {
+
+    }
+
+    private class Debuff
+    {
+        public bool stun;
+    }
+
+    public bool GetStun()
+    {
+        return debuff.stun;
+    }
+    public void SetStun(bool value)
+    {
+        debuff.stun = value;
+    }
 }
 
 [System.Serializable]
