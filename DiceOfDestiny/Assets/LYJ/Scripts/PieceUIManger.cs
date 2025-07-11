@@ -25,11 +25,25 @@ public class PieceUIManager : Singletone<PieceUIManager>
         };
     }
 
-    public void CreateUI(States state, Vector2 position)
+    public void CreatePieceUI(States state, GameObject parent)
     {
         if (uiDic.TryGetValue(state, out GameObject newUIObj))
         {
-            Instantiate(newUIObj, position, Quaternion.identity);
+            Instantiate(newUIObj, parent.transform.position, Quaternion.identity, parent.transform);
+        }
+    }
+
+    public void ErasePieceUI(GameObject parent)
+    {
+        RectTransform[] allUIs = parent.GetComponentsInChildren<RectTransform>();
+
+        foreach (RectTransform targets in allUIs)
+        {
+            if (targets == null) { return; }
+            if (targets.CompareTag("PieceUI")) // 추후 태그 수정 필요
+            {
+                Destroy(targets.gameObject);
+            }
         }
     }
 
