@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -47,11 +48,14 @@ public class SkillManager : Singletone<SkillManager>
                 break;
             case "Priest":
                 Debug.Log("사제 스킬 발동!");
-                //ActionPointManager.Instance.AddAP(1);
-                //Debug.Log(ActionPointManager.Instance.currentAP);
+
+                SkillPriest();
+
                 break;
             case "Thief":
                 Debug.Log("도둑 스킬 발동!");
+
+                SkillThief();
 
                 break;
             case "Wizard":
@@ -63,6 +67,18 @@ public class SkillManager : Singletone<SkillManager>
                 break;
         }
     }
+
+    private void SkillPriest()
+    {
+        GameManager.Instance.actionPointManager.AddAP(1);
+    }
+
+
+    private void SkillThief()
+    {
+        
+    }
+
 
     private IEnumerator SkillEffectCoroutine(SpriteRenderer pieceRenderer, Vector2Int position, List<Vector2Int> matchingTiles)
     {

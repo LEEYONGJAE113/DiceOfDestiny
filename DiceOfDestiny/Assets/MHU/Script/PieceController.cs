@@ -84,6 +84,8 @@ public class PieceController : MonoBehaviour
                 if (!GameManager.Instance.actionPointManager.TryUseAP())
                     return;
 
+                
+
                 // 이전 타일에 Piece 값을 null로 바꾸고, 다음 타일에 Piece 값을 적용 
                 BoardManager.Instance.Board[gridPosition.x, gridPosition.y].SetPiece(null);
                 BoardManager.Instance.Board[newPosition.x, newPosition.y].SetPiece(this);
@@ -92,25 +94,19 @@ public class PieceController : MonoBehaviour
 
                 ObstacleManager.Instance.UpdateObstacleStep();
 
-                gridPosition = newPosition;
+               
+
+                //gridPosition = newPosition;
                 transform.position = new Vector3(
                     BoardManager.Instance.boardTransform.position.x + gridPosition.x,
                     BoardManager.Instance.boardTransform.position.y + gridPosition.y,
                     0f
                 );
                 UpdateTopFace(moveDirection); // 윗면 업데이트
-                // RotateToTopFace(moveDirection);
-                RotateHalfBack(moveDirection);
+                RotateToTopFace(moveDirection);
+                //RotateHalfBack(moveDirection);
 
-                // 스킬 발동 확인
-                if (SkillManager.Instance != null)
-                {
-                    SkillManager.Instance.TryActivateSkill(gridPosition, this);
-                }
-                else
-                {
-                    Debug.LogError("SkillManager.Instance is null!");
-                }
+               
             }
             else
             {
@@ -292,6 +288,17 @@ public class PieceController : MonoBehaviour
         colorRenderer.transform.localScale = Vector3.one;
 
         isMoving = false;
+
+        // 스킬 발동
+        if (SkillManager.Instance != null)
+        {
+            SkillManager.Instance.TryActivateSkill(gridPosition, this);
+        }
+        else
+        {
+            Debug.LogError("SkillManager.Instance is null!");
+        }
+
     }
 
     public void RotateHalfBack(Vector2Int moveDirection)
