@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Priest
   m_EditorClassIdentifier: 
   className: Priest
-  sprite: {fileID: 21300000, guid: fe5308c37896fb14eb13145634ac3e96, type: 3}
+  sprite: {fileID: 21300000, guid: d1da082ed880d2744bc60b0f9ad30095, type: 3}

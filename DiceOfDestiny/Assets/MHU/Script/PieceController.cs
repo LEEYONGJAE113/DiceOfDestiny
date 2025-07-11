@@ -92,25 +92,11 @@ public class PieceController : MonoBehaviour
 
                 ObstacleManager.Instance.UpdateObstacleStep();
 
-                gridPosition = newPosition;
-                transform.position = new Vector3(
-                    BoardManager.Instance.boardTransform.position.x + gridPosition.x,
-                    BoardManager.Instance.boardTransform.position.y + gridPosition.y,
-                    0f
-                );
+                RotateToTopFace(moveDirection);
                 UpdateTopFace(moveDirection); // 윗면 업데이트
-                // RotateToTopFace(moveDirection);
-                RotateHalfBack(moveDirection);
 
-                // 스킬 발동 확인
-                if (SkillManager.Instance != null)
-                {
-                    SkillManager.Instance.TryActivateSkill(gridPosition, this);
-                }
-                else
-                {
-                    Debug.LogError("SkillManager.Instance is null!");
-                }
+                //RotateHalfBack(moveDirection);
+
             }
             else
             {
@@ -292,6 +278,17 @@ public class PieceController : MonoBehaviour
         colorRenderer.transform.localScale = Vector3.one;
 
         isMoving = false;
+
+        // 스킬 발동
+        if (SkillManager.Instance != null)
+        {
+            SkillManager.Instance.TryActivateSkill(gridPosition, this);
+        }
+        else
+        {
+            Debug.LogError("SkillManager.Instance is null!");
+        }
+
     }
 
     public void RotateHalfBack(Vector2Int moveDirection)
