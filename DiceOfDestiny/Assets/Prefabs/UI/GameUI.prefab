@@ -391,6 +391,8 @@ GameObject:
   - component: {fileID: 5871212226624033188}
   - component: {fileID: 1348566884849320576}
   - component: {fileID: 6330682711020914740}
+  - component: {fileID: 3270874844935555810}
+  - component: {fileID: -6494050053675337793}
   m_Layer: 5
   m_Name: GameUI
   m_TagString: Untagged
@@ -445,6 +447,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9b613c3959f6b54192a170652e71533, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3270874844935555810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1551000356895241345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3389154ced69e894b9724b7bdabdf73d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reColorBoardButton: {fileID: 1652632208006027327}
+  regenerateButton: {fileID: 5983659340997096733}
+  nextStepButton: {fileID: 9166837454393700166}
+--- !u!114 &-6494050053675337793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1551000356895241345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17630b978a0b39f43b45a792db2032ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: {fileID: 1858490216332416208}
+  currentTurn: {fileID: 8332216108628847703}
+  Dice: {fileID: 8345710812499394732}
+  AP: {fileID: 9023669873715637223}
 --- !u!1 &2108077266216155349
 GameObject:
   m_ObjectHideFlags: 0

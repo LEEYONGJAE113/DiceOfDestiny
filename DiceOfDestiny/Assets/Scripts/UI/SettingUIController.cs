@@ -23,6 +23,7 @@ public class SettingUIController : MonoBehaviour
     [SerializeField] private Toggle fullscreenToggle;
     [SerializeField] private Dropdown fpsDropdown;
     [SerializeField] private Toggle vsyncToggle;
+    [SerializeField] private Dropdown colorBlindDropdown;
 
     [Header("Audio Settings")]
     [SerializeField] private AudioMixer audioMixer;
@@ -36,6 +37,15 @@ public class SettingUIController : MonoBehaviour
     private Resolution[] resolutions;
 
     private List<int> availableFpsList;
+
+    private readonly List<string> colorBlindOptions = new List<string>
+    {
+        "일반",
+        "적록색약(Protanope)",
+        "녹색약(Deuteranope)",
+        "청색약(Tritanope)",
+        "흑백(Grayscale)"
+    };
 
     private void Awake()
     {
@@ -61,6 +71,7 @@ public class SettingUIController : MonoBehaviour
 
         InitResolutionOptions();
         InitFPSDropdown();
+        InitColorBlindDropdown();
         InitAudioSettings();
 
         fullscreenToggle.onValueChanged.AddListener(SetFullScreen);
@@ -73,6 +84,10 @@ public class SettingUIController : MonoBehaviour
 
         ShowPanel(displayPanel); // 디스플레이 탭 기본 활성화
         LoadFPSLimit(); // FPS 제한 로드
+
+        if (colorBlindDropdown == null)
+            colorBlindDropdown = GetComponentInChildren<Dropdown>(true);
+        ColorBlindManager.Instance.RegisterDropdown(colorBlindDropdown);
     }
       
 
@@ -239,6 +254,12 @@ public class SettingUIController : MonoBehaviour
         fpsDropdown.RefreshShownValue();
 
         SetFPSLimit(savedIndex);
+    }
+
+    private void InitColorBlindDropdown()
+    {
+        colorBlindDropdown.ClearOptions();
+        colorBlindDropdown.AddOptions(colorBlindOptions);
     }
 
     #endregion
