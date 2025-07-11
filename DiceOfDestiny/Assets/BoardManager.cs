@@ -13,22 +13,7 @@ public enum TileColor
 }
 
 public class BoardManager : Singletone<BoardManager>
-{
-    // public static BoardManager Instance { get; private set; }
-
-    // private void Awake()
-    // {
-    //     if (Instance == null)
-    //     {
-    //         Instance = this;
-    //         DontDestroyOnLoad(gameObject);
-    //     }
-    //     else
-    //     {
-    //         Destroy(gameObject);
-    //     }
-    // }
-
+{ 
     [Header("Board Size Settings")]
     [SerializeField] public int boardSize = 11;
     [SerializeField] private GameObject tilePrefab;
@@ -288,7 +273,6 @@ public class BoardManager : Singletone<BoardManager>
     {
         if(position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
         {
-            Debug.LogError("Position out of bounds");
             return null;
         }
         else
