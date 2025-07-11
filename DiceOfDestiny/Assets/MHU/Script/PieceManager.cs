@@ -31,7 +31,7 @@ public class PieceManager : Singletone<PieceManager>
     {
         for (int i = 0; i < pieces.Count; i++)
         {
-            PieceUIManager.Instance.CreateUI(pieceStates[i].CurrentState, pieces[i].gameObject.transform.position);
+            PieceUIManager.Instance.CreatePieceUI(pieceStates[i].CurrentState, pieces[i].gameObject);
         }
     }
 

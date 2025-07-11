@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public static class AllEventNames
 {
     #region 피스매니저
