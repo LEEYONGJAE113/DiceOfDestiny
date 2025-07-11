@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -18,6 +18,8 @@ public class MainUIController : MonoBehaviour
 
         bool hasSave = PlayerPrefs.GetInt("SaveExists", 0) == 1;
         continueButton.interactable = hasSave;
+
+        AudioManager.Instance.PlayBGM("MainBGM");
     }
 
 
@@ -29,9 +31,9 @@ public class MainUIController : MonoBehaviour
 
     private void OnNewGameClicked()
     {
-        PlayerPrefs.SetString("LastScene", "Doho_GameScene");
+        PlayerPrefs.SetString("LastScene", "GameScene");
         PlayerPrefs.SetInt("SaveExists", 1);
-        SceneManager.LoadScene("Doho_GameScene");
+        SceneManager.LoadScene("GameScene");
     }
     private void OnSettingsClicked()
     {

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -36,7 +36,7 @@ public class AudioManager : Singletone<AudioManager>
         // }
 
         // Instance = this;
-        // DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject);
 
         bgmDict = bgmClips.ToDictionary(c => c.name, c => c);
         sfxDict = sfxClips.ToDictionary(c => c.name, c => c);

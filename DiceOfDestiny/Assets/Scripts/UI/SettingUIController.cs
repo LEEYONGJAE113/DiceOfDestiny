@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,6 +11,7 @@ public class SettingUIController : MonoBehaviour
     [SerializeField] private Button displayTabButton;
     [SerializeField] private Button audioTabButton;
     [SerializeField] private Button controlsTabButton;
+    [SerializeField] private Button closeButton;
 
     [Header("Content Panels")]
     [SerializeField] private GameObject displayPanel;
@@ -45,7 +46,18 @@ public class SettingUIController : MonoBehaviour
     {
         displayTabButton.onClick.AddListener(() => ShowPanel(displayPanel));
         audioTabButton.onClick.AddListener(() => ShowPanel(audioPanel));
-        controlsTabButton.onClick.AddListener(() => ShowPanel(controlsPanel));        
+        controlsTabButton.onClick.AddListener(() => ShowPanel(controlsPanel));
+        closeButton.onClick.AddListener(() =>
+        {
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.ToggleSettings(false);
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
+        });
 
         InitResolutionOptions();
         InitFPSDropdown();
@@ -303,7 +315,6 @@ public class SettingUIController : MonoBehaviour
 
         AudioManager.Instance.SetMasterMute(isMuted);
     }
-
 
     private float ToDecibel(float linear)
     {
