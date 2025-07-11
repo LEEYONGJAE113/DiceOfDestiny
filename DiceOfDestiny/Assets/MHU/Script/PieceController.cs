@@ -84,8 +84,6 @@ public class PieceController : MonoBehaviour
                 if (!GameManager.Instance.actionPointManager.TryUseAP())
                     return;
 
-                
-
                 // 이전 타일에 Piece 값을 null로 바꾸고, 다음 타일에 Piece 값을 적용 
                 BoardManager.Instance.Board[gridPosition.x, gridPosition.y].SetPiece(null);
                 BoardManager.Instance.Board[newPosition.x, newPosition.y].SetPiece(this);
@@ -94,19 +92,11 @@ public class PieceController : MonoBehaviour
 
                 ObstacleManager.Instance.UpdateObstacleStep();
 
-               
-
-                //gridPosition = newPosition;
-                transform.position = new Vector3(
-                    BoardManager.Instance.boardTransform.position.x + gridPosition.x,
-                    BoardManager.Instance.boardTransform.position.y + gridPosition.y,
-                    0f
-                );
-                UpdateTopFace(moveDirection); // 윗면 업데이트
                 RotateToTopFace(moveDirection);
+                UpdateTopFace(moveDirection); // 윗면 업데이트
+
                 //RotateHalfBack(moveDirection);
 
-               
             }
             else
             {

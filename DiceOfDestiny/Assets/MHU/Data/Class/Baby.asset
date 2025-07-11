@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Baby
   m_EditorClassIdentifier: 
   className: Baby
-  sprite: {fileID: 21300000, guid: 1e319c30bce32ca469cbb33f374a7d6c, type: 3}
+  sprite: {fileID: 21300000, guid: 05b85f161caa9eb4bac341b98b638172, type: 3}

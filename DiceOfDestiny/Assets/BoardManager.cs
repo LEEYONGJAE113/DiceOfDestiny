@@ -13,7 +13,7 @@ public enum TileColor
 }
 
 public class BoardManager : Singletone<BoardManager>
-{ 
+{
     [Header("Board Size Settings")]
     [SerializeField] public int boardSize = 11;
     [SerializeField] private GameObject tilePrefab;
@@ -382,9 +382,11 @@ public class BoardManager : Singletone<BoardManager>
                     case 5: Board[checkPos.x, checkPos.y].TileColor = TileColor.Gray; break;
                 }
             }
+        }
+    }
     public Tile GetTile(Vector2Int position)
     {
-        if(position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
+        if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
         {
             return null;
         }
