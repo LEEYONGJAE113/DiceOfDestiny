@@ -13,22 +13,7 @@ public enum TileColor
 }
 
 public class BoardManager : Singletone<BoardManager>
-{
-    // public static BoardManager Instance { get; private set; }
-
-    // private void Awake()
-    // {
-    //     if (Instance == null)
-    //     {
-    //         Instance = this;
-    //         DontDestroyOnLoad(gameObject);
-    //     }
-    //     else
-    //     {
-    //         Destroy(gameObject);
-    //     }
-    // }
-
+{ 
     [Header("Board Size Settings")]
     [SerializeField] public int boardSize = 11;
     [SerializeField] private GameObject tilePrefab;
@@ -248,7 +233,7 @@ public class BoardManager : Singletone<BoardManager>
         Board[currentPos.x, currentPos.y].Obstacle = ObstacleType.None; // 현재 타일의 장애물 제거
         Board[nextPos.x, nextPos.y].Obstacle = obstacle.obstacleType; // 다음 타일에 장애물 설정
         obstacle.obstaclePosition = nextPos; // 장애물의 위치 업데이트
-        obstacle.transform.position = new Vector3(boardTransform.position.x + nextPos.x, boardTransform.position.y + nextPos.y, 0); // 장애물 위치 이동
+        // obstacle.transform.position = new Vector3(boardTransform.position.x + nextPos.x, boardTransform.position.y + nextPos.y, 0); // 장애물 위치 이동
     }
 
     // 주변 8칸 중 윗면과 같은 색이 몇개인지 카운팅하는 함수
@@ -397,6 +382,15 @@ public class BoardManager : Singletone<BoardManager>
                     case 5: Board[checkPos.x, checkPos.y].TileColor = TileColor.Gray; break;
                 }
             }
+    public Tile GetTile(Vector2Int position)
+    {
+        if(position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
+        {
+            return null;
+        }
+        else
+        {
+            return Board[position.x, position.y];
         }
     }
 }
