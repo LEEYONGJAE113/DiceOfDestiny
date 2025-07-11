@@ -27,7 +27,7 @@ public class PieceController : MonoBehaviour
     }
 
     void Update()
-    {       
+    {
         TestInput();
     }
 
@@ -56,11 +56,17 @@ public class PieceController : MonoBehaviour
                 return;
             }
 
+            if (piece.debuff.IsStun)
+            {
+                Debug.Log("Piece is stunned!");
+                return;
+            }
+
             // 이동하는 곳에 장애물이 있으면 return
             Debug.Log("Obstacle Name : " + BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle);
             if (BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle != ObstacleType.None)
             {
-                //newPosition = gridPosition;
+                RotateHalfBack(moveDirection); // 튕김 애니메이션
                 return;
             }
 

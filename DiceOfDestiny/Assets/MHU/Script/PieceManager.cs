@@ -15,7 +15,7 @@ public class PieceManager : Singletone<PieceManager>
     }
     private List<PieceState> pieceStates = new();
     public GameObject piecePrefab;
-    private PieceController currentPiece; // 현재 내가 조종중인 말
+    [SerializeField]private PieceController currentPiece; // 현재 내가 조종중인 말
 
     void Awake()
     {
@@ -51,4 +51,14 @@ public class PieceManager : Singletone<PieceManager>
         }
     }
 
+    public void DecreaseDebuffAllPieces()
+    {
+        foreach (var piece in pieces)
+        {
+            if(piece.GetPiece().debuff.IsStun)
+                piece.GetPiece().debuff.DecreaseStunTurn();
+        }
+        if (currentPiece.GetPiece().debuff.IsStun)
+            currentPiece.GetPiece().debuff.DecreaseStunTurn();
+    }
 }
