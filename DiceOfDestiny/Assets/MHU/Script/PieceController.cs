@@ -92,26 +92,11 @@ public class PieceController : MonoBehaviour
 
                 ObstacleManager.Instance.UpdateObstacleStep();
 
-                // 기존 시각적 이동
-                //gridPosition = newPosition;
-                // transform.position = new Vector3(
-                //     BoardManager.Instance.boardTransform.position.x + gridPosition.x,
-                //     BoardManager.Instance.boardTransform.position.y + gridPosition.y,
-                //     0f
-                // );
-                RotateToTopFace(moveDirection); // moveDirection 방향으로 회전? // 일반 이동
+                RotateToTopFace(moveDirection);
                 UpdateTopFace(moveDirection); // 윗면 업데이트
-                //RotateHalfBack(moveDirection); // 튕김 애니메이션
 
-                // 스킬 발동 확인
-                if (SkillManager.Instance != null)
-                {
-                    SkillManager.Instance.TryActivateSkill(gridPosition, this);
-                }
-                else
-                {
-                    Debug.LogError("SkillManager.Instance is null!");
-                }
+                //RotateHalfBack(moveDirection);
+
             }
             else
             {
@@ -293,6 +278,17 @@ public class PieceController : MonoBehaviour
         colorRenderer.transform.localScale = Vector3.one;
 
         isMoving = false;
+
+        // 스킬 발동
+        if (SkillManager.Instance != null)
+        {
+            SkillManager.Instance.TryActivateSkill(gridPosition, this);
+        }
+        else
+        {
+            Debug.LogError("SkillManager.Instance is null!");
+        }
+
     }
 
     public void RotateHalfBack(Vector2Int moveDirection)

@@ -14,21 +14,6 @@ public enum TileColor
 
 public class BoardManager : Singletone<BoardManager>
 {
-    // public static BoardManager Instance { get; private set; }
-
-    // private void Awake()
-    // {
-    //     if (Instance == null)
-    //     {
-    //         Instance = this;
-    //         DontDestroyOnLoad(gameObject);
-    //     }
-    //     else
-    //     {
-    //         Destroy(gameObject);
-    //     }
-    // }
-
     [Header("Board Size Settings")]
     [SerializeField] public int boardSize = 11;
     [SerializeField] private GameObject tilePrefab;
@@ -248,9 +233,10 @@ public class BoardManager : Singletone<BoardManager>
         Board[currentPos.x, currentPos.y].Obstacle = ObstacleType.None; // 현재 타일의 장애물 제거
         Board[nextPos.x, nextPos.y].Obstacle = obstacle.obstacleType; // 다음 타일에 장애물 설정
         obstacle.obstaclePosition = nextPos; // 장애물의 위치 업데이트
-        obstacle.transform.position = new Vector3(boardTransform.position.x + nextPos.x, boardTransform.position.y + nextPos.y, 0); // 장애물 위치 이동
+        // obstacle.transform.position = new Vector3(boardTransform.position.x + nextPos.x, boardTransform.position.y + nextPos.y, 0); // 장애물 위치 이동
     }
 
+    // 주변 8칸 중 윗면과 같은 색이 몇개인지 카운팅하는 함수
     public int CountMatchingColors(Vector2Int position, TileColor targetColor)
     {
         int matchCount = 0;
@@ -282,5 +268,131 @@ public class BoardManager : Singletone<BoardManager>
         }
 
         return matchCount;
+    }
+
+    // 주변 8칸 중 윗면과 같은 색의 위치를 가져오는 함수
+    public List<Vector2Int> GetMatchingColorTiles(Vector2Int position, TileColor targetColor)
+    {
+        List<Vector2Int> matchingTiles = new List<Vector2Int>();
+        Vector2Int[] directions = new Vector2Int[]
+        {
+            new Vector2Int(-1, -1), // 좌상
+            new Vector2Int(-1, 0),  // 좌
+            new Vector2Int(-1, 1),  // 좌하
+            new Vector2Int(0, -1),  // 상
+            new Vector2Int(0, 1),   // 하
+            new Vector2Int(1, -1),  // 우상
+            new Vector2Int(1, 0),   // 우
+            new Vector2Int(1, 1)    // 우하
+        };
+
+        foreach (Vector2Int dir in directions)
+        {
+            Vector2Int checkPos = position + dir;
+            if (checkPos.x >= 0 && checkPos.x < boardSize &&
+                checkPos.y >= 0 && checkPos.y < boardSize)
+            {
+                if (Board[checkPos.x, checkPos.y] != null &&
+                    Board[checkPos.x, checkPos.y].TileColor == targetColor)
+                {
+                    matchingTiles.Add(checkPos);
+                }
+            }
+        }
+
+        return matchingTiles;
+    }
+
+    // 주변 8칸 중 특정 색과 일치하는 칸만 재배정하는 함수
+    public void ReassignMatchingColorTiles(Vector2Int position, TileColor targetColor)
+    {
+        Vector2Int[] directions = new Vector2Int[]
+        {
+        new Vector2Int(-1, -1), // 좌상
+        new Vector2Int(-1, 0),  // 좌
+        new Vector2Int(-1, 1),  // 좌하
+        new Vector2Int(0, -1),  // 상
+        new Vector2Int(0, 1),   // 하
+        new Vector2Int(1, -1),  // 우상
+        new Vector2Int(1, 0),   // 우
+        new Vector2Int(1, 1)    // 우하
+        };
+
+        foreach (Vector2Int dir in directions)
+        {
+            Vector2Int checkPos = position + dir;
+            if (checkPos.x >= 0 && checkPos.x < boardSize &&
+                checkPos.y >= 0 && checkPos.y < boardSize &&
+                Board[checkPos.x, checkPos.y] != null &&
+                Board[checkPos.x, checkPos.y].TileColor == targetColor)
+            {
+                // 각 타일마다 독립적으로 무작위 색상 인덱스 선택 (None 제외)
+                int randomColorIndex = Random.Range(0, tileColors.Length); // tileColors.Length는 6 (Red, Green, Blue, Yellow, Purple, Gray)
+
+                // 타일 색상 설정
+                Board[checkPos.x, checkPos.y].SetTileColor(tileColors[randomColorIndex]);
+                // TileColor 열거형 값 설정
+                switch (randomColorIndex)
+                {
+                    case 0: Board[checkPos.x, checkPos.y].TileColor = TileColor.Red; break;
+                    case 1: Board[checkPos.x, checkPos.y].TileColor = TileColor.Green; break;
+                    case 2: Board[checkPos.x, checkPos.y].TileColor = TileColor.Blue; break;
+                    case 3: Board[checkPos.x, checkPos.y].TileColor = TileColor.Yellow; break;
+                    case 4: Board[checkPos.x, checkPos.y].TileColor = TileColor.Purple; break;
+                    case 5: Board[checkPos.x, checkPos.y].TileColor = TileColor.Gray; break;
+                }
+            }
+        }
+    }
+
+    // 주변 8칸 색상 재배정하는 함수
+    public void ReassignSurroundingColors(Vector2Int position)
+    {
+        Vector2Int[] directions = new Vector2Int[]
+        {
+            new Vector2Int(-1, -1), // 좌상
+            new Vector2Int(-1, 0),  // 좌
+            new Vector2Int(-1, 1),  // 좌하
+            new Vector2Int(0, -1),  // 상
+            new Vector2Int(0, 1),   // 하
+            new Vector2Int(1, -1),  // 우상
+            new Vector2Int(1, 0),   // 우
+            new Vector2Int(1, 1)    // 우하
+        };
+
+        foreach (Vector2Int dir in directions)
+        {
+            Vector2Int checkPos = position + dir;
+            if (checkPos.x >= 0 && checkPos.x < boardSize &&
+                checkPos.y >= 0 && checkPos.y < boardSize &&
+                Board[checkPos.x, checkPos.y] != null)
+            {
+                // 무작위 색상 인덱스 선택
+                int randomColorIndex = Random.Range(0, tileColors.Length);
+                // 타일 색상 설정
+                Board[checkPos.x, checkPos.y].SetTileColor(tileColors[randomColorIndex]);
+                // TileColor 열거형 값 설정
+                switch (randomColorIndex)
+                {
+                    case 0: Board[checkPos.x, checkPos.y].TileColor = TileColor.Red; break;
+                    case 1: Board[checkPos.x, checkPos.y].TileColor = TileColor.Green; break;
+                    case 2: Board[checkPos.x, checkPos.y].TileColor = TileColor.Blue; break;
+                    case 3: Board[checkPos.x, checkPos.y].TileColor = TileColor.Yellow; break;
+                    case 4: Board[checkPos.x, checkPos.y].TileColor = TileColor.Purple; break;
+                    case 5: Board[checkPos.x, checkPos.y].TileColor = TileColor.Gray; break;
+                }
+            }
+        }
+    }
+    public Tile GetTile(Vector2Int position)
+    {
+        if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
+        {
+            return null;
+        }
+        else
+        {
+            return Board[position.x, position.y];
+        }
     }
 }

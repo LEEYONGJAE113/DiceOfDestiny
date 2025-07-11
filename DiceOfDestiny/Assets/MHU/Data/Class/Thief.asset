@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Thief
   m_EditorClassIdentifier: 
   className: Thief
-  sprite: {fileID: 21300000, guid: a66ee77fc8a3c1b4ba8836b3e8c7ca08, type: 3}
+  sprite: {fileID: 21300000, guid: ce9ea16c2ba39fb4baac8a1d233ad9d9, type: 3}
