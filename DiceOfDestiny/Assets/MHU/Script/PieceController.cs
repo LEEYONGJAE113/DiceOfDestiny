@@ -403,7 +403,13 @@ public class PieceController : MonoBehaviour
         isMoving = false;
     }
 
-
+    public Face GetFace(int index)
+    {
+        if (index >= 0 && index < 6)
+            return piece.faces[index];
+        Debug.LogError($"Invalid face index: {index}");
+        return default;
+    }
 
     public Piece GetPiece()
     {
