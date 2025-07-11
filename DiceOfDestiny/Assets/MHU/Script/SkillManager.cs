@@ -10,7 +10,7 @@ public class SkillManager : Singletone<SkillManager>
         if (matchCount >= 3)
         {
             ActivateSkill(piece.GetTopFace().classData);
-            StartCoroutine(SkillEffectCoroutine(piece.colorRenderer));
+            //StartCoroutine(SkillEffectCoroutine(piece.colorRenderer));
         }
         else
         {

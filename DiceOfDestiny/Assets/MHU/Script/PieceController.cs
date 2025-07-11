@@ -92,15 +92,16 @@ public class PieceController : MonoBehaviour
 
                 ObstacleManager.Instance.UpdateObstacleStep();
 
-                gridPosition = newPosition;
-                transform.position = new Vector3(
-                    BoardManager.Instance.boardTransform.position.x + gridPosition.x,
-                    BoardManager.Instance.boardTransform.position.y + gridPosition.y,
-                    0f
-                );
+                // 기존 시각적 이동
+                //gridPosition = newPosition;
+                // transform.position = new Vector3(
+                //     BoardManager.Instance.boardTransform.position.x + gridPosition.x,
+                //     BoardManager.Instance.boardTransform.position.y + gridPosition.y,
+                //     0f
+                // );
+                RotateToTopFace(moveDirection); // moveDirection 방향으로 회전? // 일반 이동
                 UpdateTopFace(moveDirection); // 윗면 업데이트
-                // RotateToTopFace(moveDirection);
-                RotateHalfBack(moveDirection);
+                //RotateHalfBack(moveDirection); // 튕김 애니메이션
 
                 // 스킬 발동 확인
                 if (SkillManager.Instance != null)
