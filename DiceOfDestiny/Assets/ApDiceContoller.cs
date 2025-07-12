@@ -1,98 +1,117 @@
-// DiceVisualController.cs
 using System.Collections;
 using UnityEngine;
 
-public class DiceVisualController : MonoBehaviour
+public class FourSideRollingDice : MonoBehaviour
 {
-    public SpriteRenderer topRenderer;
-    public SpriteRenderer frontRenderer;
-    public SpriteRenderer sideRenderer;
+    [Header("Sprite Renderers")]
+    public SpriteRenderer upperRenderer;
+    public SpriteRenderer lowerRenderer;
 
-    public Sprite[] diceFaceSprites; // 6개의 스프라이트
+    [Header("Dice Sides")]
+    public Sprite[] sideSprites; // 4개 스프라이트 필요
 
-    private int currentTopIndex = 0;
-    private int currentFrontIndex = 1;
+    [Header("Animation Settings")]
+    public float duration = 0.8f; // 한 사이클 애니메이션 지속 시간
+    public float inflateAmount = 0.4f; // 부풀림 크기
 
-    void Start()
+    [Header("Roll Settings")]
+    public int rollCount = 6; // 몇 번 굴릴지
+
+    [Header("Movement Settings")]
+    public Vector3 startPosition = Vector3.zero;
+    public Vector3 endPosition = new Vector3(-3f, 3f, 0f); // 좌상단 예시
+    // 속도 대신 위치 기반으로 보간 처리
+
+    private int currentIndex = 0; // 현재 위쪽 면 인덱스
+
+    private void Start()
     {
-        StartCoroutine(AutoRollLoop());
-    }
-
-    IEnumerator AutoRollLoop()
-    {
-        while (true)
+        if (sideSprites == null || sideSprites.Length < 4)
         {
-            Vector2Int randomDir = GetRandomDirection();
-            yield return RollRoutine(randomDir);
-            yield return new WaitForSeconds(0.5f);
+            Debug.LogError("sideSprites 배열에 최소 4개의 스프라이트를 넣어주세요.");
+            enabled = false;
+            return;
         }
+
+        transform.localPosition = startPosition;
+
+        // 초기 스프라이트 설정
+        upperRenderer.sprite = sideSprites[currentIndex];
+        lowerRenderer.sprite = sideSprites[GetNextIndex(currentIndex)];
+
+        StartCoroutine(RollLoop());
     }
 
-    Vector2Int GetRandomDirection()
+    IEnumerator RollLoop()
     {
-        Vector2Int[] directions = { Vector2Int.right, Vector2Int.left, Vector2Int.up, Vector2Int.down };
-        return directions[Random.Range(0, directions.Length)];
-    }
-
-    public void Roll(Vector2Int direction)
-    {
-        StartCoroutine(RollRoutine(direction));
-    }
-
-    IEnumerator RollRoutine(Vector2Int dir)
-    {
-        Vector3 startPos = transform.position;
-        Vector3 endPos = startPos + new Vector3(dir.x, dir.y, 0);
-
-        float duration = 0.8f;
-        float t = 0f;
-
-        int nextTop = (currentTopIndex + 1) % diceFaceSprites.Length;
-        int nextFront = (currentFrontIndex + 1) % diceFaceSprites.Length;
-
-        Vector3 topStartScale = topRenderer.transform.localScale;
-        Vector3 frontStartScale = frontRenderer.transform.localScale;
-        Vector3 sideStartScale = sideRenderer.transform.localScale;
-        Vector3 sideStartEuler = sideRenderer.transform.localEulerAngles;
-
-        while (t < 1f)
+        for (int i = 0; i < rollCount; i++)
         {
-            t += Time.deltaTime / duration;
-            float curve = Mathf.Sin(t * Mathf.PI);
+            // 현재 진행률 (0~1) — 얼마나 굴렀는지 비율
+            float progress = (float)i / (rollCount - 1);
 
-            transform.position = Vector3.Lerp(startPos, endPos, t);
+            // start ~ end 위치를 보간해서 이번 애니메이션 시작 위치로 설정
+            transform.localPosition = Vector3.Lerp(startPosition, endPosition, progress);
 
-            // 육각형처럼 늘어났다 줄어드는 효과
-            Vector3 topTargetScale = new Vector3(1.2f, 0.5f, 1f);
-            Vector3 sideTargetScale = new Vector3(0.9f, 1.2f, 1f);
-            Vector3 sideTargetEuler = new Vector3(0, 0, -30f);
+            yield return RollCycle();
 
-            topRenderer.transform.localScale = Vector3.Lerp(topStartScale, topTargetScale, curve);
-            frontRenderer.transform.localScale = Vector3.Lerp(frontStartScale, Vector3.one, curve);
-            sideRenderer.transform.localScale = Vector3.Lerp(sideStartScale, sideTargetScale, curve);
+            // 면 교체
+            currentIndex = GetNextIndex(currentIndex);
+            upperRenderer.sprite = sideSprites[currentIndex];
+            lowerRenderer.sprite = sideSprites[GetNextIndex(currentIndex)];
+        }
 
-            sideRenderer.transform.localEulerAngles = Vector3.Lerp(sideStartEuler, sideTargetEuler, curve);
+        // 마지막 위치 정확하게 맞춤
+        transform.localPosition = endPosition;
 
-            if (t > 0.5f && currentTopIndex != nextTop)
-            {
-                currentTopIndex = nextTop;
-                currentFrontIndex = nextFront;
-                UpdateFaceSprites(currentTopIndex, currentFrontIndex);
-            }
+        Debug.Log("주사위 굴리기 완료!");
+    }
+
+    int GetNextIndex(int index)
+    {
+        return (index + 1) % sideSprites.Length;
+    }
+
+    IEnumerator RollCycle()
+    {
+        Vector3 moveVec = Vector3.right;
+
+        upperRenderer.transform.localPosition = Vector3.zero;
+        lowerRenderer.transform.localPosition = Vector3.zero;
+
+        upperRenderer.transform.localScale = Vector3.one;
+        lowerRenderer.transform.localScale = Vector3.zero;
+
+        float time = 0f;
+
+        while (time < duration)
+        {
+            float t = time / duration;
+            float ease = Mathf.SmoothStep(0f, 1f, t);
+
+            float inflate = Mathf.Sin(ease * Mathf.PI) * inflateAmount;
+            float totalScale = 1f + inflate;
+
+            float scaleUpper = (1f - ease) * totalScale;
+            float scaleLower = ease * totalScale;
+
+            upperRenderer.transform.localScale = new Vector3(scaleUpper, 1f, 1f);
+            lowerRenderer.transform.localScale = new Vector3(scaleLower, 1f, 1f);
+
+            float upperWidth = upperRenderer.sprite.bounds.size.x * scaleUpper;
+            float lowerWidth = lowerRenderer.sprite.bounds.size.x * scaleLower;
+
+            float distance = (upperWidth / 2f) + (lowerWidth / 2f);
+
+            Vector3 upperPos = moveVec * distance * 0.5f;
+            Vector3 lowerPos = -moveVec * distance * 0.5f;
+
+            Vector3 extraOffset = moveVec * 0.5f * t;
+
+            upperRenderer.transform.localPosition = upperPos + extraOffset;
+            lowerRenderer.transform.localPosition = lowerPos + extraOffset;
+
+            time += Time.deltaTime;
             yield return null;
         }
-
-        transform.position = endPos;
-        topRenderer.transform.localScale = topStartScale;
-        frontRenderer.transform.localScale = frontStartScale;
-        sideRenderer.transform.localScale = sideStartScale;
-        sideRenderer.transform.localEulerAngles = sideStartEuler;
-    }
-
-    void UpdateFaceSprites(int topIndex, int frontIndex)
-    {
-        topRenderer.sprite = diceFaceSprites[topIndex];
-        frontRenderer.sprite = diceFaceSprites[frontIndex];
-        sideRenderer.sprite = diceFaceSprites[(topIndex + frontIndex) % diceFaceSprites.Length];
     }
 }
