@@ -23,7 +23,6 @@ public class SettingUIController : MonoBehaviour
     [SerializeField] private Toggle fullscreenToggle;
     [SerializeField] private Dropdown fpsDropdown;
     [SerializeField] private Toggle vsyncToggle;
-    [SerializeField] private Dropdown colorBlindDropdown;
 
     [Header("Audio Settings")]
     [SerializeField] private AudioMixer audioMixer;
@@ -32,20 +31,8 @@ public class SettingUIController : MonoBehaviour
     [SerializeField] private Slider sfxSlider;
     [SerializeField] private Toggle muteToggle;
 
-
-
     private Resolution[] resolutions;
-
     private List<int> availableFpsList;
-
-    private readonly List<string> colorBlindOptions = new List<string>
-    {
-        "일반",
-        "적록색약(Protanope)",
-        "녹색약(Deuteranope)",
-        "청색약(Tritanope)",
-        "흑백(Grayscale)"
-    };
 
     private void Awake()
     {
@@ -71,7 +58,6 @@ public class SettingUIController : MonoBehaviour
 
         InitResolutionOptions();
         InitFPSDropdown();
-        InitColorBlindDropdown();
         InitAudioSettings();
 
         fullscreenToggle.onValueChanged.AddListener(SetFullScreen);
@@ -83,13 +69,9 @@ public class SettingUIController : MonoBehaviour
         QualitySettings.vSyncCount = vsyncToggle.isOn ? 1 : 0;
 
         ShowPanel(displayPanel); // 디스플레이 탭 기본 활성화
-        LoadFPSLimit(); // FPS 제한 로드
-
-        if (colorBlindDropdown == null)
-            colorBlindDropdown = GetComponentInChildren<Dropdown>(true);
-        ColorBlindManager.Instance.RegisterDropdown(colorBlindDropdown);
-    }
-      
+        LoadFPSLimit(); // FPS 제한 로드        
+        }
+    
 
     private void Update()
     {
@@ -106,7 +88,6 @@ public class SettingUIController : MonoBehaviour
         }
     }
 
-
     private void ShowPanel(GameObject panelToShow)
     {
         displayPanel.SetActive(panelToShow == displayPanel);
@@ -120,19 +101,14 @@ public class SettingUIController : MonoBehaviour
     {
         resolutions = Screen.resolutions;
 
-        // 고유 해상도 딕셔너리 (중복 제거)
         var uniqueResolutions = new Dictionary<string, Resolution>();
-
         foreach (var res in resolutions)
         {
             string key = res.width + "x" + res.height;
             if (!uniqueResolutions.ContainsKey(key))
-            {
                 uniqueResolutions.Add(key, res);
-            }
         }
 
-        // 정렬된 리스트 생성 (해상도 큰 순)
         var sortedResList = uniqueResolutions.Values
             .OrderByDescending(r => r.width)
             .ThenByDescending(r => r.height)
@@ -140,7 +116,6 @@ public class SettingUIController : MonoBehaviour
 
         var options = new List<string>();
         int currentIndex = 0;
-
         for (int i = 0; i < sortedResList.Count; i++)
         {
             var res = sortedResList[i];
@@ -179,10 +154,8 @@ public class SettingUIController : MonoBehaviour
     private void SetFPSLimit(int index)
     {
         QualitySettings.vSyncCount = 0;
-
         int selectedFps = availableFpsList[index];
         Application.targetFrameRate = selectedFps;
-
         PlayerPrefs.SetInt("FPSIndex", index);
     }
 
@@ -193,38 +166,29 @@ public class SettingUIController : MonoBehaviour
         fpsDropdown.RefreshShownValue();
         SetFPSLimit(index);
     }
+
     private void SetVSync(bool enabled)
     {
         QualitySettings.vSyncCount = enabled ? 1 : 0;
         PlayerPrefs.SetInt("VSyncEnabled", enabled ? 1 : 0);
-
-        // VSync가 꺼졌을 경우에만 FPS 제한 적용
         if (!enabled)
-        {
             SetFPSLimit(fpsDropdown.value);
-        }
-
-        // UI 상에서 FPS 드롭다운 인터랙션도 제어
         fpsDropdown.interactable = !enabled;
     }
 
     private List<int> GetAvailableRefreshRates()
     {
         HashSet<int> refreshRates = new HashSet<int>();
-
         foreach (var res in Screen.resolutions)
         {
-            // 정수 FPS 추출 (예: 59.94 → 59)
             int hz = Mathf.RoundToInt(
                 (float)res.refreshRateRatio.numerator / res.refreshRateRatio.denominator);
-
             refreshRates.Add(hz);
         }
 
         List<int> result = refreshRates.ToList();
         result.Sort();
 
-        // 기본적으로 60FPS는 넣어두기
         if (!result.Contains(60))
             result.Insert(0, 60);
 
@@ -236,14 +200,12 @@ public class SettingUIController : MonoBehaviour
         availableFpsList = GetAvailableRefreshRates();
         availableFpsList.Add(-1); // 무제한
 
-        // 드롭다운 항목 텍스트 생성
         List<string> labels = availableFpsList.Select(fps =>
             fps == -1 ? "무제한" : $"{fps} FPS").ToList();
 
         fpsDropdown.ClearOptions();
         fpsDropdown.AddOptions(labels);
 
-        // 기본값: 60FPS 인덱스 또는 0
         int defaultIndex = availableFpsList.IndexOf(60);
         if (defaultIndex == -1) defaultIndex = 0;
 
@@ -255,15 +217,7 @@ public class SettingUIController : MonoBehaviour
 
         SetFPSLimit(savedIndex);
     }
-
-    private void InitColorBlindDropdown()
-    {
-        colorBlindDropdown.ClearOptions();
-        colorBlindDropdown.AddOptions(colorBlindOptions);
-    }
-
     #endregion
-
 
     #region Audio Settings
     private void InitAudioSettings()
@@ -286,7 +240,6 @@ public class SettingUIController : MonoBehaviour
             PlayerPrefs.SetFloat("SFXVolume", value);
         });
 
-        // 불러오기
         float master = PlayerPrefs.GetFloat("MasterVolume", 1f);
         float bgm = PlayerPrefs.GetFloat("BGMVolume", 1f);
         float sfx = PlayerPrefs.GetFloat("SFXVolume", 1f);
@@ -333,7 +286,6 @@ public class SettingUIController : MonoBehaviour
     private void ApplyMuteState(bool isMuted)
     {
         if (AudioManager.Instance == null) return;
-
         AudioManager.Instance.SetMasterMute(isMuted);
     }
 
