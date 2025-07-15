@@ -15,7 +15,7 @@ public class PieceManager : Singletone<PieceManager>
     }
     private List<PieceState> pieceStates = new();
     public GameObject piecePrefab;
-    [SerializeField]private PieceController currentPiece; // 현재 내가 조종중인 말
+    [SerializeField] private PieceController currentPiece; // 현재 내가 조종중인 말
 
     void Awake()
     {
@@ -55,10 +55,23 @@ public class PieceManager : Singletone<PieceManager>
     {
         foreach (var piece in pieces)
         {
-            if(piece.GetPiece().debuff.IsStun)
+            if (piece.GetPiece().debuff.IsStun)
                 piece.GetPiece().debuff.DecreaseStunTurn();
         }
         if (currentPiece.GetPiece().debuff.IsStun)
             currentPiece.GetPiece().debuff.DecreaseStunTurn();
+    }
+
+    public void AddDebuffPiece(ObstacleType obstacleType, PieceController pieceController) // 어떤 기물인지?, 클래스 데이터
+    {
+        if (obstacleType == ObstacleType.PoisonousHerb)
+        {
+            if (pieceController.GetTopFace().classData.className == "Demon")
+            {
+                GameManager.Instance.actionPointManager.AddAP(1);
+                return;
+            }
+            GameManager.Instance.actionPointManager.RemoveAP(1);
+        }
     }
 }
