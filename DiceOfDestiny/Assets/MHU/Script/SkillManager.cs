@@ -1,8 +1,13 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class SkillManager : Singletone<SkillManager>
 {
+    [SerializeField] private float blinkTime = 1.5f;
+
     public void TryActivateSkill(Vector2Int position, PieceController piece)
     {
         // 주변 8칸 중 상단 컬러와 일치하는 칸 수 확인
@@ -10,11 +15,13 @@ public class SkillManager : Singletone<SkillManager>
         if (matchCount >= 3)
         {
             ActivateSkill(piece.GetTopFace().classData);
-            StartCoroutine(SkillEffectCoroutine(piece.colorRenderer));
+            List<Vector2Int> matchingTile = BoardManager.Instance.GetMatchingColorTiles(position, piece.GetTopFace().color);
+            StartCoroutine(SkillEffectCoroutine(piece.colorRenderer, position, matchingTile));
+            StartCoroutine(SkillEfterBoard(piece, position));
         }
         else
         {
-            Debug.Log($"Not enough matching colors ({matchCount}/3) to activate skill.");
+            //Debug.Log($"Not enough matching colors ({matchCount}/3) to activate skill.");
         }
     }
 
@@ -41,10 +48,14 @@ public class SkillManager : Singletone<SkillManager>
                 break;
             case "Priest":
                 Debug.Log("사제 스킬 발동!");
-                // 실제 구현: 아군 체력 회복 로직
+
+                SkillPriest();
+
                 break;
             case "Thief":
                 Debug.Log("도둑 스킬 발동!");
+
+                SkillThief();
 
                 break;
             case "Wizard":
@@ -57,7 +68,19 @@ public class SkillManager : Singletone<SkillManager>
         }
     }
 
-    private IEnumerator SkillEffectCoroutine(SpriteRenderer color)
+    private void SkillPriest()
+    {
+        GameManager.Instance.actionPointManager.AddAP(1);
+    }
+
+
+    private void SkillThief()
+    {
+        
+    }
+
+
+    private IEnumerator SkillEffectCoroutine(SpriteRenderer pieceRenderer, Vector2Int position, List<Vector2Int> matchingTiles)
     {
         if (PieceManager.Instance == null /*|| PieceManager.Instance.GetPiece() == null*/)
         {
@@ -65,34 +88,107 @@ public class SkillManager : Singletone<SkillManager>
             yield break;
         }
 
-        Color originalColor = color.color;
-        float duration = 1f;
-        float blinkInterval = 0.25f; // 깜빡임 간격 (1초에 4번 깜빡임)
-        int blinkCount = Mathf.FloorToInt(duration / blinkInterval);
+        // 스킬이 발동된 타일과 매칭된 타일들의 SpriteRenderer 수집
+        List<(SpriteRenderer renderer, Color originalColor)> renderers = new List<(SpriteRenderer, Color)>();
+
+        // 피스의 SpriteRenderer 추가
+        if (pieceRenderer != null)
+        {
+            renderers.Add((pieceRenderer, pieceRenderer.color));
+        }
+        else
+        {
+            Debug.LogError("Piece SpriteRenderer is null!");
+        }
+
+        // 스킬이 발동된 타일의 SpriteRenderer 추가
+        if (position.x >= 0 && position.x < BoardManager.Instance.boardSize &&
+            position.y >= 0 && position.y < BoardManager.Instance.boardSize &&
+            BoardManager.Instance.Board[position.x, position.y] != null)
+        {
+            SpriteRenderer tileRenderer = BoardManager.Instance.Board[position.x, position.y].GetComponent<SpriteRenderer>();
+            if (tileRenderer != null)
+            {
+                renderers.Add((tileRenderer, tileRenderer.color));
+            }
+            else
+            {
+                Debug.LogError($"SpriteRenderer is null for tile at {position}");
+            }
+        }
+        else
+        {
+            Debug.LogError("Invalid tile position or tile is null!");
+        }
+
+        // 매칭된 타일들의 SpriteRenderer 추가
+        foreach (Vector2Int tilePos in matchingTiles)
+        {
+            if (tilePos.x >= 0 && tilePos.x < BoardManager.Instance.boardSize &&
+                tilePos.y >= 0 && tilePos.y < BoardManager.Instance.boardSize &&
+                BoardManager.Instance.Board[tilePos.x, tilePos.y] != null)
+            {
+                SpriteRenderer tileRenderer = BoardManager.Instance.Board[tilePos.x, tilePos.y].GetComponent<SpriteRenderer>();
+                if (tileRenderer != null)
+                {
+                    renderers.Add((tileRenderer, tileRenderer.color));
+                }
+                else
+                {
+                    Debug.LogError($"SpriteRenderer is null for tile at {tilePos}");
+                }
+            }
+            else
+            {
+                Debug.LogError($"Invalid position or null tile at {tilePos}");
+            }
+        }
+
+        // 깜빡임 효과
+        
+        float blinkInterval = 0.25f; // 1초에 4번 깜빡임
+        int blinkCount = Mathf.FloorToInt(blinkTime / blinkInterval);
         float elapsed = 0f;
 
         for (int i = 0; i < blinkCount; i++)
         {
-            // 알파 값을 0.2로 낮춤
-            color.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0.2f);
+            // 모든 SpriteRenderer를 검정색으로 변경
+            foreach (var (renderer, originalColor) in renderers)
+            {
+                renderer.color = Color.black;
+            }
             yield return new WaitForSeconds(blinkInterval / 2);
 
-            // 알파 값을 원래 값(1.0)으로 복원
-            color.color = originalColor;
+            // 모든 SpriteRenderer를 원래 색상으로 복원
+            foreach (var (renderer, originalColor) in renderers)
+            {
+                renderer.color = originalColor;
+            }
             yield return new WaitForSeconds(blinkInterval / 2);
 
             elapsed += blinkInterval;
         }
 
         // 정확히 1초가 되도록 남은 시간 대기
-        if (elapsed < duration)
+        if (elapsed < blinkTime)
         {
-            yield return new WaitForSeconds(duration - elapsed);
+            yield return new WaitForSeconds(blinkTime - elapsed);
         }
 
-        // 최종적으로 원래 색상 복원
-        color.color = originalColor;
-
-        // isSkillActive = false;
+        // 최종적으로 모든 SpriteRenderer를 원래 색상으로 복원
+        foreach (var (renderer, originalColor) in renderers)
+        {
+            renderer.color = originalColor;
+        }
     }
+    IEnumerator SkillEfterBoard(PieceController piece, Vector2Int position)
+    {
+        yield return new WaitForSeconds(0.1f + blinkTime);
+        BoardManager.Instance.ReassignMatchingColorTiles(position, piece.GetTopFace().color);
+        // 기물 움직일 수 있게
+    }
+
+
+
+
 }

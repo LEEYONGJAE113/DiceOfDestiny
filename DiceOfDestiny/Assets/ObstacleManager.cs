@@ -112,9 +112,9 @@ public class ObstacleManager : MonoBehaviour
                 zombie.nextStep = oppositeStep;
             }
         }
-        else
+        else 
         {
-            if (true /*IsCombatType(nextTile.GetPiece()) || IsStunned(nextTile.GetPiece())*/)
+            if (nextTile.GetPiece().GetTopFace().classData.IsCombatClass || nextTile.GetPiece().GetPiece().debuff.IsStun)
             {
                 AnimateObstacleHalfBack(zombie.nextStep, zombie);
                 zombie.nextStep = oppositeStep;
@@ -123,6 +123,9 @@ public class ObstacleManager : MonoBehaviour
             {
                 AnimateZombieNyamNyam(zombie.nextStep, zombie);
                 zombie.nextStep = oppositeStep;
+
+                Debug.Log("Piece SStun!");
+                nextTile.GetPiece().GetPiece().debuff.SetStun(true, 2);
             }
         }
     }
@@ -316,13 +319,7 @@ public class ObstacleManager : MonoBehaviour
                 continue;
             }
 
-            // 해당 좌표에 피스가 있으면 해당 피스 행동력 1 감소
-            if (BoardManager.Instance.Board[detection.x, detection.y].GetPiece() != null)
-            {
-                Debug.Log("RemoveAP");
-                GameManager.Instance.actionPointManager.RemoveAP(1);
-                return;
-            }
+            
         }
     }
 
