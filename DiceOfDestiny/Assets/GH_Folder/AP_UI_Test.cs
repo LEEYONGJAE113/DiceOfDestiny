@@ -1,13 +1,25 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class AP_UI_Test : MonoBehaviour
 {
-    public TextMeshProUGUI currentState;
-    public TextMeshProUGUI currentTurn;
-    public TextMeshProUGUI Dice;
-    public TextMeshProUGUI AP;
+    [SerializeField] private TextMeshProUGUI currentState;
+    [SerializeField] private TextMeshProUGUI currentTurn;
+    [SerializeField] private TextMeshProUGUI Dice;
+    [SerializeField] private TextMeshProUGUI AP;
+    [SerializeField] private Button EndTurnButton;
 
+    private void Start()
+    {
+        EndTurnButton.onClick.AddListener(onClickEndTurnButton);
+    }
+    public void onClickEndTurnButton()
+    {
+        ObstacleManager.Instance.UpdateObstacleStep();
+
+        GameManager.Instance.actionPointManager.TurnOff();
+    }
     public void Refresh()
     {
         currentState.text = "State : " + GameManager.Instance.actionPointManager.testGameState.ToString();

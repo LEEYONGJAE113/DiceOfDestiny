@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 8420750793978971149}
   - component: {fileID: 1123275308198039202}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: ReColorText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -392,7 +392,6 @@ GameObject:
   - component: {fileID: 1348566884849320576}
   - component: {fileID: 6330682711020914740}
   - component: {fileID: 3270874844935555810}
-  - component: {fileID: -6494050053675337793}
   m_Layer: 5
   m_Name: GameUI
   m_TagString: Untagged
@@ -462,22 +461,6 @@ MonoBehaviour:
   reColorBoardButton: {fileID: 1652632208006027327}
   regenerateButton: {fileID: 5983659340997096733}
   nextStepButton: {fileID: 9166837454393700166}
---- !u!114 &-6494050053675337793
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1551000356895241345}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17630b978a0b39f43b45a792db2032ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentState: {fileID: 1858490216332416208}
-  currentTurn: {fileID: 8332216108628847703}
-  Dice: {fileID: 8345710812499394732}
-  AP: {fileID: 9023669873715637223}
 --- !u!1 &2108077266216155349
 GameObject:
   m_ObjectHideFlags: 0
@@ -490,7 +473,7 @@ GameObject:
   - component: {fileID: 3539066971589196046}
   - component: {fileID: 7566642988684947380}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: ReGenerateText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -628,7 +611,7 @@ GameObject:
   - component: {fileID: 876119702837996360}
   - component: {fileID: 4976444959640678911}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: NextStepText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1008,7 +991,7 @@ GameObject:
   - component: {fileID: 2986832266643442463}
   - component: {fileID: 65250325724488190}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: ExitText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1144,7 +1127,7 @@ GameObject:
   - component: {fileID: 4283767287953583811}
   - component: {fileID: 5431334270081453329}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: MainMenuText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1401,7 +1384,7 @@ GameObject:
   - component: {fileID: 7485690892698840421}
   - component: {fileID: 1140423257227086665}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: SettingsText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1654,7 +1637,7 @@ GameObject:
   - component: {fileID: 1243343589590036525}
   - component: {fileID: 2759743698508163940}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: EndTurnText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1927,7 +1910,7 @@ GameObject:
   - component: {fileID: 2680765557947482080}
   - component: {fileID: 5753993187475180391}
   m_Layer: 5
-  m_Name: TurnEndButton
+  m_Name: EndTurn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2437,6 +2420,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8177226717378978277}
+  - component: {fileID: 3190985300922684211}
+  - component: {fileID: 4072154362113667943}
   m_Layer: 5
   m_Name: AP
   m_TagString: Untagged
@@ -2468,6 +2453,35 @@ RectTransform:
   m_AnchoredPosition: {x: -710, y: -0.000030518}
   m_SizeDelta: {x: 498.8933, y: 1079.9912}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &3190985300922684211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7452896350869797742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c16fdf1bb19ef6409f457b60f5af1f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4072154362113667943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7452896350869797742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17630b978a0b39f43b45a792db2032ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: {fileID: 1858490216332416208}
+  currentTurn: {fileID: 8332216108628847703}
+  Dice: {fileID: 8345710812499394732}
+  AP: {fileID: 9023669873715637223}
+  EndTurnButton: {fileID: 5753993187475180391}
 --- !u!1 &8220551445917361207
 GameObject:
   m_ObjectHideFlags: 0
@@ -2480,7 +2494,7 @@ GameObject:
   - component: {fileID: 2163392473590316501}
   - component: {fileID: 7834741825374126546}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: ResumeText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
