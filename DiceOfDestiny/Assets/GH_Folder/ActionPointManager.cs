@@ -112,6 +112,8 @@ public class ActionPointManager : MonoBehaviour
             return;
         }
 
+        PieceManager.Instance.DecreaseDebuffAllPieces();
+
         currentTurnNum++;
 
         testGameState = TestGameState.Dice;

@@ -29,13 +29,13 @@ public class PieceController : MonoBehaviour
     }
 
     void Update()
-    {       
+    {
         TestInput();
     }
 
-    
 
-    public void TestInput()
+    public void TestInput() // 이벤트로 넘기거나 할 필요가 있을듯................................하바ㅏㅏㅏㅏㅏㅏ니ㅏㄷ..............밑에관련메소드잇음................................
+
     {
         Vector2Int moveDirection = Vector2Int.zero;
         if (!isMoving)
@@ -60,11 +60,17 @@ public class PieceController : MonoBehaviour
                 return;
             }
 
+            if (piece.debuff.IsStun)
+            {
+                Debug.Log("Piece is stunned!");
+                return;
+            }
+
             // 이동하는 곳에 장애물이 있으면 return
             Debug.Log("Obstacle Name : " + BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle);
             if (BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle != ObstacleType.None)
             {
-                //newPosition = gridPosition;
+                RotateHalfBack(moveDirection); // 튕김 애니메이션
                 return;
             }
 
@@ -434,5 +440,38 @@ public class PieceController : MonoBehaviour
     public Vector2Int GetLastMoveDirection()
     {
         return lastMoveDirection;
+    }
+
+    private bool isInGame;
+    public bool IsinGame => IsinGame;
+
+
+    public void Init(Piece piece)
+    {
+        gridPosition = new Vector2Int(0, 0);
+        this.piece = piece;
+    }
+
+    public void SetInGame(bool value)
+    {
+        isInGame = value;
+    }
+
+    public Vector2Int MovePiece(Directions dir)
+    {
+        switch (dir)
+        {
+            case Directions.Up:
+                return Vector2Int.up;
+            case Directions.Down:
+                return Vector2Int.down;
+            case Directions.Left:
+                return Vector2Int.left;
+            case Directions.Right:
+                return Vector2Int.right;
+            default:
+                return Vector2Int.zero;
+        }
+
     }
 }

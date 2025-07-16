@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PieceManager : Singletone<PieceManager>
+public class PieceManager_LYJ : Singletone<PieceManager_LYJ>
 {
     List<PieceController> pieces = new List<PieceController>();
     public List<PieceController> Pieces
     {
         get => pieces;
-        set
+        private set
         {
             pieces = value;
             EventManager.Instance.TriggerEvent(AllEventNames.PIECE_COUNT_CHANGED);
@@ -15,16 +15,16 @@ public class PieceManager : Singletone<PieceManager>
     }
     private List<PieceState> pieceStates = new();
     public GameObject piecePrefab;
-    [SerializeField]private PieceController currentPiece; // 현재 내가 조종중인 말
+    private PieceController currentPiece; // 현재 내가 조종중인 말
 
     void Awake()
     {
-        UpdatePieceManagerList();
+        UpdatePieceManagerLists();
     }
 
     void Start()
     {
-        EventManager.Instance.AddListener(AllEventNames.PIECE_COUNT_CHANGED, UpdatePieceManagerList);
+        EventManager.Instance.AddListener(AllEventNames.PIECE_COUNT_CHANGED, UpdatePieceManagerLists);
     }
 
     public void DrawAllPieceUIs()
@@ -35,7 +35,7 @@ public class PieceManager : Singletone<PieceManager>
         }
     }
 
-    private void UpdatePieceManagerList(object data = null)
+    private void UpdatePieceManagerLists(object data = null)
     {
         int count = pieces.Count;
         if (pieceStates.Count < count)
@@ -51,14 +51,23 @@ public class PieceManager : Singletone<PieceManager>
         }
     }
 
-    public void DecreaseDebuffAllPieces()
+    //
+
+    public void AddPiece(PieceController newPiece)
     {
-        foreach (var piece in pieces)
-        {
-            if(piece.GetPiece().debuff.IsStun)
-                piece.GetPiece().debuff.DecreaseStunTurn();
-        }
-        if (currentPiece.GetPiece().debuff.IsStun)
-            currentPiece.GetPiece().debuff.DecreaseStunTurn();
+        pieces.Add(newPiece);
+        Pieces = pieces;
+        // newPiece.Init();
+        newPiece.SetInGame(true);
     }
+
+    public void RemovePiece(PieceController targetPiece)
+    {
+        pieces.Remove(targetPiece);
+        Pieces = pieces;
+        targetPiece.SetInGame(false);
+    }
+
+    
+
 }
