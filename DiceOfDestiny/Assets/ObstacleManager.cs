@@ -331,4 +331,12 @@ public class ObstacleManager : MonoBehaviour
         return pos.x >= 0 && pos.x < BoardManager.Instance.Board.GetLength(0)
             && pos.y >= 0 && pos.y < BoardManager.Instance.Board.GetLength(1);
     }
+    public void RemoveSingleObstacle(GameObject obstacle)
+    {
+        if (currentObstacles.Contains(obstacle))
+        {
+            currentObstacles.Remove(obstacle);
+            Destroy(obstacle);
+        }
+    }
 }

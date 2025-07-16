@@ -8,7 +8,8 @@ using UnityEngine.UIElements;
 public class PieceController : MonoBehaviour
 {
     [SerializeField] private Piece piece; // 현재 기물
-    Vector2Int gridPosition;
+    [SerializeField] private Vector2Int lastMoveDirection = Vector2Int.zero; // 마지막 방향
+    private Vector2Int gridPosition;
 
     // 전개도 데이터 (십자형: 0:바닥, 1:앞, 2:위, 3:뒤, 4:왼쪽, 5:오른쪽)
     private readonly int[] upTransition = new int[] { 1, 2, 3, 0, 4, 5 }; // 위로 이동
@@ -18,6 +19,7 @@ public class PieceController : MonoBehaviour
 
     [SerializeField] private SpriteRenderer classRenderer;
     [SerializeField] public SpriteRenderer colorRenderer;
+    
 
     bool isMoving = false; // 이동 중인지 여부
 
@@ -30,6 +32,8 @@ public class PieceController : MonoBehaviour
     {       
         TestInput();
     }
+
+    
 
     public void TestInput()
     {
@@ -91,6 +95,9 @@ public class PieceController : MonoBehaviour
                 GameManager.Instance.actionPointManager.PieceAction();
 
                 ObstacleManager.Instance.UpdateObstacleStep();
+
+                // 마지막 이동 방향 저장
+                lastMoveDirection = moveDirection;
 
                 RotateToTopFace(moveDirection);
                 UpdateTopFace(moveDirection); // 윗면 업데이트
@@ -416,5 +423,16 @@ public class PieceController : MonoBehaviour
     public void SetPiece(Piece newPiece)
     {
         piece = newPiece;
+    }
+
+    public Vector2Int GetGridPosition()
+    {
+        return gridPosition;
+    }
+
+
+    public Vector2Int GetLastMoveDirection()
+    {
+        return lastMoveDirection;
     }
 }
