@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum Directions { Up, Down, Left, Right }
+
 public class PieceControlUI : MonoBehaviour
 {
-    private enum directions { Up, Down, Left, Right }
-    [SerializeField] private directions dir;
+    [SerializeField] private Directions dir;
     [SerializeField] private GameObject faceColor;
     [SerializeField] private GameObject faceClass;
     private Image buttonImage;
@@ -32,16 +33,16 @@ public class PieceControlUI : MonoBehaviour
 
         switch (dir)
         {
-            case directions.Up:
+            case Directions.Up:
                 faceIndex = 3;
                 break;
-            case directions.Down:
+            case Directions.Down:
                 faceIndex = 1;
                 break;
-            case directions.Left:
+            case Directions.Left:
                 faceIndex = 5;
                 break;
-            case directions.Right:
+            case Directions.Right:
                 faceIndex = 4;
                 break;
             default:
@@ -58,7 +59,7 @@ public class PieceControlUI : MonoBehaviour
     public void OnButtonExit()
     {
         buttonImage.color = new Color(buttonImage.color.r, buttonImage.color.g, buttonImage.color.b, 0f);
-        
+
         faceClass.SetActive(false);
         faceColor.SetActive(false);
     }
@@ -67,28 +68,28 @@ public class PieceControlUI : MonoBehaviour
     {
         switch (dir)
         {
-            case directions.Up:
+            case Directions.Up:
                 Debug.Log("위버튼눌림");
                 // 매니저에서 지우기 요청
                 // 피스 컨트롤러에서 위로가는거
                 // 피스매니저에서 이동함 플래그 세우기
                 // 매니저에서 그리기 요청
                 break;
-            case directions.Down:
+            case Directions.Down:
                 Debug.Log("밑버튼눌림");
                 // 매니저에서 지우기 요청
                 // 피스 컨트롤러에서 밑으로가는거
                 // 피스매니저에서 이동함 플래그 세우기
                 // 매니저에서 그리기 요청
                 break;
-            case directions.Left:
+            case Directions.Left:
                 Debug.Log("왼버튼눌림");
                 // 매니저에서 지우기 요청
                 // 피스 컨트롤러에서 왼쪽으로가는거
                 // 피스매니저에서 이동함 플래그 세우기
                 // 매니저에서 그리기 요청
                 break;
-            case directions.Right:
+            case Directions.Right:
                 Debug.Log("오른버튼눌림");
                 // 매니저에서 지우기 요청
                 // 피스 컨트롤러에서 오른쪽으로가는거
