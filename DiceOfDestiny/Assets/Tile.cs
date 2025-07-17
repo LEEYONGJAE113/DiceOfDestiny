@@ -5,6 +5,7 @@ public class Tile : MonoBehaviour
     private TileColor tileColor;
     private ObstacleType obstacle;
     private PieceController piece;
+    public bool isWalkable { get; set; }
 
     SpriteRenderer sr;
 

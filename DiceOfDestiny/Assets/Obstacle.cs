@@ -30,4 +30,6 @@ public class Obstacle : MonoBehaviour
 
     public NextStep nextStep = NextStep.None;
     public Vector2Int obstaclePosition;
+
+    public bool isWalkable;
 }
