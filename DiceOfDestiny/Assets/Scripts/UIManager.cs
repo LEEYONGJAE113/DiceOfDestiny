@@ -9,10 +9,10 @@ public class UIManager : Singletone<UIManager>
     [SerializeField] private GameObject settingUIPrefab;
     [SerializeField] private GameObject dialogueUIPrefab;
 
+    private Canvas currentCanvas;
     private GameObject currentUIRoot;
     private GameObject settingUI;
     private GameObject dialogueUI;
-    private Canvas currentCanvas;
 
     public bool IsSettingUIOpen() => settingUI != null && settingUI.activeSelf;
     public bool IsUIReady { get; private set; }
@@ -25,15 +25,30 @@ public class UIManager : Singletone<UIManager>
             return;
         }
         DontDestroyOnLoad(gameObject);
+
+        CreateCanvas();
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
+    private void CreateCanvas()
+    {
+        // 전용 커서 Canvas가 이미 있으면 생략
+        if (GameObject.Find("Canvas") != null)
+            return;
 
+        GameObject canvasObj = new GameObject("Canvas");
+        currentCanvas = canvasObj.AddComponent<Canvas>();
+        currentCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+
+        // EventSystem은 필요 없음
+        DontDestroyOnLoad(canvasObj);
+    }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         IsUIReady = false;
 
         // 항상 현재 씬에서 Canvas 찾기
-        currentCanvas = FindFirstObjectByType<Canvas>();
+        currentCanvas = GameObject.Find("Canvas")?.GetComponent<Canvas>();
+
         if (currentCanvas == null)
         {
             Debug.LogError("[UIManager] No Canvas found in scene. UI will not be visible.");

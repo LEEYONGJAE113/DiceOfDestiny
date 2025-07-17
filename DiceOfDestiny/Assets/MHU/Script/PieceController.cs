@@ -66,12 +66,21 @@ public class PieceController : MonoBehaviour
                 return;
             }
 
-            // 이동하는 곳에 장애물이 있으면 return
+            // 이동하는 곳에 장애물이 있으면
             Debug.Log("Obstacle Name : " + BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle);
             if (BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle != ObstacleType.None)
             {
-                RotateHalfBack(moveDirection); // 튕김 애니메이션
-                return;
+                // 밟을 수 없다면
+                if (!BoardManager.Instance.Board[newPosition.x, newPosition.y].isWalkable)
+                {
+                    RotateHalfBack(moveDirection); // 튕김 애니메이션
+                    return;
+                }
+                else
+                {
+                    // 밟을 수 있는 장애물을 밟아서 효과 발동!
+                    //PieceManager.Instance.AddDebuffPiece(BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle, this);
+                }
             }
 
             if (newPosition.x >= 0 && newPosition.x < BoardManager.Instance.boardSize &&
@@ -100,7 +109,6 @@ public class PieceController : MonoBehaviour
 
                 GameManager.Instance.actionPointManager.PieceAction();
 
-                ObstacleManager.Instance.UpdateObstacleStep();
 
                 // 마지막 이동 방향 저장
                 lastMoveDirection = moveDirection;
@@ -110,6 +118,7 @@ public class PieceController : MonoBehaviour
 
                 //RotateHalfBack(moveDirection);
 
+                ObstacleManager.Instance.UpdateObstacleStep();
             }
             else
             {

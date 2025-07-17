@@ -101,3 +101,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obstacleType: 4
+  nextStep: 4
+  obstaclePosition: {x: 0, y: 0}
+  isWalkable: 1
