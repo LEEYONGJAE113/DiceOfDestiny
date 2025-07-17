@@ -6,7 +6,11 @@ using UnityEngine.UIElements;
 
 public class SkillManager : Singletone<SkillManager>
 {
-    [SerializeField] private float blinkTime = 1.5f;
+    [SerializeField] public float blinkTime = 1.5f;
+    [SerializeField] private PieceController pieceController;
+    [SerializeField] private PieceActiveSkill pieceActiveSkill;
+
+
 
     public void TryActivateSkill(Vector2Int position, PieceController piece)
     {
@@ -17,7 +21,7 @@ public class SkillManager : Singletone<SkillManager>
             ActivateSkill(piece.GetTopFace().classData);
             List<Vector2Int> matchingTile = BoardManager.Instance.GetMatchingColorTiles(position, piece.GetTopFace().color);
             StartCoroutine(SkillEffectCoroutine(piece.colorRenderer, position, matchingTile));
-            StartCoroutine(SkillEfterBoard(piece, position));
+            StartCoroutine(BoardReassign(piece, position));
         }
         else
         {
@@ -35,6 +39,7 @@ public class SkillManager : Singletone<SkillManager>
                 break;
             case "Demon":
                 Debug.Log("악마 스킬 발동!");
+                DemonActiveSkill();
 
                 break;
             case "Fanatic":
@@ -43,23 +48,24 @@ public class SkillManager : Singletone<SkillManager>
                 break;
             case "Knight":
                 Debug.Log("기사 스킬 발동!");
-                // 실제 구현: 적에게 피해를 주는 로직
+
+                KnightActiveSkill();
 
                 break;
             case "Priest":
                 Debug.Log("사제 스킬 발동!");
 
-                SkillPriest();
+                PriestActiveSkill();
 
                 break;
             case "Thief":
                 Debug.Log("도둑 스킬 발동!");
 
-                SkillThief();
+                ThiefActiveSkill();
 
                 break;
-            case "Wizard":
-                Debug.Log("마법사 스킬 발동!");
+            case "Artist":
+                Debug.Log("화가 스킬 발동!");
 
                 break;
             default:
@@ -68,14 +74,29 @@ public class SkillManager : Singletone<SkillManager>
         }
     }
 
-    private void SkillPriest()
+    private void PriestActiveSkill()
     {
         GameManager.Instance.actionPointManager.AddAP(1);
     }
 
 
-    private void SkillThief()
+    private void ThiefActiveSkill()
     {
+        // 도둑 스킬 : 원하는 방향으로 1칸 움직임, 컨트롤러 한번 더 띄움
+    }
+
+    private void KnightActiveSkill()
+    {
+        // 기사 스킬 : 진행했던 방향으로 1칸 움직임, 다 부숨
+        Vector2Int lastDirection = pieceController.GetLastMoveDirection();
+
+        pieceActiveSkill.MoveForward(lastDirection);
+
+    }
+    private void DemonActiveSkill()
+    {
+        // 악마 스킬 : 원하는 보드 한칸에 독초 장애물을 만듬
+        //pieceActiveSkill.
         
     }
 
@@ -145,7 +166,7 @@ public class SkillManager : Singletone<SkillManager>
         }
 
         // 깜빡임 효과
-        
+
         float blinkInterval = 0.25f; // 1초에 4번 깜빡임
         int blinkCount = Mathf.FloorToInt(blinkTime / blinkInterval);
         float elapsed = 0f;
@@ -181,7 +202,7 @@ public class SkillManager : Singletone<SkillManager>
             renderer.color = originalColor;
         }
     }
-    IEnumerator SkillEfterBoard(PieceController piece, Vector2Int position)
+    IEnumerator BoardReassign(PieceController piece, Vector2Int position)
     {
         yield return new WaitForSeconds(0.1f + blinkTime);
         BoardManager.Instance.ReassignMatchingColorTiles(position, piece.GetTopFace().color);

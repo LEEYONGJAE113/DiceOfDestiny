@@ -152,12 +152,12 @@ MonoBehaviour:
   tilePrefab: {fileID: 2471703998611980718, guid: 23386ab979afcd04f83177db42443585, type: 3}
   boardTransform: {fileID: 512030437}
   tileColors:
-  - {r: 1, g: 0, b: 0, a: 1}
-  - {r: 0, g: 1, b: 0, a: 1}
-  - {r: 0, g: 0, b: 1, a: 1}
-  - {r: 1, g: 1, b: 0, a: 1}
-  - {r: 1, g: 0, b: 1, a: 1}
-  - {r: 0.9, g: 0.9, b: 0.9, a: 1}
+  - {r: 0.8867924, g: 0.29699183, b: 0.29699183, a: 1}
+  - {r: 0.40650585, g: 0.8207547, b: 0.40650585, a: 1}
+  - {r: 0.2683339, g: 0.2683339, b: 0.8490566, a: 1}
+  - {r: 0.8207547, g: 0.8207547, b: 0.2981043, a: 1}
+  - {r: 0.6105346, g: 0.17568529, b: 0.7924528, a: 1}
+  - {r: 0.6603774, g: 0.6603774, b: 0.6603774, a: 1}
 --- !u!4 &21907065
 Transform:
   m_ObjectHideFlags: 0
@@ -531,6 +531,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blinkTime: 1.5
+  pieceController: {fileID: 704259827}
+  pieceActiveSkill: {fileID: 1769006172}
 --- !u!4 &178542209
 Transform:
   m_ObjectHideFlags: 0
@@ -1526,6 +1528,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Piece
       objectReference: {fileID: 0}
+    - target: {fileID: 1324270886440449900, guid: 9f362b8a8cbf6a5459069012fc3b07ef, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3789393067031802111, guid: 9f362b8a8cbf6a5459069012fc3b07ef, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6441678837052477297, guid: 9f362b8a8cbf6a5459069012fc3b07ef, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7157527981714372214, guid: 9f362b8a8cbf6a5459069012fc3b07ef, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1572,7 +1586,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7157527981714372214, guid: 9f362b8a8cbf6a5459069012fc3b07ef, type: 3}
       insertIndex: -1
       addedObject: {fileID: 101976873}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1324270886440449900, guid: 9f362b8a8cbf6a5459069012fc3b07ef, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1769006172}
   m_SourcePrefab: {fileID: 100100000, guid: 9f362b8a8cbf6a5459069012fc3b07ef, type: 3}
 --- !u!1 &543216601
 GameObject:
@@ -1939,6 +1956,17 @@ MonoBehaviour:
   currentTurn: {fileID: 2027566982}
   Dice: {fileID: 1957206646}
   AP: {fileID: 450192631}
+--- !u!114 &704259827 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6989186115329613593, guid: 9f362b8a8cbf6a5459069012fc3b07ef, type: 3}
+  m_PrefabInstance: {fileID: 522207762}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1769006171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37d694702f3c42428861002076ba292, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &735438707
 GameObject:
   m_ObjectHideFlags: 0
@@ -4227,6 +4255,25 @@ RectTransform:
   m_AnchoredPosition: {x: -77, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1769006171 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1324270886440449900, guid: 9f362b8a8cbf6a5459069012fc3b07ef, type: 3}
+  m_PrefabInstance: {fileID: 522207762}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1769006172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1769006171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f156c1b43ec7c4c4e8bb1c1f68f9f297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pieceController: {fileID: 704259827}
+  knightSkillEffect: {fileID: 5787608323475247453, guid: cab6e3fb3ba5eb944b235d2eab030fe1, type: 3}
 --- !u!1 &1787825802
 GameObject:
   m_ObjectHideFlags: 0

@@ -384,6 +384,26 @@ public class BoardManager : Singletone<BoardManager>
             }
         }
     }
+    public void RemoveObstacleAtPosition(Vector2Int position)
+    {
+        if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
+        {
+            Debug.LogError("Position out of bounds");
+            return;
+        }
+
+        Tile tile = Board[position.x, position.y];
+        if (tile.Obstacle != ObstacleType.None)
+        {
+            Obstacle obstacle = ReturnObstacleByPosition(position);
+            if (obstacle != null)
+            {
+                ObstacleManager.Instance.RemoveSingleObstacle(obstacle.gameObject);
+                tile.Obstacle = ObstacleType.None;
+            }
+        }
+    }
+
     public Tile GetTile(Vector2Int position)
     {
         if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
