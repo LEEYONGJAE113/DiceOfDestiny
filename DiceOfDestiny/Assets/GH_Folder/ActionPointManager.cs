@@ -37,7 +37,7 @@ public class ActionPointManager : MonoBehaviour
                 RollingDice();
 
                 testGameState = TestGameState.Action;
-                GameManager.Instance.aP_UI_Test.Refresh();
+                GameManager.Instance.actionPointUI.Refresh();
             }
         }
         if (testGameState == TestGameState.TurnOff)
@@ -45,7 +45,7 @@ public class ActionPointManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.T))
             {
                 TurnOff();
-                GameManager.Instance.aP_UI_Test.Refresh();
+                GameManager.Instance.actionPointUI.Refresh();
             }
         }
     }
@@ -53,7 +53,7 @@ public class ActionPointManager : MonoBehaviour
     public void Init()
     {
         currentAP = 0;
-        GameManager.Instance.aP_UI_Test.Refresh();
+        GameManager.Instance.actionPointUI.Refresh();
     }
 
     public void AddAP(int _plusAP)
@@ -61,7 +61,7 @@ public class ActionPointManager : MonoBehaviour
         currentAP += _plusAP;
 
         // UI Refresh
-        GameManager.Instance.aP_UI_Test.Refresh();
+        GameManager.Instance.actionPointUI.Refresh();
     }
     public void RemoveAP(int _minusAP)
     {
@@ -74,7 +74,7 @@ public class ActionPointManager : MonoBehaviour
         Debug.Log("현재 행동력 : " + currentAP);
 
         // UI Refresh
-        GameManager.Instance.aP_UI_Test.Refresh();
+        GameManager.Instance.actionPointUI.Refresh();
     }
     public bool TryUseAP()
     {
@@ -108,7 +108,7 @@ public class ActionPointManager : MonoBehaviour
         if (!TryUseAP())
         {
             testGameState = TestGameState.TurnOff;
-            GameManager.Instance.aP_UI_Test.Refresh();
+            GameManager.Instance.actionPointUI.Refresh();
         }
     }
 

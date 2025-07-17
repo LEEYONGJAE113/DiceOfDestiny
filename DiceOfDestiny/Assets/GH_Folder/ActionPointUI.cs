@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class AP_UI_Test : MonoBehaviour
+public class ActionPointUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI currentState;
     [SerializeField] private TextMeshProUGUI currentTurn;
