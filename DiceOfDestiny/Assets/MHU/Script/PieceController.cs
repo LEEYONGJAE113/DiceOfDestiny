@@ -54,6 +54,11 @@ public class PieceController : MonoBehaviour
         {
             Vector2Int newPosition = gridPosition + moveDirection;
 
+            // 이동 확정 시
+            // 행동력이 0이면 행동 불가
+            if (!GameManager.Instance.actionPointManager.TryUseAP())
+                return;
+
             // 이동하는 곳이 보드 밖이면 return
             if (!ObstacleManager.Instance.IsInsideBoard(newPosition))
             {
@@ -98,10 +103,7 @@ public class PieceController : MonoBehaviour
                     return;
                 }
 
-                // 이동 확정 시
-                // 행동력이 0이면 행동 불가
-                if (!GameManager.Instance.actionPointManager.TryUseAP())
-                    return;
+                
 
                 // 이전 타일에 Piece 값을 null로 바꾸고, 다음 타일에 Piece 값을 적용 
                 BoardManager.Instance.Board[gridPosition.x, gridPosition.y].SetPiece(null);
