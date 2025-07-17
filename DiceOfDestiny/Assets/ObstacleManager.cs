@@ -19,8 +19,9 @@ public class ObstacleManager : MonoBehaviour
 
     public List<GameObject> currentObstacles;
 
-    ZombieBehaviour zombieBehaviour;
-    PoisonousherbBehaviour poisonousherbBehaviour;
+    private ZombieBehaviour zombieBehaviour;
+    private PoisonousherbBehaviour poisonousherbBehaviour;
+    private PuddleBehaviour puddleBehaviour;
 
     private void Awake()
     {
@@ -50,6 +51,10 @@ public class ObstacleManager : MonoBehaviour
         };
 
         currentObstacles = new List<GameObject>();
+
+        zombieBehaviour = GetComponent<ZombieBehaviour>();
+        poisonousherbBehaviour = GetComponent<PoisonousherbBehaviour>();
+        puddleBehaviour = GetComponent<PuddleBehaviour>();
     }
 
     public void SetObstacle(GameObject obstacle)
@@ -81,6 +86,10 @@ public class ObstacleManager : MonoBehaviour
             else if (obstacleComponent.obstacleType == ObstacleType.PoisonousHerb) // 독초
             {
                 poisonousherbBehaviour.DoPoisionousherbLogic(obstacleComponent);
+            }
+            else if (obstacleComponent.obstacleType == ObstacleType.Puddle) // 독초
+            {
+                puddleBehaviour.DoPuddleLogic(obstacleComponent);
             }
         }
     }

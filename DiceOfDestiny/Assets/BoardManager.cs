@@ -187,6 +187,8 @@ public class BoardManager : Singletone<BoardManager>
                         new Vector3(boardTransform.position.x + x, boardTransform.position.y + y, 0), Quaternion.identity, boardTransform);
                     obstacle.GetComponent<Obstacle>().obstaclePosition = new Vector2Int(x, y);
                     ObstacleManager.Instance.SetObstacle(obstacle);
+
+                    Board[x, y].isWalkable = obstacle.GetComponent<Obstacle>().isWalkable;
                 }
                 idx++;
             }

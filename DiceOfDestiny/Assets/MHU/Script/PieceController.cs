@@ -75,7 +75,7 @@ public class PieceController : MonoBehaviour
                 else
                 {
                     // 밟을 수 있는 장애물을 밟아서 효과 발동!
-                    PieceManager.Instance.AddDebuffPiece(BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle, this);
+                    //PieceManager.Instance.AddDebuffPiece(BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle, this);
                 }
             }
 
@@ -105,13 +105,13 @@ public class PieceController : MonoBehaviour
 
                 GameManager.Instance.actionPointManager.PieceAction();
 
-                ObstacleManager.Instance.UpdateObstacleStep();
 
                 RotateToTopFace(moveDirection);
                 UpdateTopFace(moveDirection); // 윗면 업데이트
 
                 //RotateHalfBack(moveDirection);
 
+                ObstacleManager.Instance.UpdateObstacleStep();
             }
             else
             {
