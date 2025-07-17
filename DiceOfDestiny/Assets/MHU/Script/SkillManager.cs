@@ -97,9 +97,10 @@ public class SkillManager : Singletone<SkillManager>
     {
         // 악마 스킬 : 원하는 보드 한칸에 독초 장애물을 만듬
         //pieceActiveSkill.
-        
+
     }
 
+    #region 스킬 발동 시 깜빡임, 보드 색상 재배치 코루틴
 
     private IEnumerator SkillEffectCoroutine(SpriteRenderer pieceRenderer, Vector2Int position, List<Vector2Int> matchingTiles)
     {
@@ -209,7 +210,7 @@ public class SkillManager : Singletone<SkillManager>
         // 기물 움직일 수 있게
     }
 
-
+    #endregion
 
 
 }
