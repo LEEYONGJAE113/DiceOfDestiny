@@ -39,17 +39,19 @@ public class ZombieBehaviour : MonoBehaviour
         else
         {
             if (nextTile.GetPiece().GetTopFace().classData.IsCombatClass || nextTile.GetPiece().GetPiece().debuff.IsStun)
-            {
+            {                
                 AnimateObstacleHalfBack(zombie.nextStep, zombie);
                 zombie.nextStep = oppositeStep;
+                ToastManager.Instance.ShowToast("어림도 없지", nextTile.GetPiece().transform.position + Vector3.up * 1.2f);
             }
             else
             {
                 AnimateZombieNyamNyam(zombie.nextStep, zombie);
                 zombie.nextStep = oppositeStep;
 
-                Debug.Log("Piece SStun!");
+                Debug.Log("Piece SStun!");                
                 nextTile.GetPiece().GetPiece().debuff.SetStun(true, 2);
+                ToastManager.Instance.ShowToast("좀비한테 물려버렸습니다! 1턴간 기절합니다.", nextTile.GetPiece().transform.position + Vector3.up * 1.2f);
             }
         }
     }

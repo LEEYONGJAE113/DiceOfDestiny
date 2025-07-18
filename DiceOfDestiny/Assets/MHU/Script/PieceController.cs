@@ -68,6 +68,7 @@ public class PieceController : MonoBehaviour
             if (piece.debuff.IsStun)
             {
                 Debug.Log("Piece is stunned!");
+                ToastManager.Instance.ShowToast("기물이 기절했습니다! 1턴간 이동할 수 없습니다.", transform.position + Vector3.up * 1.2f);
                 return;
             }
 

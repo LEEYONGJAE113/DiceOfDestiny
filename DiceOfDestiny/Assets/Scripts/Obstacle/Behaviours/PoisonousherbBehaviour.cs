@@ -7,9 +7,11 @@ public class PoisonousherbBehaviour : MonoBehaviour
         Tile currentTile = BoardManager.Instance.GetTile(herb.obstaclePosition);
         if (currentTile.GetPiece() != null)
         {
-            if (currentTile.GetPiece().GetTopFace().classData.className == "Demon")
+            PieceController currentPiece = currentTile.GetPiece();
+            if (currentPiece.GetTopFace().classData.className == "Demon")
             {
-                Debug.Log("악마가 독초를 밟아 행동력 +1");
+                Debug.Log("악마가 독초를 밟아 행동력 +1");                
+                ToastManager.Instance.ShowToast("독초를 밟아 행동력 +1", currentPiece.transform.position + Vector3.up * 1.2f);
                 GameManager.Instance.actionPointManager.AddAP(1);
                 return;
             }
