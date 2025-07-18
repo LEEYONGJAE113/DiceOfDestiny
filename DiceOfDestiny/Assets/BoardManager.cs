@@ -448,6 +448,54 @@ public class BoardManager : Singletone<BoardManager>
         }
     }
 
+    public void SetTileColor(Vector2Int position, TileColor targetColor)
+    {
+        // 위치 유효성 검사
+        if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
+        {
+            Debug.LogError($"Position out of bounds: {position}");
+            return;
+        }
+
+        // 타일 가져오기
+        Tile tile = Board[position.x, position.y];
+        if (tile == null)
+        {
+            Debug.LogError($"No tile found at position: {position}");
+            return;
+        }
+
+        // 타일 색상 설정
+        tile.TileColor = targetColor;
+        switch (targetColor)
+        {
+            case TileColor.Red:
+                tile.SetTileColor(tileColors[0]);
+                break;
+            case TileColor.Green:
+                tile.SetTileColor(tileColors[1]);
+                break;
+            case TileColor.Blue:
+                tile.SetTileColor(tileColors[2]);
+                break;
+            case TileColor.Yellow:
+                tile.SetTileColor(tileColors[3]);
+                break;
+            case TileColor.Purple:
+                tile.SetTileColor(tileColors[4]);
+                break;
+            case TileColor.Gray:
+                tile.SetTileColor(tileColors[5]);
+                break;
+            case TileColor.None:
+                tile.SetTileColor(Color.white); // None일 경우 기본 색상 (예: 흰색)
+                break;
+            default:
+                Debug.LogWarning($"Unknown TileColor: {targetColor}");
+                break;
+        }
+    }
+
 
     public Tile GetTile(Vector2Int position)
     {

@@ -1,18 +1,20 @@
-using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting;
+using UnityEngine;
 
 public class PieceActiveSkill : MonoBehaviour
 {
-    [SerializeField] private PieceController pieceController;
     [SerializeField] private GameObject knightSkillEffect;
-    [SerializeField] private GameObject DemonSkillEffect;
+    [SerializeField] private GameObject demonSkillEffect;
+    [SerializeField] private GameObject painterSkillEffect;
+    [SerializeField] private PainterActiveSkillUI painterSkillUI;
 
-    public void MoveForward(Vector2Int moveDirection)
+    public void MoveForward(PieceController pieceController, Vector2Int moveDirection)
     {
-        StartCoroutine(MoveForwardCoroutine(moveDirection));
+        StartCoroutine(MoveForwardCoroutine(pieceController, moveDirection));
     }
 
-    private IEnumerator MoveForwardCoroutine(Vector2Int moveDirection)
+    private IEnumerator MoveForwardCoroutine(PieceController pieceController, Vector2Int moveDirection)
     {
         // 깜빡임 대기
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
@@ -30,7 +32,7 @@ public class PieceActiveSkill : MonoBehaviour
         float moveDuration = 0.4f; // 이동 시간
         float time = 0f;
 
-        Vector3 startPos = transform.position;
+        Vector3 startPos = pieceController.transform.position;
         Vector3 endPos = startPos + moveVec;
 
         // 스킬 이펙트 생성
@@ -39,32 +41,28 @@ public class PieceActiveSkill : MonoBehaviour
         {
             skillEffect = Instantiate(knightSkillEffect, startPos, Quaternion.identity);
             // 이펙트가 캐릭터를 따라가도록 설정
-            skillEffect.transform.SetParent(transform);
+            skillEffect.transform.SetParent(pieceController.transform);
 
             // 방향에 따라 이펙트 조정
             if (moveDirection == Vector2Int.left)
             {
-                // 왼쪽: 기본 방향
                 skillEffect.transform.localScale = new Vector3(1f, 1f, 1f);
-                skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+                skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, 90f);
             }
             else if (moveDirection == Vector2Int.right)
             {
-                // 오른쪽: X축 플립
                 skillEffect.transform.localScale = new Vector3(-1f, 1f, 1f);
-                skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+                skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, 90f);
             }
             else if (moveDirection == Vector2Int.up)
             {
-                // 위쪽: -90도 회전
                 skillEffect.transform.localScale = new Vector3(1f, 1f, 1f);
-                skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, -90f);
+                skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
             }
             else if (moveDirection == Vector2Int.down)
             {
-                // 아래쪽: 90도 회전
                 skillEffect.transform.localScale = new Vector3(1f, 1f, 1f);
-                skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, 90f);
+                skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, 180f);
             }
         }
         else
@@ -77,13 +75,13 @@ public class PieceActiveSkill : MonoBehaviour
         {
             float t = time / moveDuration;
             float ease = Mathf.SmoothStep(0f, 1f, t);
-            transform.position = Vector3.Lerp(startPos, endPos, ease);
+            pieceController.transform.position = Vector3.Lerp(startPos, endPos, ease);
             time += Time.deltaTime;
             yield return null;
         }
 
         // 실제 그리드 위치 설정
-        transform.position = endPos;
+        pieceController.transform.position = endPos;
         Vector2Int gridPos = pieceController.gridPosition;
         gridPos += moveDirection;
         pieceController.gridPosition = gridPos;
@@ -110,16 +108,16 @@ public class PieceActiveSkill : MonoBehaviour
         // 스킬 이펙트 제거
         if (skillEffect != null)
         {
-            Destroy(skillEffect, 0.5f); // 0.5초 후 제거 (이펙트 지속 시간에 맞게 조정)
+            Destroy(skillEffect, 0.5f); // 0.5초 후 제거
         }
     }
 
-    public void Plant()
+    public void Plant(PieceController pieceController)
     {
-        StartCoroutine(PlantCoroutine());
+        StartCoroutine(PlantCoroutine(pieceController));
     }
 
-    IEnumerator PlantCoroutine()
+    IEnumerator PlantCoroutine(PieceController pieceController)
     {
         // 깜빡임 대기
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
@@ -134,29 +132,92 @@ public class PieceActiveSkill : MonoBehaviour
         Vector2Int gridPos = BoardSelectManager.Instance.lastClickedPosition;
 
         // 이펙트 생성
-        if (DemonSkillEffect != null)
+        if (demonSkillEffect != null)
         {
             GameObject effect = Instantiate(
-                DemonSkillEffect,
+                demonSkillEffect,
                 new Vector3(
                     BoardManager.Instance.boardTransform.position.x + gridPos.x,
                     BoardManager.Instance.boardTransform.position.y + gridPos.y,
-                    -1), // z=-1로 타일 위에 렌더링
+                    -1),
                 Quaternion.identity,
                 BoardManager.Instance.boardTransform
             );
-            // 0.5초 후 이펙트 삭제
             Destroy(effect, 0.5f);
         }
         else
         {
-            Debug.LogWarning("Effect prefab is not assigned!");
+            Debug.LogWarning("DemonSkillEffect is not assigned!");
         }
 
-        // 1초 대기
+        // 0.5초 대기
         yield return new WaitForSeconds(0.5f);
 
         // 장애물 설정
         BoardManager.Instance.CreateObstacle(gridPos, ObstacleType.PoisonousHerb);
+    }
+
+    public void Paint(PieceController pieceController)
+    {
+        StartCoroutine(PaintCoroutine(pieceController));
+    }
+
+    IEnumerator PaintCoroutine(PieceController pieceController)
+    {
+        // 깜빡임 대기
+        yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
+
+        // 타일 선택 이미지 띄우기
+        BoardSelectManager.Instance.HighlightTiles();
+
+        // 클릭 기다림
+        yield return BoardSelectManager.Instance.WaitForTileClick();
+
+        // 위치 불러오기
+        Vector2Int gridPos = BoardSelectManager.Instance.lastClickedPosition;
+
+        
+
+        // 화가 스킬 UI 표시
+        if (painterSkillUI != null)
+        {
+
+            painterSkillUI.OnDisable(); // ui 초기화
+            painterSkillUI.ShowPalette();
+            // UI에서 색상 선택을 기다림
+            while (painterSkillUI.SelectedColor == TileColor.None)
+            {
+                yield return null; // 색상이 선택될 때까지 대기
+            }
+            
+            // 선택된 색상 가져오기
+            TileColor selectedColor = painterSkillUI.SelectedColor;
+
+            // 이펙트 생성
+            if (painterSkillEffect != null)
+            {
+                GameObject effect = Instantiate(
+                    painterSkillEffect,
+                    pieceController.transform.position, // pieceController의 위치 사용
+                    Quaternion.identity
+                );
+                Destroy(effect, 0.5f);
+            }
+            else
+            {
+                Debug.LogWarning("PainterSkillEffect is not assigned!");
+            }
+
+
+            // 0.5초 대기
+            yield return new WaitForSeconds(0.5f);
+
+            BoardManager.Instance.SetTileColor(gridPos, selectedColor);
+
+        }
+        else
+        {
+            Debug.LogWarning("PainterActiveSkillUI is not assigned!");
+        }
     }
 }
