@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: b3a26a3f4caf4bc4da7ec51a33336830
+guid: 0eb1f5cc7e3dd564dac13af0e8434c03
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5631908155996147488
-    second: FX003_02_0
+      213: 446568746212952993
+    second: "\uC880\uBE44Idle_0"
+  - first:
+      213: 5056246105889231418
+    second: "\uC880\uBE44Idle_1"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +40,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -51,7 +54,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -75,7 +78,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -140,7 +143,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -152,13 +155,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: FX003_02_0
+      name: "\uC880\uBE44Idle_0"
       rect:
         serializedVersion: 2
-        x: 6
+        x: 0
         y: 0
-        width: 18
-        height: 18
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -167,8 +170,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 02f86c5f0ae882e40800000000000000
-      internalID: 5631908155996147488
+      spriteID: 1ab80dd98e7823600800000000000000
+      internalID: 446568746212952993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uC880\uBE44Idle_1"
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a32da7e4b056b2640800000000000000
+      internalID: 5056246105889231418
       vertices: []
       indices: 
       edges: []
@@ -177,7 +202,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 3985c84c01960424c8da3cbbc6d1ed84
     internalID: 0
     vertices: []
     indices: 
@@ -187,7 +212,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      FX003_02_0: 5631908155996147488
+      "\uC880\uBE44Idle_0": 446568746212952993
+      "\uC880\uBE44Idle_1": 5056246105889231418
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

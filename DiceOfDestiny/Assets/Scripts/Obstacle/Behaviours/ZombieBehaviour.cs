@@ -42,16 +42,17 @@ public class ZombieBehaviour : MonoBehaviour
             {                
                 AnimateObstacleHalfBack(zombie.nextStep, zombie);
                 zombie.nextStep = oppositeStep;
-                ToastManager.Instance.ShowToast("어림도 없지", nextTile.GetPiece().transform.position + Vector3.up * 1.2f);
+                ToastManager.Instance.ShowToast("어림도 없지! <color=red>(팅!)</color>", nextTile.GetPiece().transform, 1f);
             }
             else
             {
                 AnimateZombieNyamNyam(zombie.nextStep, zombie);
                 zombie.nextStep = oppositeStep;
 
-                Debug.Log("Piece SStun!");                
-                nextTile.GetPiece().GetPiece().debuff.SetStun(true, 2);
-                ToastManager.Instance.ShowToast("좀비한테 물려버렸습니다! 1턴간 기절합니다.", nextTile.GetPiece().transform.position + Vector3.up * 1.2f);
+                Debug.Log("Piece Stun!");
+                var stunTurns = 2;
+                nextTile.GetPiece().GetPiece().debuff.SetStun(true, stunTurns);
+                ToastManager.Instance.ShowToast($"좀비한테 물려버렸습니다! {stunTurns}턴간 기절합니다.", nextTile.GetPiece().transform, 1f);
             }
         }
     }

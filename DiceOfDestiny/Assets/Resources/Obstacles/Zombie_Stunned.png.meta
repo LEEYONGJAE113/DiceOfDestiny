@@ -1,10 +1,19 @@
 fileFormatVersion: 2
-guid: b3a26a3f4caf4bc4da7ec51a33336830
+guid: 0ae22872dfa73c645b47e8f325a927d9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5631908155996147488
-    second: FX003_02_0
+      213: 1059035942237573976
+    second: "\uC880\uBE44Stun_0"
+  - first:
+      213: 2398643587982028426
+    second: "\uC880\uBE44Stun_1"
+  - first:
+      213: -2895083325629901164
+    second: "\uC880\uBE44Stun_2"
+  - first:
+      213: 3462281729223457394
+    second: "\uC880\uBE44Stun_3"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +46,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -51,7 +60,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -75,7 +84,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -140,7 +149,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -152,13 +161,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: FX003_02_0
+      name: "\uC880\uBE44Stun_0"
       rect:
         serializedVersion: 2
-        x: 6
+        x: 0
         y: 0
-        width: 18
-        height: 18
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -167,8 +176,74 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 02f86c5f0ae882e40800000000000000
-      internalID: 5631908155996147488
+      spriteID: 8531175149372be00800000000000000
+      internalID: 1059035942237573976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uC880\uBE44Stun_1"
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8eef6c72a1b94120800000000000000
+      internalID: 2398643587982028426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uC880\uBE44Stun_2"
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4965cacdd0992d7d0800000000000000
+      internalID: -2895083325629901164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uC880\uBE44Stun_3"
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 27a70b683ee7c0030800000000000000
+      internalID: 3462281729223457394
       vertices: []
       indices: 
       edges: []
@@ -177,7 +252,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: dccfcd7c2eed7794e91fc74ddcc7b733
     internalID: 0
     vertices: []
     indices: 
@@ -187,7 +262,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      FX003_02_0: 5631908155996147488
+      "\uC880\uBE44Stun_0": 1059035942237573976
+      "\uC880\uBE44Stun_1": 2398643587982028426
+      "\uC880\uBE44Stun_2": -2895083325629901164
+      "\uC880\uBE44Stun_3": 3462281729223457394
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

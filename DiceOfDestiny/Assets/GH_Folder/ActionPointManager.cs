@@ -40,6 +40,14 @@ public class ActionPointManager : MonoBehaviour
                 GameManager.Instance.actionPointUI.Refresh();
             }
         }
+        if (testGameState == TestGameState.Action)
+        {
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                TurnOff();
+                GameManager.Instance.actionPointUI.Refresh();
+            }
+        }
         if (testGameState == TestGameState.TurnOff)
         {
             if (Input.GetKeyDown(KeyCode.T))

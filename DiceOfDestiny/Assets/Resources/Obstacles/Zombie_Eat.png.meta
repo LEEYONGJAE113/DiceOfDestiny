@@ -1,10 +1,16 @@
 fileFormatVersion: 2
-guid: b3a26a3f4caf4bc4da7ec51a33336830
+guid: 22dc9c63a2f22034495ba12e5b710027
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5631908155996147488
-    second: FX003_02_0
+      213: -9159069082162446135
+    second: "\uC880\uBE44Eat_0"
+  - first:
+      213: 6855075855358959254
+    second: "\uC880\uBE44Eat_1"
+  - first:
+      213: 3776943079673931286
+    second: "\uC880\uBE44Eat_2"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +43,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -51,7 +57,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -75,7 +81,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -140,7 +146,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -152,13 +158,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: FX003_02_0
+      name: "\uC880\uBE44Eat_0"
       rect:
         serializedVersion: 2
-        x: 6
+        x: 0
         y: 0
-        width: 18
-        height: 18
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -167,8 +173,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 02f86c5f0ae882e40800000000000000
-      internalID: 5631908155996147488
+      spriteID: 9c0c174523374e080800000000000000
+      internalID: -9159069082162446135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uC880\uBE44Eat_1"
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69e1703bb2f122f50800000000000000
+      internalID: 6855075855358959254
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uC880\uBE44Eat_2"
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 616a5d848b56a6430800000000000000
+      internalID: 3776943079673931286
       vertices: []
       indices: 
       edges: []
@@ -177,7 +227,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 725da41c127008f49969ed1d597338c3
     internalID: 0
     vertices: []
     indices: 
@@ -187,7 +237,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      FX003_02_0: 5631908155996147488
+      "\uC880\uBE44Eat_0": -9159069082162446135
+      "\uC880\uBE44Eat_1": 6855075855358959254
+      "\uC880\uBE44Eat_2": 3776943079673931286
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

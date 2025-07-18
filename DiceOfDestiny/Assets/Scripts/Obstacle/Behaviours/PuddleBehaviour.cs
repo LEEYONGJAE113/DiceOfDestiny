@@ -12,13 +12,13 @@ public class PuddleBehaviour : MonoBehaviour
 
             if (rand == 0)
             {
-                Debug.Log("50% 확률로 질병을 극복했습니다.");
-                ToastManager.Instance.ShowToast("50퍼 확률로 질병을 극복했습니다.", currentPiece.transform.position + Vector3.up * 1.2f);
+                Debug.Log("확률 50%로 질병을 극복했습니다.");
+                ToastManager.Instance.ShowToast("확률 50%로 질병을 극복했습니다.", currentPiece.transform, 0.3f);
             }
             else
             {
-                Debug.Log("50% 확률로 질병에 걸렸습니다.");
-                ToastManager.Instance.ShowToast("50% 확률로 질병에 걸렸습니다.", currentPiece.transform.position + Vector3.up * 1.2f);
+                Debug.Log("확률 50%로 질병에 걸렸습니다.");
+                ToastManager.Instance.ShowToast("확률 50%로 질병에 걸렸습니다.", currentPiece.transform, 0.7f);
                 // 질병 디버프 걸리는 함수 실행
             }
             // 해당 장애물 오브젝트 삭제 함수 실행

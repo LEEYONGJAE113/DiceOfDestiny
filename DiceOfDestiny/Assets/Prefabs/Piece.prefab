@@ -49,6 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   piece: {fileID: 11400000, guid: 7c184e42357c7bc42921652d84bac1c3, type: 2}
   lastMoveDirection: {x: 0, y: 0}
+  gridPosition: {x: 0, y: 0}
   classRenderer: {fileID: 6441678837052477297}
   colorRenderer: {fileID: 3789393067031802111}
 --- !u!114 &7694676294565098491
@@ -65,6 +66,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pieceController: {fileID: 6989186115329613593}
   knightSkillEffect: {fileID: 5787608323475247453, guid: cab6e3fb3ba5eb944b235d2eab030fe1, type: 3}
+  DemonSkillEffect: {fileID: 8546471297454802166, guid: 6cf9d3419d8d3e14989491b6e6491ce4, type: 3}
 --- !u!1 &2300401942455410093
 GameObject:
   m_ObjectHideFlags: 0

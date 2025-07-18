@@ -92,6 +92,8 @@ MonoBehaviour:
   toastPrefab: {fileID: 569366315313829650}
   uiCanvas: {fileID: 0}
   toastDuration: 2
+  worldYOffset: 0
+  pixelYOffset: 10
 --- !u!1 &8833940191713730514
 GameObject:
   m_ObjectHideFlags: 0
