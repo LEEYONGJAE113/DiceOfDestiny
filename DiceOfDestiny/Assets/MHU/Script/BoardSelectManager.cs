@@ -11,6 +11,8 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
     [SerializeField] public Vector2Int lastClickedPosition; // 마지막 클릭된 타일 위치
 
     private bool isWaitingForClick = false; // 클릭 대기 상태
+    private bool isHighlighted = false; // 현재 하이라이트 상태
+    public bool IsHighlighted => isHighlighted; // 외부에서 하이라이트 상태 확인용
 
     private Dictionary<Vector2Int, GameObject> activeEffects; // 활성화된 이펙트 저장
     private BoardManager boardManager;
@@ -21,10 +23,11 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
         boardManager = BoardManager.Instance;
     }
 
-    // 타일마다 장애물 검사 후 적절한 이펙트 적용
+    // 타일마다 장애물 여부에 따라 이펙트 적용
     public void HighlightTiles()
     {
         ClearAllEffects(); // 기존 이펙트 제거
+        isHighlighted = true; // 하이라이트 상태로 설정
 
         for (int x = 0; x < boardManager.boardSize; x++)
         {
@@ -34,7 +37,7 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
                 Tile tile = boardManager.GetTile(position);
                 if (tile != null)
                 {
-                    // 빈 타일에는 highlightEffectPrefab, 장애물 타일에는 effect2Prefab 적용
+                    // 하이라이트, 낫하이라이트 이미지 띄우기
                     GameObject effectPrefab = boardManager.IsEmptyTile(position) ? highlight : notHighlight;
                     // 이펙트 프리팹 인스턴스화
                     GameObject effect = Instantiate(effectPrefab,
@@ -44,9 +47,7 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
                         Quaternion.identity,
                         boardManager.boardTransform);
                     activeEffects.Add(position, effect);
-                }
-
-                
+                } 
             }
         }
     }
@@ -62,6 +63,7 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
             }
         }
         activeEffects.Clear();
+        isHighlighted = false; // 하이라이트 상태 해제
     }
 
     // 클릭된 타일의 위치를 비동기적으로 반환
@@ -83,7 +85,7 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
         lastClickedPosition = position;
         isWaitingForClick = false;
         Debug.Log($"클릭된 타일 위치 저장: {lastClickedPosition}");
-         ClearAllEffects();
+        ClearAllEffects();
     }
 
 }

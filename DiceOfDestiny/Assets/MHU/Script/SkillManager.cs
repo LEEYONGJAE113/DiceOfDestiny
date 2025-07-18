@@ -67,9 +67,13 @@ public class SkillManager : Singletone<SkillManager>
                 ThiefActiveSkill();
 
                 break;
-            case "Artist":
+            case "Painter":
                 Debug.Log("화가 스킬 발동!");
+
+                PainterActiveSkill();
+
                 ToastManager.Instance.ShowToast("화가 스킬 발동! 원하는 보드 한 칸의 색상 변경합니다.", pieceController.transform);
+
 
                 break;
             default:
@@ -96,16 +100,29 @@ public class SkillManager : Singletone<SkillManager>
         // 기사 스킬 : 진행했던 방향으로 1칸 움직임, 다 부숨
         Vector2Int lastDirection = pieceController.GetLastMoveDirection();
 
-        pieceActiveSkill.MoveForward(lastDirection);
+
+        pieceActiveSkill.MoveForward(pieceController,lastDirection);
+
+
         ToastManager.Instance.ShowToast("기사 스킬 발동! 기사 앞에 있는 모든 장애물을 제거합니다.", pieceController.transform);
+
 
     }
     private void DemonActiveSkill()
     {
         // 악마 스킬 : 원하는 보드 한칸에 독초 장애물을 만듬
-        pieceActiveSkill.Plant();
+
+        pieceActiveSkill.Plant(pieceController);
+
         ToastManager.Instance.ShowToast("악마 스킬 발동! 원하는 보드 한 칸에 독초 장애물을 만듭니다.", pieceController.transform);
 
+
+    }
+
+    private void PainterActiveSkill()
+    {
+        // 화가 스킬: 원하는 보드 한칸에 색깔을 칠함
+        pieceActiveSkill.Paint(pieceController);
     }
 
     #region 스킬 발동 시 깜빡임, 보드 색상 재배치 코루틴
