@@ -4,7 +4,8 @@ using System.Collections;
 public class PieceActiveSkill : MonoBehaviour
 {
     [SerializeField] private PieceController pieceController;
-    [SerializeField] private GameObject knightSkillEffect; // 이펙트 프리팹 참조
+    [SerializeField] private GameObject knightSkillEffect;
+    [SerializeField] private GameObject DemonSkillEffect;
 
     public void MoveForward(Vector2Int moveDirection)
     {
@@ -13,7 +14,8 @@ public class PieceActiveSkill : MonoBehaviour
 
     private IEnumerator MoveForwardCoroutine(Vector2Int moveDirection)
     {
-        yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f); // 잠시 대기
+        // 깜빡임 대기
+        yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
         // 유효한 이동 방향인지 확인
         if (moveDirection != Vector2Int.up && moveDirection != Vector2Int.down &&
@@ -23,7 +25,7 @@ public class PieceActiveSkill : MonoBehaviour
             yield break;
         }
 
-        // 1단계: 주어진 방향으로 이동
+        // 마지막 방향으로 이동 애니메이션
         Vector3 moveVec = new Vector3(moveDirection.x, moveDirection.y, 0);
         float moveDuration = 0.4f; // 이동 시간
         float time = 0f;
@@ -42,7 +44,7 @@ public class PieceActiveSkill : MonoBehaviour
             // 방향에 따라 이펙트 조정
             if (moveDirection == Vector2Int.left)
             {
-                // 기본 방향 (왼쪽): 아무 작업도 하지 않음
+                // 왼쪽: 기본 방향
                 skillEffect.transform.localScale = new Vector3(1f, 1f, 1f);
                 skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
             }
@@ -54,13 +56,13 @@ public class PieceActiveSkill : MonoBehaviour
             }
             else if (moveDirection == Vector2Int.up)
             {
-                // 위쪽: 90도 회전
+                // 위쪽: -90도 회전
                 skillEffect.transform.localScale = new Vector3(1f, 1f, 1f);
                 skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, -90f);
             }
             else if (moveDirection == Vector2Int.down)
             {
-                // 아래쪽: -90도 회전
+                // 아래쪽: 90도 회전
                 skillEffect.transform.localScale = new Vector3(1f, 1f, 1f);
                 skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, 90f);
             }
@@ -80,10 +82,11 @@ public class PieceActiveSkill : MonoBehaviour
             yield return null;
         }
 
-        // 최종 위치 설정
+        // 실제 그리드 위치 설정
         transform.position = endPos;
-        Vector2Int gridPos = pieceController.GetGridPosition();
+        Vector2Int gridPos = pieceController.gridPosition;
         gridPos += moveDirection;
+        pieceController.gridPosition = gridPos;
 
         // 이동한 위치에 장애물 확인
         bool hasObstacle = BoardManager.Instance.IsEmptyTile(gridPos);
@@ -109,5 +112,51 @@ public class PieceActiveSkill : MonoBehaviour
         {
             Destroy(skillEffect, 0.5f); // 0.5초 후 제거 (이펙트 지속 시간에 맞게 조정)
         }
+    }
+
+    public void Plant()
+    {
+        StartCoroutine(PlantCoroutine());
+    }
+
+    IEnumerator PlantCoroutine()
+    {
+        // 깜빡임 대기
+        yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
+
+        // 타일 선택 이미지 띄우기
+        BoardSelectManager.Instance.HighlightTiles();
+
+        // 클릭 기다림
+        yield return BoardSelectManager.Instance.WaitForTileClick();
+
+        // 위치 불러오기
+        Vector2Int gridPos = BoardSelectManager.Instance.lastClickedPosition;
+
+        // 이펙트 생성
+        if (DemonSkillEffect != null)
+        {
+            GameObject effect = Instantiate(
+                DemonSkillEffect,
+                new Vector3(
+                    BoardManager.Instance.boardTransform.position.x + gridPos.x,
+                    BoardManager.Instance.boardTransform.position.y + gridPos.y,
+                    -1), // z=-1로 타일 위에 렌더링
+                Quaternion.identity,
+                BoardManager.Instance.boardTransform
+            );
+            // 0.5초 후 이펙트 삭제
+            Destroy(effect, 0.5f);
+        }
+        else
+        {
+            Debug.LogWarning("Effect prefab is not assigned!");
+        }
+
+        // 1초 대기
+        yield return new WaitForSeconds(0.5f);
+
+        // 장애물 설정
+        BoardManager.Instance.CreateObstacle(gridPos, ObstacleType.PoisonousHerb);
     }
 }

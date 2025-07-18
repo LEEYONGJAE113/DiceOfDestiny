@@ -406,6 +406,49 @@ public class BoardManager : Singletone<BoardManager>
         }
     }
 
+    public void CreateObstacle(Vector2Int position, ObstacleType obstacleType)
+    {
+        if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
+        {
+            Debug.LogError("Position out of bounds");
+            return;
+        }
+
+        Tile tile = Board[position.x, position.y];
+        if (tile.Obstacle != ObstacleType.None)
+        {
+            Debug.LogWarning($"Obstacle already exists at position ({position.x}, {position.y})");
+            return;
+        }
+
+        // 장애물 타입 설정
+        tile.Obstacle = obstacleType;
+
+        // 장애물 프리팹 생성
+        if (ObstacleManager.Instance.obstaclePrefabs.ContainsKey(obstacleType))
+        {
+            GameObject obstacle = Instantiate(
+                ObstacleManager.Instance.obstaclePrefabs[obstacleType],
+                new Vector3(boardTransform.position.x + position.x, boardTransform.position.y + position.y, 0),
+                Quaternion.identity,
+                boardTransform
+            );
+            obstacle.name = $"Obstacle_{obstacleType}_{position.x}_{position.y}";
+            Obstacle obstacleComponent = obstacle.GetComponent<Obstacle>();
+            obstacleComponent.obstaclePosition = position;
+            ObstacleManager.Instance.SetObstacle(obstacle);
+
+            // 타일의 isWalkable 속성 업데이트
+            tile.isWalkable = obstacleComponent.isWalkable;
+        }
+        else
+        {
+            Debug.LogError($"No prefab found for ObstacleType: {obstacleType}");
+            tile.Obstacle = ObstacleType.None; // 프리팹이 없으면 장애물 설정 취소
+        }
+    }
+
+
     public Tile GetTile(Vector2Int position)
     {
         if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
