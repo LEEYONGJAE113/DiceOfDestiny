@@ -9,7 +9,7 @@ public class ToastManager : Singletone<ToastManager>
     [SerializeField] private Canvas uiCanvas;
     [SerializeField] private float toastDuration = 2f; 
     [SerializeField] private float worldYOffset = 0f; 
-    [SerializeField] private float pixelYOffset = 10f;
+    [SerializeField] private float pixelYOffset = 20f;
 
     private readonly List<RectTransform> activeToasts = new List<RectTransform>();
 
@@ -60,7 +60,7 @@ public class ToastManager : Singletone<ToastManager>
             canvasRect, screenPos,cam, out Vector2 localPoint
         );
 
-        float uiYOff = (pixelYOffset * index) / uiCanvas.scaleFactor;
+        float uiYOff = ((pixelYOffset + 20) * index) / uiCanvas.scaleFactor;
         toastRect.anchoredPosition = new Vector2(localPoint.x, localPoint.y + uiYOff);
 
         var textComponent = toastInstance.GetComponentInChildren<TextMeshProUGUI>();
