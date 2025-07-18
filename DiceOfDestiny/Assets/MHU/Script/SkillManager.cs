@@ -103,8 +103,9 @@ public class SkillManager : Singletone<SkillManager>
     private void DemonActiveSkill()
     {
         // 악마 스킬 : 원하는 보드 한칸에 독초 장애물을 만듬
-        //pieceActiveSkill.
+        pieceActiveSkill.Plant();
         ToastManager.Instance.ShowToast("악마 스킬 발동! 원하는 보드 한 칸에 독초 장애물을 만듭니다.", pieceController.transform.position + Vector3.up * 1.2f);
+
     }
 
     #region 스킬 발동 시 깜빡임, 보드 색상 재배치 코루틴
@@ -174,7 +175,6 @@ public class SkillManager : Singletone<SkillManager>
         }
 
         // 깜빡임 효과
-
         float blinkInterval = 0.25f; // 1초에 4번 깜빡임
         int blinkCount = Mathf.FloorToInt(blinkTime / blinkInterval);
         float elapsed = 0f;

@@ -40,4 +40,16 @@ public class Tile : MonoBehaviour
     {
         piece = newPiece;
     }
+    
+    // 타일 눌렀을 때 호출됨
+    private void OnMouseDown()
+    {
+        Vector2Int position = new Vector2Int(
+        Mathf.RoundToInt(transform.position.x - BoardManager.Instance.boardTransform.position.x),
+        Mathf.RoundToInt(transform.position.y - BoardManager.Instance.boardTransform.position.y));
+
+        Debug.Log($"Clicked tile at position: {position}");
+        BoardSelectManager.Instance.SetClickedTilePosition(position);
+        BoardSelectManager.Instance.ClearAllEffects();
+    }
 }
