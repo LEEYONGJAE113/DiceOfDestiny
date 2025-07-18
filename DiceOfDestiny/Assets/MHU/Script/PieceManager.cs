@@ -60,11 +60,9 @@ public class PieceManager : Singletone<PieceManager>
     {
         foreach (var piece in pieces)
         {
-            if (piece.GetPiece().debuff.IsStun)
-                piece.GetPiece().debuff.DecreaseStunTurn();
+            piece.statusEffectController.EndTurn();
         }
-        if (currentPiece.GetPiece().debuff.IsStun)
-            currentPiece.GetPiece().debuff.DecreaseStunTurn();
+        currentPiece.statusEffectController.EndTurn();
     }
 
     // public void AddDebuffPiece(ObstacleType obstacleType, PieceController pieceController) // 어떤 기물인지?, 클래스 데이터

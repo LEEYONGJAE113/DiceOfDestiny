@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7157527981714372214}
   - component: {fileID: 6989186115329613593}
+  - component: {fileID: -496050788824586386}
   m_Layer: 0
   m_Name: Piece
   m_TagString: Untagged
@@ -47,8 +48,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   piece: {fileID: 11400000, guid: 7c184e42357c7bc42921652d84bac1c3, type: 2}
+  lastMoveDirection: {x: 0, y: 0}
   classRenderer: {fileID: 6441678837052477297}
   colorRenderer: {fileID: 3789393067031802111}
+  statusEffectController: {fileID: 0}
+--- !u!114 &-496050788824586386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1324270886440449900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d798ea2d3be35fd47acf8d1a485b6486, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2300401942455410093
 GameObject:
   m_ObjectHideFlags: 0

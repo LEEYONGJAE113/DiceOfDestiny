@@ -23,9 +23,13 @@ public class PieceController : MonoBehaviour
 
     bool isMoving = false; // 이동 중인지 여부
 
+    public StatusEffectController statusEffectController;
+
     void Start()
     {
         gridPosition = new Vector2Int(0, 0);
+
+        statusEffectController = GetComponent<StatusEffectController>();
     }
 
     void Update()
@@ -65,7 +69,7 @@ public class PieceController : MonoBehaviour
                 return;
             }
 
-            if (piece.debuff.IsStun)
+            if (statusEffectController.IsStatusActive(StatusType.Stun)) // if (piece.debuff.IsStun)
             {
                 Debug.Log("Piece is stunned!");
                 return;

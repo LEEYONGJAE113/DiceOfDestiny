@@ -33,4 +33,6 @@ MonoBehaviour:
     weight: 5
   - type: 5
     weight: 3
+  - type: 9
+    weight: 5
   obstacleDensity: 0.2

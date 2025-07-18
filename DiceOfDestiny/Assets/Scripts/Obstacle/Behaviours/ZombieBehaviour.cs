@@ -38,7 +38,7 @@ public class ZombieBehaviour : MonoBehaviour
         }
         else
         {
-            if (nextTile.GetPiece().GetTopFace().classData.IsCombatClass || nextTile.GetPiece().GetPiece().debuff.IsStun)
+            if (nextTile.GetPiece().GetTopFace().classData.IsCombatClass || nextTile.GetPiece().statusEffectController.IsStatusActive(StatusType.Stun))
             {
                 AnimateObstacleHalfBack(zombie.nextStep, zombie);
                 zombie.nextStep = oppositeStep;
@@ -49,7 +49,7 @@ public class ZombieBehaviour : MonoBehaviour
                 zombie.nextStep = oppositeStep;
 
                 Debug.Log("Piece SStun!");
-                nextTile.GetPiece().GetPiece().debuff.SetStun(true, 2);
+                nextTile.GetPiece().statusEffectController.SetStatus(StatusType.Stun, 2);
             }
         }
     }
