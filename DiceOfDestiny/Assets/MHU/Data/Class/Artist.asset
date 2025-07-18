@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e494b535558a694aaf0df1132571600, type: 3}
   m_Name: Artist
   m_EditorClassIdentifier: 
-  className: Class Name
+  className: Artist
   sprite: {fileID: 21300000, guid: a30ba71e0ddd451479da54c3c6cfc45d, type: 3}
   isCombatClass: 0

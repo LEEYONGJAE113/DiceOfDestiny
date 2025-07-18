@@ -9,7 +9,8 @@ public class PieceController : MonoBehaviour
 {
     [SerializeField] private Piece piece; // 현재 기물
     [SerializeField] private Vector2Int lastMoveDirection = Vector2Int.zero; // 마지막 방향
-    private Vector2Int gridPosition;
+    [SerializeField] public Vector2Int gridPosition;
+
 
     // 전개도 데이터 (십자형: 0:바닥, 1:앞, 2:위, 3:뒤, 4:왼쪽, 5:오른쪽)
     private readonly int[] upTransition = new int[] { 1, 2, 3, 0, 4, 5 }; // 위로 이동
@@ -446,11 +447,17 @@ public class PieceController : MonoBehaviour
         piece = newPiece;
     }
 
-    public Vector2Int GetGridPosition()
-    {
-        return gridPosition;
-    }
 
+    
+    //public Vector2Int GetGridPosition()
+    //{
+    //    return gridPosition;
+    //}
+
+    //public Vector2Int SetGridPosition(Vector2Int newPosition)
+    //{
+    //    gridPosition = newPosition;
+    //}
 
     public Vector2Int GetLastMoveDirection()
     {
