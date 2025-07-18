@@ -35,4 +35,10 @@ public class Singletone<T> : MonoBehaviour where T : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
     }
+
+    protected virtual void OnDestroy()
+    {
+        if (_instance == this)
+            _instance = null;
+    }
 }
