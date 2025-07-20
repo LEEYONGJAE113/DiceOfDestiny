@@ -332,12 +332,12 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ce9edd7b2ed68e9478ff09f087366ffd, type: 3}
   - {fileID: 21300000, guid: 80e9eaf8288e57e49b1c283992861fcb, type: 3}
   - {fileID: 21300000, guid: 5b03dde04c7beff41a3d2d170021ef34, type: 3}
-  rollCountMin: 8
-  rollCountMax: 8
+  rollCountMin: 12
+  rollCountMax: 12
   inflateAmount: 0.3
   startOffset: 1
   centerRandomRange: 0.5
-  moveDuration: 10
+  moveDuration: 5
 --- !u!4 &896653131
 Transform:
   m_ObjectHideFlags: 0
@@ -347,7 +347,7 @@ Transform:
   m_GameObject: {fileID: 896653128}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0, z: -0.9238796, w: -0.38268328}
-  m_LocalPosition: {x: 8, y: -4, z: 0}
+  m_LocalPosition: {x: 9.58, y: -12.85, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:

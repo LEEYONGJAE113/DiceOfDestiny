@@ -1,5 +1,5 @@
-using System.Collections;
 using UnityEngine;
+using System.Collections;
 
 public class ApDiceController : MonoBehaviour
 {
@@ -50,8 +50,8 @@ public class ApDiceController : MonoBehaviour
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle);
 
-        StartCoroutine(ReSizeDiceOverTime());
         StartCoroutine(MoveDiceOverTime());
+        StartCoroutine(ReSizeDiceOverTime());
         StartCoroutine(RollCycle());
     }
 
@@ -77,23 +77,39 @@ public class ApDiceController : MonoBehaviour
     IEnumerator MoveDiceOverTime()
     {
         float elapsed = 0f;
+        float duration = moveDuration;
 
-        while (elapsed < moveDuration)
+        Vector3 totalDelta = endPosition - startPosition / 1.5f;
+        float totalDistance = totalDelta.magnitude;
+        Vector3 direction = totalDelta.normalized;
+
+        float prevT = 0f;
+
+        while (elapsed < duration)
         {
-            float t = elapsed / moveDuration;
-            float easeT = 1f - Mathf.Pow(1f - t, 2);
-            transform.localPosition = Vector3.Lerp(startPosition, endPosition, easeT);
+            float t = elapsed / duration;
+            float easeT = 1f - Mathf.Pow(1f - t, 2); // Ease-out
 
+            float movedDistance = easeT * totalDistance;
+            float deltaDistance = movedDistance - (prevT * totalDistance);
+
+            // 현재 스케일 고려하여 이동량 보정
+            float scaleFactor = transform.localScale.magnitude; // 스케일이 크면 적게 움직이니까 더 보정
+            Vector3 adjustedDelta = direction * deltaDistance * scaleFactor;
+
+            transform.position += adjustedDelta;
+
+            prevT = easeT;
             elapsed += Time.deltaTime;
             yield return null;
         }
-        transform.localPosition = endPosition;
     }
-    IEnumerator ReSizeDiceOverTime()
+
+        IEnumerator ReSizeDiceOverTime()
     {
         float elapsed = 0f;
         float startScale = 3.5f;
-        float resizeDuration = moveDuration / 5f;
+        float resizeDuration = moveDuration / 8f;
 
         while (elapsed < resizeDuration)
         {
@@ -108,7 +124,6 @@ public class ApDiceController : MonoBehaviour
         transform.localScale = Vector3.one;
     }
 
-    Vector3 prevExpandLocalPos = Vector3.zero;
     IEnumerator RollCycle()
     {
         int currentCycle = 0;
@@ -147,29 +162,40 @@ public class ApDiceController : MonoBehaviour
             nextIndex = nextNextIndex;
             nextNextIndex = GetNextIndex(nextNextIndex);
 
-            // 🔄 렌더러 스왑
             var temp = expand;
             expand = contract;
             contract = next;
             next = temp;
 
-            // 🔁 위치/스케일 이전 값 복사
             expand.transform.localPosition = contract.transform.localPosition;
             expand.transform.localScale = contract.transform.localScale;
 
             contract.transform.localPosition = next.transform.localPosition;
             contract.transform.localScale = next.transform.localScale;
 
-            next.transform.localPosition = temp.transform.localPosition;
-            next.transform.localScale = temp.transform.localScale;
+            next.transform.localPosition = Vector3.zero;
+            next.transform.localScale = Vector3.zero;
 
-            // 🎴 스프라이트 교체
             next.sprite = sideSprites[nextNextIndex];
             contract.sprite = sideSprites[nextIndex];
             expand.sprite = sideSprites[currentIndex];
 
             float duration = cycleDurations[currentCycle];
             float elapsed = 0f;
+
+            float length = 0.67f;  // 당기고 싶은 거리
+            float angleDegrees = transform.eulerAngles.z;  // 현재 회전 각도 (0~360)
+            float oppositeAngle = (angleDegrees + 180f) % 360f;  // 반대 방향 각도
+
+            // 라디안 변환
+            float angleRad = oppositeAngle * Mathf.Deg2Rad;
+
+            // 방향 벡터 계산 및 길이 곱하기
+            Vector2 offset = new Vector2(Mathf.Cos(angleRad), Mathf.Sin(angleRad)) * length;
+
+            // 위치에 적용 (월드 좌표 기준)
+            transform.position += new Vector3(offset.x, offset.y, 0);
+
             while (elapsed < duration)
             {
                 float t = Mathf.Clamp01(elapsed / duration);
@@ -179,17 +205,6 @@ public class ApDiceController : MonoBehaviour
                 elapsed += Time.deltaTime;
                 yield return null;
             }
-
-            // ✅ 위치 보정 (expand 렌더러의 위치 변화만큼 부모 위치를 역으로 보정)
-            // 이전 localPosition → world 변환
-            Vector3 prevWorld = transform.TransformPoint(prevExpandLocalPos);
-            Vector3 currWorld = transform.TransformPoint(expand.transform.localPosition);
-
-            Vector3 offset = prevWorld - currWorld;
-            transform.position += offset;
-
-            // 다음 사이클을 위해 현재 위치 저장
-            prevExpandLocalPos = expand.transform.localPosition;
 
             currentCycle++;
         }
@@ -217,4 +232,3 @@ public class ApDiceController : MonoBehaviour
 
     int GetNextIndex(int index) => (index + 1) % sideSprites.Length;
 }
-
