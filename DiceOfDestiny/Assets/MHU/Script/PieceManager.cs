@@ -64,17 +64,4 @@ public class PieceManager : Singletone<PieceManager>
         }
         currentPiece.statusEffectController.EndTurn();
     }
-
-    // public void AddDebuffPiece(ObstacleType obstacleType, PieceController pieceController) // 어떤 기물인지?, 클래스 데이터
-    // {
-    //     if (obstacleType == ObstacleType.PoisonousHerb)
-    //     {
-    //         if (pieceController.GetTopFace().classData.className == "Demon")
-    //         {
-    //             GameManager.Instance.actionPointManager.AddAP(1);
-    //             return;
-    //         }
-    //         GameManager.Instance.actionPointManager.RemoveAP(1);
-    //     }
-    // }
 }

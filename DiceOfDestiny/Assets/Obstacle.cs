@@ -11,7 +11,8 @@ public enum ObstacleType
     ManaSpring,
     Goblin,
     PoisonousHerb,
-    Unicorn,
+    Grass,
+    Slime,
     None
 }
 
@@ -32,4 +33,11 @@ public class Obstacle : MonoBehaviour
     public Vector2Int obstaclePosition;
 
     public bool isWalkable;
+
+    private Animator animator;
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
 }

@@ -20,7 +20,7 @@ public class PieceController : MonoBehaviour
 
     [SerializeField] private SpriteRenderer classRenderer;
     [SerializeField] public SpriteRenderer colorRenderer;
-    
+
 
     bool isMoving = false; // 이동 중인지 여부
 
@@ -76,6 +76,12 @@ public class PieceController : MonoBehaviour
                 return;
             }
 
+            if (statusEffectController.IsStatusActive(StatusType.Disease) && GameManager.Instance.actionPointManager.currentAP < 2)
+            {
+                Debug.Log("Piece is diseased!");
+                return;
+            }
+
             // 이동하는 곳에 장애물이 있으면
             Debug.Log("Obstacle Name : " + BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle);
             if (BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle != ObstacleType.None)
@@ -85,11 +91,6 @@ public class PieceController : MonoBehaviour
                 {
                     RotateHalfBack(moveDirection); // 튕김 애니메이션
                     return;
-                }
-                else
-                {
-                    // 밟을 수 있는 장애물을 밟아서 효과 발동!
-                    //PieceManager.Instance.AddDebuffPiece(BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle, this);
                 }
             }
 
@@ -108,18 +109,24 @@ public class PieceController : MonoBehaviour
                     return;
                 }
 
-                
+                GameManager.Instance.actionPointManager.PieceAction();
+
+                if (statusEffectController.IsStatusActive(StatusType.Disease))
+                {
+                    GameManager.Instance.actionPointManager.PieceAction();
+                }
+
 
                 // 이전 타일에 Piece 값을 null로 바꾸고, 다음 타일에 Piece 값을 적용 
                 BoardManager.Instance.Board[gridPosition.x, gridPosition.y].SetPiece(null);
                 BoardManager.Instance.Board[newPosition.x, newPosition.y].SetPiece(this);
 
-                GameManager.Instance.actionPointManager.PieceAction();
 
 
                 // 마지막 이동 방향 저장
                 lastMoveDirection = moveDirection;
 
+                // 실제 이동
                 RotateToTopFace(moveDirection);
                 UpdateTopFace(moveDirection); // 윗면 업데이트
 
@@ -448,7 +455,7 @@ public class PieceController : MonoBehaviour
     }
 
 
-    
+
     //public Vector2Int GetGridPosition()
     //{
     //    return gridPosition;
