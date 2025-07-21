@@ -20,7 +20,7 @@ public class PieceController : MonoBehaviour
 
     [SerializeField] private SpriteRenderer classRenderer;
     [SerializeField] public SpriteRenderer colorRenderer;
-    
+
 
     bool isMoving = false; // 이동 중인지 여부
 
@@ -105,7 +105,7 @@ public class PieceController : MonoBehaviour
                     return;
                 }
 
-                
+
 
                 // 이전 타일에 Piece 값을 null로 바꾸고, 다음 타일에 Piece 값을 적용 
                 BoardManager.Instance.Board[gridPosition.x, gridPosition.y].SetPiece(null);
@@ -445,7 +445,7 @@ public class PieceController : MonoBehaviour
     }
 
 
-    
+
     //public Vector2Int GetGridPosition()
     //{
     //    return gridPosition;
@@ -493,4 +493,5 @@ public class PieceController : MonoBehaviour
         }
 
     }
+
 }
