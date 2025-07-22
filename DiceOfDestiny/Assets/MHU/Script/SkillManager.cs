@@ -18,6 +18,7 @@ public class SkillManager : Singletone<SkillManager>
         int matchCount = BoardManager.Instance.CountMatchingColors(position, piece.GetTopFace().color);
         if (matchCount >= 3)
         {
+            Vector3 abovePiece = piece.transform.position + Vector3.up * 1.2f;
             ActivateSkill(piece.GetTopFace().classData);
             List<Vector2Int> matchingTile = BoardManager.Instance.GetMatchingColorTiles(position, piece.GetTopFace().color);
             StartCoroutine(SkillEffectCoroutine(piece.colorRenderer, position, matchingTile));
@@ -35,6 +36,7 @@ public class SkillManager : Singletone<SkillManager>
         {
             case "Baby":
                 Debug.Log("아기 스킬 발동!");
+                ToastManager.Instance.ShowToast("아기 스킬 발동! 원하는 말 한 칸 이동합니다.", pieceController.transform); // 나중에 스킬 메서드 생기면 그리로 이동
 
                 break;
             case "Demon":
@@ -44,6 +46,7 @@ public class SkillManager : Singletone<SkillManager>
                 break;
             case "Fanatic":
                 Debug.Log("광신도 스킬 발동!");
+                ToastManager.Instance.ShowToast("광신도 스킬 발동! 주변에 있는 사제를 광신도로 만듭니다.", pieceController.transform);
 
                 break;
             case "Knight":
@@ -64,8 +67,13 @@ public class SkillManager : Singletone<SkillManager>
                 ThiefActiveSkill();
 
                 break;
-            case "Artist":
+            case "Painter":
                 Debug.Log("화가 스킬 발동!");
+
+                PainterActiveSkill();
+
+                ToastManager.Instance.ShowToast("화가 스킬 발동! 원하는 보드 한 칸의 색상 변경합니다.", pieceController.transform);
+
 
                 break;
             default:
@@ -77,12 +85,14 @@ public class SkillManager : Singletone<SkillManager>
     private void PriestActiveSkill()
     {
         GameManager.Instance.actionPointManager.AddAP(1);
+        ToastManager.Instance.ShowToast("사제 스킬 발동! AP를 추가로 1 더 얻습니다.", pieceController.transform);
     }
 
 
     private void ThiefActiveSkill()
     {
         // 도둑 스킬 : 원하는 방향으로 1칸 움직임, 컨트롤러 한번 더 띄움
+        ToastManager.Instance.ShowToast("도둑 스킬 발동! 원하는 방향으로 1칸 더 이동 가능해집니다.", pieceController.transform);
     }
 
     private void KnightActiveSkill()
@@ -90,14 +100,29 @@ public class SkillManager : Singletone<SkillManager>
         // 기사 스킬 : 진행했던 방향으로 1칸 움직임, 다 부숨
         Vector2Int lastDirection = pieceController.GetLastMoveDirection();
 
-        pieceActiveSkill.MoveForward(lastDirection);
+
+        pieceActiveSkill.MoveForward(pieceController,lastDirection);
+
+
+        ToastManager.Instance.ShowToast("기사 스킬 발동! 기사 앞에 있는 모든 장애물을 제거합니다.", pieceController.transform);
+
 
     }
     private void DemonActiveSkill()
     {
         // 악마 스킬 : 원하는 보드 한칸에 독초 장애물을 만듬
-        pieceActiveSkill.Plant();
 
+        pieceActiveSkill.Plant(pieceController);
+
+        ToastManager.Instance.ShowToast("악마 스킬 발동! 원하는 보드 한 칸에 독초 장애물을 만듭니다.", pieceController.transform);
+
+
+    }
+
+    private void PainterActiveSkill()
+    {
+        // 화가 스킬: 원하는 보드 한칸에 색깔을 칠함
+        pieceActiveSkill.Paint(pieceController);
     }
 
     #region 스킬 발동 시 깜빡임, 보드 색상 재배치 코루틴

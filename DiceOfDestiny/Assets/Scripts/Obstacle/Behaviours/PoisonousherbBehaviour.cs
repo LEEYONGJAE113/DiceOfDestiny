@@ -13,15 +13,20 @@ public class PoisonousherbBehaviour : MonoBehaviour
                 BoardManager.Instance.RemoveObstacle(herb);
                 return;
             }
-            if (currentTile.GetPiece().GetTopFace().classData.className == "Demon")
+            
+            var point = 1;
+            PieceController currentPiece = currentTile.GetPiece();
+            if (currentPiece.GetTopFace().classData.className == "Demon")
             {
-                Debug.Log("악마가 독초를 밟아 행동력 +1");
-                GameManager.Instance.actionPointManager.AddAP(1);
+                GameManager.Instance.actionPointManager.AddAP(point);
+                Debug.Log($"악마가 독초를 밟아 행동력 +{point}");                
+                ToastManager.Instance.ShowToast($"독초를 밟아 {point} 행동력을 얻었습니다.", currentPiece.transform, 1f);
                 return;
-            }
+            }            
 
-            Debug.Log("독초를 밟아 행동력 -1");
-            GameManager.Instance.actionPointManager.RemoveAP(1);
+            GameManager.Instance.actionPointManager.RemoveAP(point);
+            Debug.Log($"독초를 밟아 행동력 -{point}");
+            ToastManager.Instance.ShowToast($"독초를 밟아 {point} 행동력을 잃었습니다.", currentPiece.transform, 1f);
 
             if (currentTile.GetPiece().GetTopFace().classData.className == "Baby")
             {

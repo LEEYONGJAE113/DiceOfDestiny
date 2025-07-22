@@ -10,7 +10,19 @@ public class CursorManager : Singletone<CursorManager>
     private int defaultSortOrder = 32760;
     
     private static readonly HashSet<Canvas> activeCanvases = new HashSet<Canvas>();
-    
+
+    // 씬 로드 직후 한번 실행 → 매 씬 전환마다 자동 생성 보장
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    private static void InitAfterSceneLoad()
+    {
+        if (Instance == null)
+        {
+            // 싱글톤 인스턴스가 없으면 새 GameObject에 컴포넌트 추가
+            var go = new GameObject("CursorManager");
+            go.AddComponent<CursorManager>();
+        }
+    }
+
     public static void RegisterCanvas(Canvas canvas)
     {
         if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
@@ -44,13 +56,11 @@ public class CursorManager : Singletone<CursorManager>
 
     private void Awake()
     {
-        if (Instance != this) // 싱글톤 중복 방지
-        {
-            Destroy(gameObject);
-            return;
-        }
         DontDestroyOnLoad(gameObject);
+    }
 
+    private void Start()
+    {
         CreateCursorCanvas();
         CreateCursor();
     }
@@ -107,5 +117,20 @@ public class CursorManager : Singletone<CursorManager>
             out pos
         );
         cursorRectTransform.anchoredPosition = pos;
+    }
+
+    private void OnDisable()
+    {
+        // 캔버스 등록 해제 및 생성 오브젝트 정리
+        UnregisterCanvas(cursorCanvas);
+        if (cursorCanvas != null)
+        {
+            Destroy(cursorCanvas.gameObject);
+            cursorCanvas = null;
+        }
+    }
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
     }
 }

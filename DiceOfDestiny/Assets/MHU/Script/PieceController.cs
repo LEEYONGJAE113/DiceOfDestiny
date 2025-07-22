@@ -22,6 +22,7 @@ public class PieceController : MonoBehaviour
     [SerializeField] public SpriteRenderer colorRenderer;
 
 
+
     bool isMoving = false; // 이동 중인지 여부
 
     public StatusEffectController statusEffectController;
@@ -75,6 +76,7 @@ public class PieceController : MonoBehaviour
             if (statusEffectController.IsStatusActive(StatusType.Stun)) // if (piece.debuff.IsStun)
             {
                 Debug.Log("Piece is stunned!");
+                ToastManager.Instance.ShowToast(message: $"기물이 기절했습니다! {piece.debuff.stunTurn}턴간 이동할 수 없습니다.", transform);
                 return;
             }
 
@@ -458,6 +460,7 @@ public class PieceController : MonoBehaviour
 
 
 
+
     //public Vector2Int GetGridPosition()
     //{
     //    return gridPosition;
@@ -505,4 +508,5 @@ public class PieceController : MonoBehaviour
         }
 
     }
+
 }
