@@ -325,19 +325,25 @@ MonoBehaviour:
   expandRenderer: {fileID: 1703015077}
   contractRenderer: {fileID: 277223970}
   nextRenderer: {fileID: 787372943}
-  sideSprites:
-  - {fileID: 21300000, guid: ce9edd7b2ed68e9478ff09f087366ffd, type: 3}
-  - {fileID: 21300000, guid: 80e9eaf8288e57e49b1c283992861fcb, type: 3}
-  - {fileID: 21300000, guid: 5b03dde04c7beff41a3d2d170021ef34, type: 3}
-  - {fileID: 21300000, guid: ce9edd7b2ed68e9478ff09f087366ffd, type: 3}
-  - {fileID: 21300000, guid: 80e9eaf8288e57e49b1c283992861fcb, type: 3}
-  - {fileID: 21300000, guid: 5b03dde04c7beff41a3d2d170021ef34, type: 3}
-  rollCountMin: 12
-  rollCountMax: 12
+  diceFaces:
+  - sprite: {fileID: 21300000, guid: ce9edd7b2ed68e9478ff09f087366ffd, type: 3}
+    value: 1
+  - sprite: {fileID: 21300000, guid: 80e9eaf8288e57e49b1c283992861fcb, type: 3}
+    value: 2
+  - sprite: {fileID: 21300000, guid: 5b03dde04c7beff41a3d2d170021ef34, type: 3}
+    value: 3
+  - sprite: {fileID: 21300000, guid: ce9edd7b2ed68e9478ff09f087366ffd, type: 3}
+    value: 1
+  - sprite: {fileID: 21300000, guid: 80e9eaf8288e57e49b1c283992861fcb, type: 3}
+    value: 2
+  - sprite: {fileID: 21300000, guid: 5b03dde04c7beff41a3d2d170021ef34, type: 3}
+    value: 3
+  rollCountMin: 8
+  rollCountMax: 10
   inflateAmount: 0.3
   startOffset: 1
   centerRandomRange: 0.5
-  moveDuration: 0.8
+  moveDuration: 1.6
 --- !u!4 &896653131
 Transform:
   m_ObjectHideFlags: 0
