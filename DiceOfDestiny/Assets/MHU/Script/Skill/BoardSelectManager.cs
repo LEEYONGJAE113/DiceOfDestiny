@@ -11,8 +11,10 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
     [SerializeField] public Vector2Int lastClickedPosition; // 마지막 클릭된 타일 위치
 
     private bool isWaitingForClick = false; // 클릭 대기 상태
-    private bool isHighlighted = false; // 현재 하이라이트 상태
-    public bool IsHighlighted => isHighlighted; // 외부에서 하이라이트 상태 확인용
+
+
+    // 장애물 타일 클릭 제한 여부 (true면 장애물 타일 클릭 불가, false면 가능)
+    public bool restrictObstacle = true;
 
     private Dictionary<Vector2Int, GameObject> activeEffects; // 활성화된 이펙트 저장
     private BoardManager boardManager;
@@ -23,11 +25,11 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
         boardManager = BoardManager.Instance;
     }
 
-    // 타일마다 장애물 여부에 따라 이펙트 적용
+    // 타일마다 장애물 여부에 따라 이펙트 적용 (악마 전용)
     public void HighlightTiles()
     {
         ClearAllEffects(); // 기존 이펙트 제거
-        isHighlighted = true; // 하이라이트 상태로 설정
+        restrictObstacle = true; // 장애물 타일 클릭 제한
 
         for (int x = 0; x < boardManager.boardSize; x++)
         {
@@ -52,6 +54,35 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
         }
     }
 
+    // 모든 타일에 하이라이트 이펙트 적용 (화가 전용)
+    public void AllHighlightTiles()
+    {
+        ClearAllEffects(); // 기존 이펙트 제거
+        restrictObstacle = false; // 장애물 타일 클릭 제한 해제
+
+        for (int x = 0; x < boardManager.boardSize; x++)
+        {
+            for (int y = 0; y < boardManager.boardSize; y++)
+            {
+                Vector2Int position = new Vector2Int(x, y);
+                Tile tile = boardManager.GetTile(position);
+                if (tile != null)
+                {
+                    // 모든 타일에 하이라이트 이펙트 적용
+                    GameObject effectPrefab = highlight; // 항상 highlight 프리팹 사용
+                                                         // 이펙트 프리팹 인스턴스화
+                    GameObject effect = Instantiate(effectPrefab,
+                        new Vector3(boardManager.boardTransform.position.x + x,
+                                    boardManager.boardTransform.position.y + y,
+                                    -1), // z=-1로 타일 위에 렌더링
+                        Quaternion.identity,
+                        boardManager.boardTransform);
+                    activeEffects.Add(position, effect);
+                }
+            }
+        }
+    }
+
     // 모든 이펙트 제거
     public void ClearAllEffects()
     {
@@ -63,7 +94,6 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
             }
         }
         activeEffects.Clear();
-        isHighlighted = false; // 하이라이트 상태 해제
     }
 
     // 클릭된 타일의 위치를 비동기적으로 반환
@@ -80,8 +110,23 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
         yield return lastClickedPosition;
     }
 
+    // 장애물 타일 클릭 제한 설정
+    public void SetRestrictToEmptyTiles(bool restrict)
+    {
+        restrictObstacle = restrict;
+    }
+
     public void SetClickedTilePosition(Vector2Int position)
     {
+        // restrictToEmptyTiles가 true일 때만 장애물 타일 확인
+        if (restrictObstacle && !boardManager.IsEmptyTile(position))
+        {
+            Debug.Log($"장애물이 있는 타일({position})은 클릭할 수 없습니다.");
+            // UI 피드백 호출
+            
+            return;
+        }
+
         lastClickedPosition = position;
         isWaitingForClick = false;
         Debug.Log($"클릭된 타일 위치 저장: {lastClickedPosition}");

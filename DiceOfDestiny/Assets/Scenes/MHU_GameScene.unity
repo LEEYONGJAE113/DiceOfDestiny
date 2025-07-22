@@ -510,6 +510,71 @@ Transform:
   - {fileID: 461941943}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &392611812
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 93279576410076110, guid: 26b7f82263e46d440b849314ffb80dcf, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 93279576410076110, guid: 26b7f82263e46d440b849314ffb80dcf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 93279576410076110, guid: 26b7f82263e46d440b849314ffb80dcf, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 93279576410076110, guid: 26b7f82263e46d440b849314ffb80dcf, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 93279576410076110, guid: 26b7f82263e46d440b849314ffb80dcf, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.8660254
+      objectReference: {fileID: 0}
+    - target: {fileID: 93279576410076110, guid: 26b7f82263e46d440b849314ffb80dcf, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 93279576410076110, guid: 26b7f82263e46d440b849314ffb80dcf, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 93279576410076110, guid: 26b7f82263e46d440b849314ffb80dcf, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 93279576410076110, guid: 26b7f82263e46d440b849314ffb80dcf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 93279576410076110, guid: 26b7f82263e46d440b849314ffb80dcf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 93279576410076110, guid: 26b7f82263e46d440b849314ffb80dcf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 2847281042695623499, guid: 26b7f82263e46d440b849314ffb80dcf, type: 3}
+      propertyPath: m_Name
+      value: Knight_SkillSecond
+      objectReference: {fileID: 0}
+    - target: {fileID: 2847281042695623499, guid: 26b7f82263e46d440b849314ffb80dcf, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 26b7f82263e46d440b849314ffb80dcf, type: 3}
 --- !u!1 &461941942
 GameObject:
   m_ObjectHideFlags: 0
@@ -621,6 +686,7 @@ MonoBehaviour:
   highlight: {fileID: 5202197561119462133, guid: a36e359cfbf84ac408e6e093fe3a4433, type: 3}
   notHighlight: {fileID: 8580737132803966830, guid: cec83b78fd1d6c242b8d9842092d6c99, type: 3}
   lastClickedPosition: {x: 0, y: 0}
+  restrictObstacle: 1
 --- !u!4 &483505443
 Transform:
   m_ObjectHideFlags: 0
@@ -703,7 +769,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -224, y: -14}
+  m_AnchoredPosition: {x: -219.9, y: -7.8}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &557545506
@@ -1070,10 +1136,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f156c1b43ec7c4c4e8bb1c1f68f9f297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  knightSkillEffect: {fileID: 704054100992239237, guid: 2e754a6baed768446ada6ad72dc1bfe8, type: 3}
+  knightSkillEffect: {fileID: 2847281042695623499, guid: 26b7f82263e46d440b849314ffb80dcf, type: 3}
   demonSkillEffect: {fileID: 8546471297454802166, guid: 6cf9d3419d8d3e14989491b6e6491ce4, type: 3}
   painterSkillEffect: {fileID: 2451137114134880698, guid: 901a2755ea7b5bf42945c42584821536, type: 3}
-  painterSkillUI: {fileID: 830614874}
+  painterActiveSkillUI: {fileID: 830614874}
 --- !u!114 &830614874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1129,7 +1195,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -173, y: -149}
+  m_AnchoredPosition: {x: -165.3, y: -149}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &842430164
@@ -3351,3 +3417,4 @@ SceneRoots:
   - {fileID: 1150930150}
   - {fileID: 483505443}
   - {fileID: 1222871038}
+  - {fileID: 392611812}

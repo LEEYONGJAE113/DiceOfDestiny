@@ -1,25 +1,31 @@
 fileFormatVersion: 2
-guid: b380fa2b364fc5742ba9156dea2ea7b1
+guid: 2d7c84f03ec9d0a4a98b91cb00993632
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -9041393180804707144
-    second: Knight_Skill_0
+      213: 6140105515917345324
+    second: Knight_SkillSecond_0
   - first:
-      213: 4147875316157256486
-    second: Knight_Skill_1
+      213: -5150034020415799014
+    second: Knight_SkillSecond_1
   - first:
-      213: -7740222470982005412
-    second: Knight_Skill_2
+      213: -4820092958553923477
+    second: Knight_SkillSecond_2
   - first:
-      213: 8064460243949603237
-    second: Knight_Skill_3
+      213: -50340138196504509
+    second: Knight_SkillSecond_3
   - first:
-      213: -7846379901176840949
-    second: Knight_Skill_4
+      213: 6468950964444986293
+    second: Knight_SkillSecond_4
   - first:
-      213: -8287878262187088851
-    second: Knight_Skill_5
+      213: 2868361613405326936
+    second: Knight_SkillSecond_5
+  - first:
+      213: 6802648158275174407
+    second: Knight_SkillSecond_6
+  - first:
+      213: -4778224017952099707
+    second: Knight_SkillSecond_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -154,7 +160,29 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Knight_Skill_0
+      name: Knight_SkillSecond_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c228baf5f69063550800000000000000
+      internalID: 6140105515917345324
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Knight_SkillSecond_1
       rect:
         serializedVersion: 2
         x: 32
@@ -167,16 +195,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 4bed7bf99ebc0934ba0626f6caf0ba22
-      internalID: 267283190
+      spriteID: a1180ff28576788b0800000000000000
+      internalID: -5150034020415799014
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Knight_Skill_1
+      name: Knight_SkillSecond_2
       rect:
         serializedVersion: 2
         x: 64
@@ -189,16 +217,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: e9eac487928fbfe44903e72f206f59e4
-      internalID: 12791177
+      spriteID: b60280dfdf69b1db0800000000000000
+      internalID: -4820092958553923477
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Knight_Skill_2
+      name: Knight_SkillSecond_3
       rect:
         serializedVersion: 2
         x: 96
@@ -211,16 +239,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 3c732205e64f5f940ae235fc40a5c76d
-      internalID: -1559731755
+      spriteID: 3407ad839e72d4ff0800000000000000
+      internalID: -50340138196504509
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Knight_Skill_3
+      name: Knight_SkillSecond_4
       rect:
         serializedVersion: 2
         x: 128
@@ -233,16 +261,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 92ab4b4b4660e86458298baf39d20f28
-      internalID: -2022625973
+      spriteID: 5bbf921d0a456c950800000000000000
+      internalID: 6468950964444986293
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Knight_Skill_4
+      name: Knight_SkillSecond_5
       rect:
         serializedVersion: 2
         x: 160
@@ -255,16 +283,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: a69f22f02ef83d74aa066f5924ee3ca5
-      internalID: 1513950048
+      spriteID: 85e046ea0b77ec720800000000000000
+      internalID: 2868361613405326936
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Knight_Skill_5
+      name: Knight_SkillSecond_6
       rect:
         serializedVersion: 2
         x: 192
@@ -277,10 +305,32 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 360b9100d14b6ca46aead1e612e63dbf
-      internalID: -770103611
+      spriteID: 70005fd357cd76e50800000000000000
+      internalID: 6802648158275174407
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Knight_SkillSecond_7
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 582b9b0629650bdb0800000000000000
+      internalID: -4778224017952099707
       vertices: []
       indices: 
       edges: []
@@ -289,7 +339,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: aa386fa093895124a996249611e4aa1f
+    spriteID: 4afce7fccbe243d4db0844413c901be5
     internalID: 0
     vertices: []
     indices: 
@@ -299,12 +349,14 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Knight_Skill_0: 267283190
-      Knight_Skill_1: 12791177
-      Knight_Skill_2: -1559731755
-      Knight_Skill_3: -2022625973
-      Knight_Skill_4: 1513950048
-      Knight_Skill_5: -770103611
+      Knight_SkillSecond_0: 6140105515917345324
+      Knight_SkillSecond_1: -5150034020415799014
+      Knight_SkillSecond_2: -4820092958553923477
+      Knight_SkillSecond_3: -50340138196504509
+      Knight_SkillSecond_4: 6468950964444986293
+      Knight_SkillSecond_5: 2868361613405326936
+      Knight_SkillSecond_6: 6802648158275174407
+      Knight_SkillSecond_7: -4778224017952099707
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
