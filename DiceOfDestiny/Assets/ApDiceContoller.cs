@@ -1,12 +1,13 @@
 using UnityEngine;
 using System.Collections;
+using System.Diagnostics.Contracts;
 
 public class ApDiceController : MonoBehaviour
 {
     [Header("Sprite Renderers")]
-    public SpriteRenderer expandRenderer; // 현재 면 표시, 항상 커진 상태 유지
-    public SpriteRenderer contractRenderer; // 애니메이션 중인 면 (커짐 → 축소)
-    public SpriteRenderer nextRenderer; // 다음 다음 면 미리 준비, 스케일 0 상태 유지
+    public SpriteRenderer expandRenderer; 
+    public SpriteRenderer contractRenderer; 
+    public SpriteRenderer nextRenderer; 
 
     [Header("Dice Sides")]
     public Sprite[] sideSprites;
@@ -32,6 +33,112 @@ public class ApDiceController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             DiceRoll();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            // For testing purposes, roll the dice when space is pressed
+            DiceRoll2();
+        }
+    }
+
+    void DiceRoll2()
+    {
+        StartCoroutine(RollDiceSpiral());
+    }
+
+    IEnumerator RotateDiceOverTime()
+    {
+        float elapsed = 0f;
+        float resizeDuration = moveDuration * 4;
+        float degree = 0f;
+
+        while (elapsed < resizeDuration)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, degree); 
+            elapsed += Time.deltaTime;
+            degree += 5f;
+            yield return null;
+        }
+    }
+
+    IEnumerator RollDiceSpiral()
+    {
+        int currentCycle = 0;
+        currentIndex = 0;
+        int nextIndex = GetNextIndex(currentIndex);
+        int nextNextIndex = GetNextIndex(nextIndex);
+
+        float pos = 0f;
+
+        SpriteRenderer expand = expandRenderer;
+        SpriteRenderer contract = contractRenderer;
+        SpriteRenderer next = nextRenderer;
+
+        expand.sprite = sideSprites[currentIndex];
+        expand.transform.localScale = Vector3.one;
+        expand.transform.localPosition = Vector3.zero;
+
+        contract.sprite = sideSprites[nextIndex];
+        contract.transform.localScale = Vector3.zero;
+        contract.transform.localPosition = Vector3.zero;
+
+        next.sprite = sideSprites[nextNextIndex];
+        next.transform.localScale = Vector3.zero;
+        next.transform.localPosition = Vector3.zero;
+
+        float baseDuration = moveDuration / rollCount;
+
+        while (currentCycle < rollCount)
+        {
+            currentIndex = nextIndex;
+            nextIndex = nextNextIndex;
+            nextNextIndex = GetNextIndex(nextNextIndex);
+
+            var temp = expand;
+            expand = contract;
+            contract = next;
+            next = temp;
+
+            expand.transform.localPosition = contract.transform.localPosition;
+            expand.transform.localScale = contract.transform.localScale;
+
+            contract.transform.localPosition = next.transform.localPosition;
+            contract.transform.localScale = next.transform.localScale;
+
+            next.transform.localPosition = Vector3.zero;
+            next.transform.localScale = Vector3.zero;
+
+            next.sprite = sideSprites[nextNextIndex];
+            contract.sprite = sideSprites[nextIndex];
+            expand.sprite = sideSprites[currentIndex];
+
+            float duration = baseDuration * (1f + 0.5f * (currentCycle / (float)rollCount));
+            float elapsed = 0f;
+
+            float startAngle = pos * 30f; // 이전 프레임 각도
+            float endAngle = startAngle + Mathf.Lerp(180f, 90f, currentCycle / (float)rollCount); // 한 사이클당 회전 각도 줄이기
+
+
+            while (elapsed < duration)
+            {
+                float t = Mathf.Clamp01(elapsed / duration);
+                float easedT = Mathf.Sin(t * Mathf.PI * 0.5f); // Ease-out
+
+                RollCycleStep(easedT, contract, expand);
+
+                
+
+                transform.position = new Vector3(pos, pos, 0);
+                pos += 0.1f * (1f - t); ;
+                float angle = Mathf.Lerp(startAngle, endAngle, easedT);
+                transform.rotation = Quaternion.Euler(0, 0, angle); // 회전 효과
+
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            currentCycle++;
         }
     }
 
@@ -95,7 +202,7 @@ public class ApDiceController : MonoBehaviour
 
             // 현재 스케일 고려하여 이동량 보정
             float scaleFactor = transform.localScale.magnitude; // 스케일이 크면 적게 움직이니까 더 보정
-            Vector3 adjustedDelta = direction * deltaDistance * scaleFactor;
+            Vector3 adjustedDelta = direction * deltaDistance * scaleFactor * 1.2f;
 
             transform.position += adjustedDelta;
 
@@ -105,7 +212,7 @@ public class ApDiceController : MonoBehaviour
         }
     }
 
-        IEnumerator ReSizeDiceOverTime()
+    IEnumerator ReSizeDiceOverTime()
     {
         float elapsed = 0f;
         float startScale = 3.5f;

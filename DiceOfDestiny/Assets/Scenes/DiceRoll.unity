@@ -337,7 +337,7 @@ MonoBehaviour:
   inflateAmount: 0.3
   startOffset: 1
   centerRandomRange: 0.5
-  moveDuration: 5
+  moveDuration: 0.8
 --- !u!4 &896653131
 Transform:
   m_ObjectHideFlags: 0
