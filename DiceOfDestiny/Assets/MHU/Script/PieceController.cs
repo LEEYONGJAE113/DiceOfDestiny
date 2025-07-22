@@ -8,7 +8,9 @@ using UnityEngine.UIElements;
 public class PieceController : MonoBehaviour
 {
     [SerializeField] private Piece piece; // 현재 기물
-    Vector2Int gridPosition;
+    [SerializeField] private Vector2Int lastMoveDirection = Vector2Int.zero; // 마지막 방향
+    [SerializeField] public Vector2Int gridPosition;
+
 
     // 전개도 데이터 (십자형: 0:바닥, 1:앞, 2:위, 3:뒤, 4:왼쪽, 5:오른쪽)
     private readonly int[] upTransition = new int[] { 1, 2, 3, 0, 4, 5 }; // 위로 이동
@@ -19,6 +21,7 @@ public class PieceController : MonoBehaviour
     [SerializeField] private SpriteRenderer classRenderer;
     [SerializeField] public SpriteRenderer colorRenderer;
 
+
     bool isMoving = false; // 이동 중인지 여부
 
     void Start()
@@ -27,11 +30,13 @@ public class PieceController : MonoBehaviour
     }
 
     void Update()
-    {       
+    {
         TestInput();
     }
 
-    public void TestInput()
+
+    public void TestInput() // 이벤트로 넘기거나 할 필요가 있을듯................................하바ㅏㅏㅏㅏㅏㅏ니ㅏㄷ..............밑에관련메소드잇음................................
+
     {
         Vector2Int moveDirection = Vector2Int.zero;
         if (!isMoving)
@@ -50,18 +55,39 @@ public class PieceController : MonoBehaviour
         {
             Vector2Int newPosition = gridPosition + moveDirection;
 
+            // 이동 확정 시
+            // 행동력이 0이면 행동 불가
+            if (!GameManager.Instance.actionPointManager.TryUseAP())
+                return;
+
             // 이동하는 곳이 보드 밖이면 return
             if (!ObstacleManager.Instance.IsInsideBoard(newPosition))
             {
                 return;
             }
 
-            // 이동하는 곳에 장애물이 있으면 return
+            if (piece.debuff.IsStun)
+            {
+                Debug.Log("Piece is stunned!");
+                ToastManager.Instance.ShowToast(message: $"기물이 기절했습니다! {piece.debuff.stunTurn}턴간 이동할 수 없습니다.", transform);
+                return;
+            }
+
+            // 이동하는 곳에 장애물이 있으면
             Debug.Log("Obstacle Name : " + BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle);
             if (BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle != ObstacleType.None)
             {
-                //newPosition = gridPosition;
-                return;
+                // 밟을 수 없다면
+                if (!BoardManager.Instance.Board[newPosition.x, newPosition.y].isWalkable)
+                {
+                    RotateHalfBack(moveDirection); // 튕김 애니메이션
+                    return;
+                }
+                else
+                {
+                    // 밟을 수 있는 장애물을 밟아서 효과 발동!
+                    //PieceManager.Instance.AddDebuffPiece(BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle, this);
+                }
             }
 
             if (newPosition.x >= 0 && newPosition.x < BoardManager.Instance.boardSize &&
@@ -79,10 +105,7 @@ public class PieceController : MonoBehaviour
                     return;
                 }
 
-                // 이동 확정 시
-                // 행동력이 0이면 행동 불가
-                if (!GameManager.Instance.actionPointManager.TryUseAP())
-                    return;
+
 
                 // 이전 타일에 Piece 값을 null로 바꾸고, 다음 타일에 Piece 값을 적용 
                 BoardManager.Instance.Board[gridPosition.x, gridPosition.y].SetPiece(null);
@@ -90,27 +113,16 @@ public class PieceController : MonoBehaviour
 
                 GameManager.Instance.actionPointManager.PieceAction();
 
-                ObstacleManager.Instance.UpdateObstacleStep();
 
-                gridPosition = newPosition;
-                transform.position = new Vector3(
-                    BoardManager.Instance.boardTransform.position.x + gridPosition.x,
-                    BoardManager.Instance.boardTransform.position.y + gridPosition.y,
-                    0f
-                );
+                // 마지막 이동 방향 저장
+                lastMoveDirection = moveDirection;
+
+                RotateToTopFace(moveDirection);
                 UpdateTopFace(moveDirection); // 윗면 업데이트
-                // RotateToTopFace(moveDirection);
-                RotateHalfBack(moveDirection);
 
-                // 스킬 발동 확인
-                if (SkillManager.Instance != null)
-                {
-                    SkillManager.Instance.TryActivateSkill(gridPosition, this);
-                }
-                else
-                {
-                    Debug.LogError("SkillManager.Instance is null!");
-                }
+                //RotateHalfBack(moveDirection);
+
+                ObstacleManager.Instance.UpdateObstacleStep();
             }
             else
             {
@@ -292,6 +304,17 @@ public class PieceController : MonoBehaviour
         colorRenderer.transform.localScale = Vector3.one;
 
         isMoving = false;
+
+        // 스킬 발동
+        if (SkillManager.Instance != null)
+        {
+            SkillManager.Instance.TryActivateSkill(gridPosition, this);
+        }
+        else
+        {
+            Debug.LogError("SkillManager.Instance is null!");
+        }
+
     }
 
     public void RotateHalfBack(Vector2Int moveDirection)
@@ -420,4 +443,55 @@ public class PieceController : MonoBehaviour
     {
         piece = newPiece;
     }
+
+
+
+    //public Vector2Int GetGridPosition()
+    //{
+    //    return gridPosition;
+    //}
+
+    //public Vector2Int SetGridPosition(Vector2Int newPosition)
+    //{
+    //    gridPosition = newPosition;
+    //}
+
+    public Vector2Int GetLastMoveDirection()
+    {
+        return lastMoveDirection;
+    }
+
+    private bool isInGame;
+    public bool IsinGame => IsinGame;
+
+
+    public void Init(Piece piece)
+    {
+        gridPosition = new Vector2Int(0, 0);
+        this.piece = piece;
+    }
+
+    public void SetInGame(bool value)
+    {
+        isInGame = value;
+    }
+
+    public Vector2Int MovePiece(Directions dir)
+    {
+        switch (dir)
+        {
+            case Directions.Up:
+                return Vector2Int.up;
+            case Directions.Down:
+                return Vector2Int.down;
+            case Directions.Left:
+                return Vector2Int.left;
+            case Directions.Right:
+                return Vector2Int.right;
+            default:
+                return Vector2Int.zero;
+        }
+
+    }
+
 }

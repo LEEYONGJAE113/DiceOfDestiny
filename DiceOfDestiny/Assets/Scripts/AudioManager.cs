@@ -40,7 +40,10 @@ public class AudioManager : Singletone<AudioManager>
 
         bgmDict = bgmClips.ToDictionary(c => c.name, c => c);
         sfxDict = sfxClips.ToDictionary(c => c.name, c => c);
+
+        ApplySavedAudioSettings();
     }
+
     void Update()
     {
         if (!IsClickSoundEnabled) return;
@@ -65,12 +68,22 @@ public class AudioManager : Singletone<AudioManager>
 
     public void SetMasterMute(bool mute)
     {
-        float volume = mute ? -80f : Mathf.Log10(PlayerPrefs.GetFloat("MasterVolume", 1f)) * 20f;
-        audioMixer.SetFloat("MasterVolume", volume);
+        float masterVolume = mute ? -80f : Mathf.Log10(PlayerPrefs.GetFloat("MasterVolume", 1f)) * 20f;
+        float bgmVolume = mute ? -80f : Mathf.Log10(PlayerPrefs.GetFloat("BGMVolume", 1f)) * 20f;
+        float sfxVolume = mute ? -80f : Mathf.Log10(PlayerPrefs.GetFloat("SFXVolume", 1f)) * 20f;
+
+        audioMixer.SetFloat("MasterVolume", masterVolume);
+        audioMixer.SetFloat("BGMVolume", bgmVolume);
+        audioMixer.SetFloat("SFXVolume", sfxVolume);
+
+        if (bgmSource != null)
+            bgmSource.mute = mute;
+        if (sfxSource != null)
+            sfxSource.mute = mute;
     }
 
 
-    public void PlayBGM(string name, bool loop = true)
+public void PlayBGM(string name, bool loop = true)
     {
         if (bgmDict.TryGetValue(name, out var clip))
         {
@@ -100,4 +113,19 @@ public class AudioManager : Singletone<AudioManager>
             Debug.LogWarning($"SFX '{name}' not found.");
         }
     }
+
+
+    public void ApplySavedAudioSettings()
+    {
+        float master = PlayerPrefs.GetFloat("MasterVolume", 1f);
+        float bgm = PlayerPrefs.GetFloat("BGMVolume", 1f);
+        float sfx = PlayerPrefs.GetFloat("SFXVolume", 1f);
+        bool isMuted = PlayerPrefs.GetInt("Muted", 0) == 1;
+        
+        SetVolume("MasterVolume", master);
+        SetVolume("BGMVolume", bgm);
+        SetVolume("SFXVolume", sfx);
+        SetMasterMute(isMuted);
+    }
+
 }

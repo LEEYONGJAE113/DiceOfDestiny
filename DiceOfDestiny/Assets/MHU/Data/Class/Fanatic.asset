@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Fanatic
   m_EditorClassIdentifier: 
   className: Fanatic
-  sprite: {fileID: 21300000, guid: 6f4a77db622024144a3b504406db2e6d, type: 3}
+  sprite: {fileID: 21300000, guid: dd80fb5374ee3b2418d08b4531c328bc, type: 3}
+  isCombatClass: 1

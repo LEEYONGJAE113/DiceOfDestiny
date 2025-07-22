@@ -13,7 +13,7 @@ public enum TileColor
 }
 
 public class BoardManager : Singletone<BoardManager>
-{ 
+{
     [Header("Board Size Settings")]
     [SerializeField] public int boardSize = 11;
     [SerializeField] private GameObject tilePrefab;
@@ -187,6 +187,8 @@ public class BoardManager : Singletone<BoardManager>
                         new Vector3(boardTransform.position.x + x, boardTransform.position.y + y, 0), Quaternion.identity, boardTransform);
                     obstacle.GetComponent<Obstacle>().obstaclePosition = new Vector2Int(x, y);
                     ObstacleManager.Instance.SetObstacle(obstacle);
+
+                    Board[x, y].isWalkable = obstacle.GetComponent<Obstacle>().isWalkable;
                 }
                 idx++;
             }
@@ -236,6 +238,7 @@ public class BoardManager : Singletone<BoardManager>
         // obstacle.transform.position = new Vector3(boardTransform.position.x + nextPos.x, boardTransform.position.y + nextPos.y, 0); // 장애물 위치 이동
     }
 
+    // 주변 8칸 중 윗면과 같은 색이 몇개인지 카운팅하는 함수
     public int CountMatchingColors(Vector2Int position, TileColor targetColor)
     {
         int matchCount = 0;
@@ -269,9 +272,234 @@ public class BoardManager : Singletone<BoardManager>
         return matchCount;
     }
 
+    // 주변 8칸 중 윗면과 같은 색의 위치를 가져오는 함수
+    public List<Vector2Int> GetMatchingColorTiles(Vector2Int position, TileColor targetColor)
+    {
+        List<Vector2Int> matchingTiles = new List<Vector2Int>();
+        Vector2Int[] directions = new Vector2Int[]
+        {
+            new Vector2Int(-1, -1), // 좌상
+            new Vector2Int(-1, 0),  // 좌
+            new Vector2Int(-1, 1),  // 좌하
+            new Vector2Int(0, -1),  // 상
+            new Vector2Int(0, 1),   // 하
+            new Vector2Int(1, -1),  // 우상
+            new Vector2Int(1, 0),   // 우
+            new Vector2Int(1, 1)    // 우하
+        };
+
+        foreach (Vector2Int dir in directions)
+        {
+            Vector2Int checkPos = position + dir;
+            if (checkPos.x >= 0 && checkPos.x < boardSize &&
+                checkPos.y >= 0 && checkPos.y < boardSize)
+            {
+                if (Board[checkPos.x, checkPos.y] != null &&
+                    Board[checkPos.x, checkPos.y].TileColor == targetColor)
+                {
+                    matchingTiles.Add(checkPos);
+                }
+            }
+        }
+
+        return matchingTiles;
+    }
+
+    // 주변 8칸 중 특정 색과 일치하는 칸만 재배정하는 함수
+    public void ReassignMatchingColorTiles(Vector2Int position, TileColor targetColor)
+    {
+        Vector2Int[] directions = new Vector2Int[]
+        {
+        new Vector2Int(-1, -1), // 좌상
+        new Vector2Int(-1, 0),  // 좌
+        new Vector2Int(-1, 1),  // 좌하
+        new Vector2Int(0, -1),  // 상
+        new Vector2Int(0, 1),   // 하
+        new Vector2Int(1, -1),  // 우상
+        new Vector2Int(1, 0),   // 우
+        new Vector2Int(1, 1)    // 우하
+        };
+
+        foreach (Vector2Int dir in directions)
+        {
+            Vector2Int checkPos = position + dir;
+            if (checkPos.x >= 0 && checkPos.x < boardSize &&
+                checkPos.y >= 0 && checkPos.y < boardSize &&
+                Board[checkPos.x, checkPos.y] != null &&
+                Board[checkPos.x, checkPos.y].TileColor == targetColor)
+            {
+                // 각 타일마다 독립적으로 무작위 색상 인덱스 선택 (None 제외)
+                int randomColorIndex = Random.Range(0, tileColors.Length); // tileColors.Length는 6 (Red, Green, Blue, Yellow, Purple, Gray)
+
+                // 타일 색상 설정
+                Board[checkPos.x, checkPos.y].SetTileColor(tileColors[randomColorIndex]);
+                // TileColor 열거형 값 설정
+                switch (randomColorIndex)
+                {
+                    case 0: Board[checkPos.x, checkPos.y].TileColor = TileColor.Red; break;
+                    case 1: Board[checkPos.x, checkPos.y].TileColor = TileColor.Green; break;
+                    case 2: Board[checkPos.x, checkPos.y].TileColor = TileColor.Blue; break;
+                    case 3: Board[checkPos.x, checkPos.y].TileColor = TileColor.Yellow; break;
+                    case 4: Board[checkPos.x, checkPos.y].TileColor = TileColor.Purple; break;
+                    case 5: Board[checkPos.x, checkPos.y].TileColor = TileColor.Gray; break;
+                }
+            }
+        }
+    }
+
+    // 주변 8칸 색상 재배정하는 함수
+    public void ReassignSurroundingColors(Vector2Int position)
+    {
+        Vector2Int[] directions = new Vector2Int[]
+        {
+            new Vector2Int(-1, -1), // 좌상
+            new Vector2Int(-1, 0),  // 좌
+            new Vector2Int(-1, 1),  // 좌하
+            new Vector2Int(0, -1),  // 상
+            new Vector2Int(0, 1),   // 하
+            new Vector2Int(1, -1),  // 우상
+            new Vector2Int(1, 0),   // 우
+            new Vector2Int(1, 1)    // 우하
+        };
+
+        foreach (Vector2Int dir in directions)
+        {
+            Vector2Int checkPos = position + dir;
+            if (checkPos.x >= 0 && checkPos.x < boardSize &&
+                checkPos.y >= 0 && checkPos.y < boardSize &&
+                Board[checkPos.x, checkPos.y] != null)
+            {
+                // 무작위 색상 인덱스 선택
+                int randomColorIndex = Random.Range(0, tileColors.Length);
+                // 타일 색상 설정
+                Board[checkPos.x, checkPos.y].SetTileColor(tileColors[randomColorIndex]);
+                // TileColor 열거형 값 설정
+                switch (randomColorIndex)
+                {
+                    case 0: Board[checkPos.x, checkPos.y].TileColor = TileColor.Red; break;
+                    case 1: Board[checkPos.x, checkPos.y].TileColor = TileColor.Green; break;
+                    case 2: Board[checkPos.x, checkPos.y].TileColor = TileColor.Blue; break;
+                    case 3: Board[checkPos.x, checkPos.y].TileColor = TileColor.Yellow; break;
+                    case 4: Board[checkPos.x, checkPos.y].TileColor = TileColor.Purple; break;
+                    case 5: Board[checkPos.x, checkPos.y].TileColor = TileColor.Gray; break;
+                }
+            }
+        }
+    }
+    public void RemoveObstacleAtPosition(Vector2Int position)
+    {
+        if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
+        {
+            Debug.LogError("Position out of bounds");
+            return;
+        }
+
+        Tile tile = Board[position.x, position.y];
+        if (tile.Obstacle != ObstacleType.None)
+        {
+            Obstacle obstacle = ReturnObstacleByPosition(position);
+            if (obstacle != null)
+            {
+                ObstacleManager.Instance.RemoveSingleObstacle(obstacle.gameObject);
+                tile.Obstacle = ObstacleType.None;
+            }
+        }
+    }
+
+    public void CreateObstacle(Vector2Int position, ObstacleType obstacleType)
+    {
+        if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
+        {
+            Debug.LogError("Position out of bounds");
+            return;
+        }
+
+        Tile tile = Board[position.x, position.y];
+        if (tile.Obstacle != ObstacleType.None)
+        {
+            Debug.LogWarning($"Obstacle already exists at position ({position.x}, {position.y})");
+            return;
+        }
+
+        // 장애물 타입 설정
+        tile.Obstacle = obstacleType;
+
+        // 장애물 프리팹 생성
+        if (ObstacleManager.Instance.obstaclePrefabs.ContainsKey(obstacleType))
+        {
+            GameObject obstacle = Instantiate(
+                ObstacleManager.Instance.obstaclePrefabs[obstacleType],
+                new Vector3(boardTransform.position.x + position.x, boardTransform.position.y + position.y, 0),
+                Quaternion.identity,
+                boardTransform
+            );
+            obstacle.name = $"Obstacle_{obstacleType}_{position.x}_{position.y}";
+            Obstacle obstacleComponent = obstacle.GetComponent<Obstacle>();
+            obstacleComponent.obstaclePosition = position;
+            ObstacleManager.Instance.SetObstacle(obstacle);
+
+            // 타일의 isWalkable 속성 업데이트
+            tile.isWalkable = obstacleComponent.isWalkable;
+        }
+        else
+        {
+            Debug.LogError($"No prefab found for ObstacleType: {obstacleType}");
+            tile.Obstacle = ObstacleType.None; // 프리팹이 없으면 장애물 설정 취소
+        }
+    }
+
+    public void SetTileColor(Vector2Int position, TileColor targetColor)
+    {
+        // 위치 유효성 검사
+        if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
+        {
+            Debug.LogError($"Position out of bounds: {position}");
+            return;
+        }
+
+        // 타일 가져오기
+        Tile tile = Board[position.x, position.y];
+        if (tile == null)
+        {
+            Debug.LogError($"No tile found at position: {position}");
+            return;
+        }
+
+        // 타일 색상 설정
+        tile.TileColor = targetColor;
+        switch (targetColor)
+        {
+            case TileColor.Red:
+                tile.SetTileColor(tileColors[0]);
+                break;
+            case TileColor.Green:
+                tile.SetTileColor(tileColors[1]);
+                break;
+            case TileColor.Blue:
+                tile.SetTileColor(tileColors[2]);
+                break;
+            case TileColor.Yellow:
+                tile.SetTileColor(tileColors[3]);
+                break;
+            case TileColor.Purple:
+                tile.SetTileColor(tileColors[4]);
+                break;
+            case TileColor.Gray:
+                tile.SetTileColor(tileColors[5]);
+                break;
+            case TileColor.None:
+                tile.SetTileColor(Color.white); // None일 경우 기본 색상 (예: 흰색)
+                break;
+            default:
+                Debug.LogWarning($"Unknown TileColor: {targetColor}");
+                break;
+        }
+    }
+
+
     public Tile GetTile(Vector2Int position)
     {
-        if(position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
+        if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
         {
             return null;
         }
