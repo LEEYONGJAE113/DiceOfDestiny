@@ -101,7 +101,7 @@ public class ObstacleManager : MonoBehaviour
             }
             else if (obstacleComponent.obstacleType == ObstacleType.Slime) // 슬라임
             {
-                slimeBehaviour.DoSlimeLogic(obstacleComponent);
+                //slimeBehaviour.DoSlimeLogic(obstacleComponent);
             }
         }
     }

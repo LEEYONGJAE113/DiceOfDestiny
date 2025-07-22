@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// 기물 관리하는 매니저
 public class PieceManager : Singletone<PieceManager>
 {
     List<PieceController> pieces = new List<PieceController>();
@@ -17,18 +18,36 @@ public class PieceManager : Singletone<PieceManager>
     public GameObject[] piecePrefabs;
     [SerializeField] private PieceController currentPiece; // 현재 내가 조종중인 말
 
+    public PieceInventory pieceInventory;
+
     void Awake()
     {
         UpdatePieceManagerList();
+
+        pieceInventory = GetComponent<PieceInventory>();
     }
 
     void Start()
     {
         EventManager.Instance.AddListener(AllEventNames.PIECE_COUNT_CHANGED, UpdatePieceManagerList);
+    }
 
-        for (int i = 0; i < piecePrefabs.Length; i++)
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            pieces.Add(piecePrefabs[i].GetComponent<PieceController>());
+            if (pieces.Count <= 0 || pieces[0] == null) return;
+            currentPiece = pieces[0];
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            if (pieces.Count <= 1 || pieces[1] == null) return;
+            currentPiece = pieces[1];
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            if (pieces.Count <= 2 || pieces[2] == null) return;
+            currentPiece = pieces[2];
         }
     }
 
@@ -62,6 +81,16 @@ public class PieceManager : Singletone<PieceManager>
         {
             piece.statusEffectController.EndTurn();
         }
-        currentPiece.statusEffectController.EndTurn();
     }
+
+    public PieceController GetCurrentPiece()
+    {
+        return currentPiece;
+    }
+
+    public void SetCurrentPiece(PieceController pieceController)
+    {
+        currentPiece = pieceController;
+    }
+
 }

@@ -28,7 +28,7 @@ public class PieceController : MonoBehaviour
 
     void Start()
     {
-        gridPosition = new Vector2Int(0, 0);
+        //gridPosition = new Vector2Int(0, 0);
 
         statusEffectController = GetComponent<StatusEffectController>();
     }
@@ -40,8 +40,10 @@ public class PieceController : MonoBehaviour
 
 
     public void TestInput() // 이벤트로 넘기거나 할 필요가 있을듯................................하바ㅏㅏㅏㅏㅏㅏ니ㅏㄷ..............밑에관련메소드잇음................................
-
     {
+        if (this != PieceManager.Instance.GetCurrentPiece())
+            return;
+
         Vector2Int moveDirection = Vector2Int.zero;
         if (!isMoving)
         {
