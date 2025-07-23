@@ -1434,12 +1434,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1147610153}
-  - {fileID: 2123216962}
   - {fileID: 676392993}
+  - {fileID: 2123216962}
   - {fileID: 1471050692}
   - {fileID: 1116670956}
   - {fileID: 662585022}
+  - {fileID: 1147610153}
   m_Father: {fileID: 812587662}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -1465,7 +1465,7 @@ MonoBehaviour:
   rightFace: {fileID: 2123216961}
   topFace: {fileID: 662585021}
   bottomFace: {fileID: 1116670955}
-  foldDuration: 2
+  foldDuration: 1
 --- !u!1 &734094246
 GameObject:
   m_ObjectHideFlags: 0
