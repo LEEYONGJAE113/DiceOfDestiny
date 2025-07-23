@@ -134,6 +134,7 @@ public class ActiveSkill : MonoBehaviour
         // 클릭 기다림
         yield return BoardSelectManager.Instance.WaitForTileClick();
 
+        SkillManager.Instance.IsSelectingProgress = true; // 타일 못 누르게 막아
         // 위치 불러오기
         Vector2Int gridPos = BoardSelectManager.Instance.lastClickedPosition;
 
@@ -162,7 +163,7 @@ public class ActiveSkill : MonoBehaviour
         // 장애물 설정
         BoardManager.Instance.CreateObstacle(gridPos, ObstacleType.PoisonousHerb);
 
-        SkillManager.Instance.IsSelectingProgress = false;
+        SkillManager.Instance.IsSelectingProgress = false; // 타일 누를 수 있게
     }
 
     // 화가 스킬: 색칠하기

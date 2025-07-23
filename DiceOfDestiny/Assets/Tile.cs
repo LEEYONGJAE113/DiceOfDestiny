@@ -52,12 +52,9 @@ public class Tile : MonoBehaviour
        Mathf.RoundToInt(transform.position.x - BoardManager.Instance.boardTransform.position.x),
        Mathf.RoundToInt(transform.position.y - BoardManager.Instance.boardTransform.position.y));
 
-        if (!BoardManager.Instance.IsEmptyTile(position))
-            return; // 빈 타일이 아니면 클릭 무시
+        if (!BoardManager.Instance.IsEmptyTile(position) && BoardSelectManager.Instance.restrictObstacle)
+            return; // 장애물이 있는 타일에 장애물 제한 트리거가 켜져있으면 저장하지마.
 
-        if (BoardSelectManager.Instance.restrictObstacle)
-            return; // 장애물 제한 있으면 저장하지마
-        
         BoardSelectManager.Instance.SetClickedTilePosition(position);
         BoardSelectManager.Instance.ClearAllEffects();
     }
