@@ -2,7 +2,7 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class PieceActiveSkill : MonoBehaviour
+public class ActiveSkill : MonoBehaviour
 {
     [SerializeField] private GameObject knightSkillEffect;
     [SerializeField] private GameObject demonSkillEffect;
@@ -103,7 +103,7 @@ public class PieceActiveSkill : MonoBehaviour
         // 이동한 위치에서 스킬 발동
         if (SkillManager.Instance != null)
         {
-            SkillManager.Instance.TryActivateSkill(gridPos, pieceController);
+            SkillManager.Instance.TryActiveSkillCoroutine(gridPos, pieceController);
         }
         else
         {
@@ -161,6 +161,8 @@ public class PieceActiveSkill : MonoBehaviour
 
         // 장애물 설정
         BoardManager.Instance.CreateObstacle(gridPos, ObstacleType.PoisonousHerb);
+
+        SkillManager.Instance.IsSelectingProgress = false;
     }
 
     // 화가 스킬: 색칠하기
@@ -179,6 +181,8 @@ public class PieceActiveSkill : MonoBehaviour
 
         // 클릭 기다림
         yield return BoardSelectManager.Instance.WaitForTileClick();
+
+        SkillManager.Instance.IsSelectingProgress = true; // 타일 못누르게 막아
 
         // 위치 불러오기
         Vector2Int gridPos = BoardSelectManager.Instance.lastClickedPosition;
@@ -201,12 +205,24 @@ public class PieceActiveSkill : MonoBehaviour
             // 이펙트 생성
             if (painterSkillEffect != null)
             {
+                // 마지막으로 클릭한 타일 위치 가져오기
+                Vector2Int selectPos = BoardSelectManager.Instance.lastClickedPosition;
+
+
+                // Vector2Int를 Vector3로 변환
+                // 좌표값에 맞는 위치 하드 코딩
+                Vector3 effectPosition = new Vector3(
+                    selectPos.x -5.5f ,
+                    selectPos.y -5.8f,
+                    0f
+                );
+              
                 GameObject effect = Instantiate(
                     painterSkillEffect,
-                    pieceController.transform.position, // pieceController의 위치 사용
+                    effectPosition,
                     Quaternion.identity
                 );
-                Destroy(effect, 0.5f);
+                Destroy(effect, 1f);
             }
             else
             {
@@ -218,6 +234,8 @@ public class PieceActiveSkill : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
 
             BoardManager.Instance.SetTileColor(gridPos, selectedColor);
+
+            SkillManager.Instance.IsSelectingProgress = false; // 클릭 가능하게
 
         }
         else

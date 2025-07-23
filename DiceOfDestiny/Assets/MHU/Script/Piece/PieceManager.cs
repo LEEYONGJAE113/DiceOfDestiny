@@ -15,7 +15,7 @@ public class PieceManager : Singletone<PieceManager>
     }
     private List<PieceState> pieceStates = new();
     public GameObject[] piecePrefabs;
-    [SerializeField] private PieceController currentPiece; // 현재 내가 조종중인 말
+    [SerializeField] public PieceController currentPiece; // 현재 내가 조종중인 말
 
     void Awake()
     {
