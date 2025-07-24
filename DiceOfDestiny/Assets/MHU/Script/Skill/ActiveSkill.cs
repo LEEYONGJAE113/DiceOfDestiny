@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -209,7 +210,6 @@ public class ActiveSkill : MonoBehaviour
                 // 마지막으로 클릭한 타일 위치 가져오기
                 Vector2Int selectPos = BoardSelectManager.Instance.lastClickedPosition;
 
-
                 // Vector2Int를 Vector3로 변환
                 // 좌표값에 맞는 위치 하드 코딩
                 Vector3 effectPosition = new Vector3(
@@ -243,5 +243,21 @@ public class ActiveSkill : MonoBehaviour
         {
             Debug.LogWarning("PainterActiveSkillUI is not assigned!");
         }
+    }
+
+    public void ConvertToFanatic(PieceController piece)
+    {
+         StartCoroutine(ConvertToFanaticCoroutine(piece));
+    }
+
+    IEnumerator ConvertToFanaticCoroutine(PieceController piece)
+    {
+        yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
+
+        // 주변 8칸 중 피스가 있으면?
+
+        // 기물이 있으면? or 사제가 있으면
+
+        // 윗면의 직업을 광신도로 바꾼다.
     }
 }

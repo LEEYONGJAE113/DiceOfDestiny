@@ -48,7 +48,8 @@ private void Awake()
                 break;
 
             case "Demon":
-               
+               // 악마 패시브 로직
+               StartCoroutine(passiveSkill.DemonPassiveSkill(piece));
 
                 break;
             case "Fanatic":
@@ -57,8 +58,6 @@ private void Awake()
                 // 광신도 패시브 로직
                 break;
             case "Knight":
-                
-
                 // 기사 패시브 로직
                 StartCoroutine(passiveSkill.KnightPassiveSkill(piece));
 
@@ -95,9 +94,9 @@ private void Awake()
         int matchCount = BoardManager.Instance.CountMatchingColors(position, piece.GetTopFace().color);
         if (matchCount >= 3)
         {
-            //Vector3 abovePiece = piece.transform.position + Vector3.up * 1.2f;
             DoActiveSkill(piece.GetTopFace().classData);
             List<Vector2Int> matchingTile = BoardManager.Instance.GetMatchingColorTiles(position, piece.GetTopFace().color);
+
             yield return StartCoroutine(SkillEffectCoroutine(piece.colorRenderer, position, matchingTile));
             yield return StartCoroutine(BoardReassign(piece, position));
         }
@@ -120,6 +119,7 @@ private void Awake()
                 break;
             case "Demon":
                 Debug.Log("악마 스킬 발동!");
+
                 // 악마 스킬 : 원하는 보드 한칸에 독초 장애물을 만듬
                 activeSkill.Plant(currentPiece);
                 ToastManager.Instance.ShowToast("악마 스킬 발동! 원하는 보드 한 칸에 독초 장애물을 만듭니다.", currentPiece.transform);
@@ -127,8 +127,11 @@ private void Awake()
                 break;
             case "Fanatic":
                 Debug.Log("광신도 스킬 발동!");
-                ToastManager.Instance.ShowToast("광신도 스킬 발동! 주변에 있는 사제를 광신도로 만듭니다.", currentPiece.transform);
 
+                // 광신도 스킬 : 주변에 있는 사제를 광신도로 만듬
+                activeSkill.ConvertToFanatic(currentPiece);
+                ToastManager.Instance.ShowToast("광신도 스킬 발동! 주변에 있는 사제를 광신도로 만듭니다.", currentPiece.transform);
+                
                 break;
             case "Knight":
                 Debug.Log("기사 스킬 발동!");
@@ -158,7 +161,6 @@ private void Awake()
 
                 // 화가 스킬: 원하는 보드 한칸에 색깔을 칠함
                 activeSkill.Paint(currentPiece);
-
                 ToastManager.Instance.ShowToast("화가 스킬 발동! 원하는 보드 한 칸의 색상 변경합니다.", currentPiece.transform);
 
 
