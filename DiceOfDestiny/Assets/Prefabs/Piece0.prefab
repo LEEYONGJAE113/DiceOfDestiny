@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1324270886440449900}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -47,8 +47,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a37d694702f3c42428861002076ba292, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  piece: {fileID: 11400000, guid: 7c184e42357c7bc42921652d84bac1c3, type: 2}
+  piece: {fileID: 11400000, guid: e3318411d8ae1584fb49f040757ebb02, type: 2}
   lastMoveDirection: {x: 0, y: 0}
+  gridPosition: {x: 0, y: 0}
   classRenderer: {fileID: 6441678837052477297}
   colorRenderer: {fileID: 3789393067031802111}
   statusEffectController: {fileID: 0}
@@ -139,7 +140,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 9
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -226,7 +227,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 9
+  m_SortingOrder: 8
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 0.49282542, b: 0, a: 1}
   m_FlipX: 0

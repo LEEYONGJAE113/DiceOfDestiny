@@ -319,10 +319,13 @@ public class PieceController : MonoBehaviour
 
         isMoving = false;
 
+        
+
         // 스킬 발동
         if (SkillManager.Instance != null)
         {
-            SkillManager.Instance.TryActivateSkill(gridPosition, this);
+            SkillManager.Instance.TrySkill(gridPosition, this);
+            //SkillManager.Instance.TryActiveSkill(gridPosition, this);
         }
         else
         {

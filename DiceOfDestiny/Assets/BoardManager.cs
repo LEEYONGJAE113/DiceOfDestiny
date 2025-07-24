@@ -463,6 +463,83 @@ public class BoardManager : Singletone<BoardManager>
         }
     }
 
+    // 상하좌우 칸에 장애물 확인
+    public bool HasObstacleCardinal(Vector2Int pos)
+    {
+        Vector2Int[] dirs = new Vector2Int[]
+        {
+        new Vector2Int(-1, 0),  // 좌
+        new Vector2Int(0, -1),  // 상
+        new Vector2Int(0, 1),   // 하
+        new Vector2Int(1, 0)    // 우
+        };
+
+        foreach (Vector2Int dir in dirs)
+        {
+            Vector2Int checkPos = pos + dir;
+            // 경계 조건을 먼저 확인
+            if (checkPos.x >= 0 && checkPos.x < boardSize &&
+                checkPos.y >= 0 && checkPos.y < boardSize)
+            {
+                // 좀비나 고블린인지 확인
+                if (Board[checkPos.x, checkPos.y]?.Obstacle is ObstacleType.Slime or ObstacleType.Zombie)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // 대각선 칸에 장애물 확인
+    public bool HasObstacleDiagonal(Vector2Int pos)
+    {
+        Vector2Int[] dirs = new Vector2Int[]
+        {
+        new Vector2Int(-1, -1), // 좌상
+        new Vector2Int(-1, 1),  // 좌하
+        new Vector2Int(1, -1),  // 우상
+        new Vector2Int(1, 1)    // 우하
+        };
+
+        foreach (Vector2Int dir in dirs)
+        {
+            Vector2Int checkPos = pos + dir;
+            if (checkPos.x >= 0 && checkPos.x < boardSize &&
+                checkPos.y >= 0 && checkPos.y < boardSize &&
+                Board[checkPos.x, checkPos.y] != null &&
+                Board[checkPos.x, checkPos.y].Obstacle != ObstacleType.None)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // 전방 3칸(직진 및 대각선)에 장애물 확인
+    public bool HasObstacleForward(Vector2Int pos, Vector2Int dir)
+    {
+        Vector2Int forward = -dir;
+        Vector2Int[] tiles = new Vector2Int[]
+        {
+        pos + forward, // 직진
+        pos + forward + new Vector2Int(-forward.y, forward.x), // 좌 대각선
+        pos + forward + new Vector2Int(forward.y, -forward.x)  // 우 대각선
+        };
+
+        foreach (Vector2Int checkPos in tiles)
+        {
+            if (checkPos.x >= 0 && checkPos.x < boardSize &&
+                checkPos.y >= 0 && checkPos.y < boardSize &&
+                Board[checkPos.x, checkPos.y] != null &&
+                Board[checkPos.x, checkPos.y].Obstacle != ObstacleType.None)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void SetTileColor(Vector2Int position, TileColor targetColor)
     {
         // 위치 유효성 검사
