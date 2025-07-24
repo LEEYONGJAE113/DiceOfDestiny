@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    private TileColor tileColor;
+    [SerializeField] private TileColor tileColor;
     private ObstacleType obstacle;
     private PieceController piece;
     public bool isWalkable { get; set; }

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7915344354528813862}
   - component: {fileID: 889427262378863860}
-  - component: {fileID: 5858979375728727023}
+  - component: {fileID: 1434189196919477466}
   - component: {fileID: -1110217642671347395}
   m_Layer: 0
   m_Name: Puddle
@@ -89,7 +89,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5858979375728727023
+--- !u!114 &1434189196919477466
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2439943358097891200}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c568a3fd7a5caec4eb02dfcc9228df6d, type: 3}
+  m_Script: {fileID: 11500000, guid: f5cb14a4f5ee19e4ba2b01cd1aa69cae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   obstacleType: 4

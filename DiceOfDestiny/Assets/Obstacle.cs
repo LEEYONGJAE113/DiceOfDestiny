@@ -13,6 +13,7 @@ public enum ObstacleType
     PoisonousHerb,
     Grass,
     Slime,
+    SlimeDdong,
     None
 }
 
@@ -34,10 +35,12 @@ public class Obstacle : MonoBehaviour
 
     public bool isWalkable;
 
-    private Animator animator;
+    public SpriteRenderer spriteRenderer { get; private set; }
+    public Animator animator { get; private set; }
 
     private void Awake()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
     }
 }

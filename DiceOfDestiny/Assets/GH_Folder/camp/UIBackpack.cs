@@ -12,8 +12,6 @@ public class UIBackpack : MonoBehaviour
     [Header("Backpack UI")]
     [SerializeField] private GameObject UIPieceGroup;
 
-    [SerializeField] private Transform pieceParent;
-
     private void Start()
     {
         BackpackOpenCloseButton.onClick.AddListener(onClickBackpackOpenCloseButton);

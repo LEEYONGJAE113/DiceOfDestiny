@@ -1219,9 +1219,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1146015697}
   - component: {fileID: 1146015698}
-  - component: {fileID: 1146015701}
-  - component: {fileID: 1146015700}
-  - component: {fileID: 1146015699}
   m_Layer: 0
   m_Name: ObstacleManager
   m_TagString: Untagged
@@ -1265,43 +1262,8 @@ MonoBehaviour:
   poisonousHerbPrefab: {fileID: 7749113738094060414, guid: 9943e84a8fb41ae4e9364430f57cec09, type: 3}
   grassPrefab: {fileID: 5239956457780272049, guid: fefe575a2ba4a7249bbf77dc777e9eca, type: 3}
   slimePrefab: {fileID: 2465335938598337309, guid: 2a6ce1ef19d36e64684f0baf6f13cd5e, type: 3}
+  slimeDdongPrefab: {fileID: 5239956457780272049, guid: fb256067f7bba754cb8c7031d1842fd4, type: 3}
   currentObstacles: []
---- !u!114 &1146015699
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1146015696}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4bb45da4b15f47944a8f21c8310a08b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1146015700
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1146015696}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5cb14a4f5ee19e4ba2b01cd1aa69cae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1146015701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1146015696}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8382af9f5df938b4194c58c0cb051362, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1192841539
 GameObject:
   m_ObjectHideFlags: 0
@@ -1697,7 +1659,6 @@ MonoBehaviour:
   - {fileID: 704646446}
   - {fileID: 1831686941}
   UIPieceGroup: {fileID: 443631082}
-  pieceParent: {fileID: 1066769909}
 --- !u!1 &1560926765
 GameObject:
   m_ObjectHideFlags: 0
@@ -2202,9 +2163,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f156c1b43ec7c4c4e8bb1c1f68f9f297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pieceController: {fileID: 1216011197}
   knightSkillEffect: {fileID: 5787608323475247453, guid: cab6e3fb3ba5eb944b235d2eab030fe1, type: 3}
-  DemonSkillEffect: {fileID: 0}
+  demonSkillEffect: {fileID: 0}
+  painterSkillEffect: {fileID: 0}
+  painterSkillUI: {fileID: 0}
 --- !u!1 &2123524230
 GameObject:
   m_ObjectHideFlags: 0

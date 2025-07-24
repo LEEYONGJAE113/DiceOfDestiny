@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1019993887704860530}
   - component: {fileID: 8221773383474538137}
-  - component: {fileID: 7651287421777679167}
+  - component: {fileID: -2306189453764860137}
   - component: {fileID: 1839094912385742136}
   m_Layer: 0
   m_Name: Slime
@@ -89,7 +89,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7651287421777679167
+--- !u!114 &-2306189453764860137
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -98,13 +98,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2465335938598337309}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c568a3fd7a5caec4eb02dfcc9228df6d, type: 3}
+  m_Script: {fileID: 11500000, guid: f7a57675d68fc04459160ac6a8e4e03c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   obstacleType: 10
   nextStep: 4
   obstaclePosition: {x: 0, y: 0}
   isWalkable: 0
+  duration: 1.2
 --- !u!95 &1839094912385742136
 Animator:
   serializedVersion: 7

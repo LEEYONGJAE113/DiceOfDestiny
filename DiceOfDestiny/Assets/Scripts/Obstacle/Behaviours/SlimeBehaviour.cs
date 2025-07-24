@@ -1,62 +1,63 @@
 using UnityEngine;
 using DG.Tweening;
 
-public class SlimeBehaviour : MonoBehaviour
+public class SlimeBehaviour : Obstacle, IObstacleBehaviour
 {
-    public void DoSlimeLogic(Obstacle zombie)
+    [SerializeField] private float duration = 0.4f;
+
+    NextStep oppositeStep = NextStep.None;
+
+    public void DoLogic()
     {
-        if (zombie.nextStep == NextStep.None)
+        int rand = Random.Range(0, 4); // 0~3
+        switch (rand)
         {
-            zombie.nextStep = Random.Range(0, 2) == 1 ? NextStep.Left : NextStep.Right;
+            case 0: nextStep = NextStep.Up; break;
+            case 1: nextStep = NextStep.Down; break;
+            case 2: nextStep = NextStep.Left; break;
+            case 3: nextStep = NextStep.Right; break;
         }
 
-        Vector2Int direction = GetDirection(zombie.nextStep);
-        NextStep oppositeStep = GetOppositeStep(zombie.nextStep);
+        if (nextStep == oppositeStep)
+        {
+            nextStep = GetOppositeStep(nextStep);
+        }
 
-        Vector2Int nextPosition = zombie.obstaclePosition + direction;
+        Vector2Int direction = GetDirection(nextStep);
+        oppositeStep = GetOppositeStep(nextStep);
+
+        Vector2Int nextPosition = obstaclePosition + direction;
         Tile nextTile = BoardManager.Instance.GetTile(nextPosition);
 
         if (nextTile == null)
         {
-            //AnimateObstacleHalfBack(zombie.nextStep, zombie);
-            zombie.nextStep = oppositeStep;
+            animator.SetTrigger("Jump");
+
+            if (nextStep == NextStep.Left)
+                spriteRenderer.flipX = true;
+            else
+                spriteRenderer.flipX = false;
             return;
         }
 
-        if (nextTile.GetPiece() == null)
+        if (nextTile.Obstacle == ObstacleType.None && nextTile.GetPiece() == null)
         {
-            if (nextTile.Obstacle == ObstacleType.None)
-            {
-                BoardManager.Instance.MoveObstacle(zombie, nextPosition);
-                AnimateObstacleMove(zombie.nextStep, zombie);
-            }
-            else
-            {
-                //AnimateObstacleHalfBack(zombie.nextStep, zombie);
-                zombie.nextStep = oppositeStep;
-            }
+            Vector2Int beforePosition = obstaclePosition;
+
+            BoardManager.Instance.MoveObstacle(this, nextPosition);
+            AnimateObstacleMove(nextStep);
+
+            BoardManager.Instance.CreateObstacle(beforePosition, ObstacleType.SlimeDdong);
         }
         else
         {
-            if (nextTile.GetPiece().GetTopFace().classData.IsCombatClass || nextTile.GetPiece().statusEffectController.IsStatusActive(StatusType.Stun))
-            {
-                //AnimateObstacleHalfBack(zombie.nextStep, zombie);
-                zombie.nextStep = oppositeStep;
-            }
-            else
-            {
-                //AnimateZombieNyamNyam(zombie.nextStep, zombie);
-                zombie.nextStep = oppositeStep;
-
-                if (nextTile.GetPiece().GetTopFace().classData.className == "Priest")
-                {
-                    Debug.Log("사제는 기절을 무시합니다.");
-                    return;
-                }
-                Debug.Log("Piece SStun!");
-                nextTile.GetPiece().statusEffectController.SetStatus(StatusType.Stun, 2);
-            }
+            animator.SetTrigger("Jump");
         }
+
+        if (nextStep == NextStep.Left)
+            spriteRenderer.flipX = true;
+        else
+            spriteRenderer.flipX = false;
     }
 
     private Vector2Int GetDirection(NextStep step)
@@ -83,31 +84,46 @@ public class SlimeBehaviour : MonoBehaviour
         };
     }
 
-    public void AnimateObstacleMove(NextStep nextStep, Obstacle obstacle)
+    public void AnimateObstacleMove(NextStep nextStep)
     {
         Vector2Int direction = GetDirection(nextStep);
 
-        Vector3 startPos = obstacle.transform.position;
+        Vector3 startPos = transform.position;
         Vector3 targetPos = startPos + new Vector3(direction.x, direction.y, 0);
-
-        float duration = 0.4f;
-        float jumpHeight = 0.2f;
 
         if (direction.x != 0) // 좌우 이동은 점프 효과
         {
             Sequence seq = DOTween.Sequence();
 
+            seq.AppendCallback(() => animator.SetTrigger("Jump"));
+
             // 1) X축 이동 (duration 전체)
-            seq.Append(obstacle.transform.DOMoveX(targetPos.x, duration).SetEase(Ease.InOutSine));
-
-            // 2) Y축 점프 (올라갔다 내려오기) - duration 전체, Y만 움직임
-            seq.Join(obstacle.transform.DOMoveY(startPos.y + jumpHeight, duration / 2).SetEase(Ease.OutSine));
-            seq.Append(obstacle.transform.DOMoveY(startPos.y, duration / 2).SetEase(Ease.InSine));
-
+            seq.Append(transform.DOMoveX(targetPos.x, duration).SetEase(Ease.InOutSine));
+            seq.OnComplete(() =>
+            {
+                // DOTween 애니메이션 끝난 후 위치를 보드 기준으로 맞춤
+                transform.position = new Vector3(
+                    BoardManager.Instance.boardTransform.position.x + obstaclePosition.x,
+                    BoardManager.Instance.boardTransform.position.y + obstaclePosition.y,
+                    0
+                );
+            });
         }
         else // 상하 이동은 자연스러운 이동
         {
-            obstacle.transform.DOMove(targetPos, duration).SetEase(Ease.InOutSine);
+            Sequence seq = DOTween.Sequence();
+
+            seq.AppendCallback(() => animator.SetTrigger("Jump"));
+
+            seq.Append(transform.DOMove(targetPos, duration).SetEase(Ease.InOutSine));
+            seq.OnComplete(() =>
+            {
+                transform.position = new Vector3(
+                    BoardManager.Instance.boardTransform.position.x + obstaclePosition.x,
+                    BoardManager.Instance.boardTransform.position.y + obstaclePosition.y,
+                    0
+                );
+            });
         }
     }
 
