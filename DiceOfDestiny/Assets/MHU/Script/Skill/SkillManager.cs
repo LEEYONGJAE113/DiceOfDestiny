@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 public class SkillManager : Singletone<SkillManager>
 {
     [SerializeField] public float blinkTime = 1.5f;
-    [SerializeField] private PieceController pieceController;
+    [SerializeField] private PieceController currentPiece;
 
     private ActiveSkill activeSkill;
     private PassiveSkill passiveSkill;
@@ -109,56 +109,57 @@ private void Awake()
 
     private void DoActiveSkill(ClassData classData)
     {
+        currentPiece = PieceManager.Instance.currentPiece; 
 
         switch (classData.className)
         {
             case "Baby":
                 Debug.Log("아기 스킬 발동!");
-                ToastManager.Instance.ShowToast("아기 스킬 발동! 원하는 말 한 칸 이동합니다.", pieceController.transform); // 나중에 스킬 메서드 생기면 그리로 이동
+                ToastManager.Instance.ShowToast("아기 스킬 발동! 원하는 말 한 칸 이동합니다.", currentPiece.transform); // 나중에 스킬 메서드 생기면 그리로 이동
 
                 break;
             case "Demon":
                 Debug.Log("악마 스킬 발동!");
                 // 악마 스킬 : 원하는 보드 한칸에 독초 장애물을 만듬
-                activeSkill.Plant(pieceController);
-                ToastManager.Instance.ShowToast("악마 스킬 발동! 원하는 보드 한 칸에 독초 장애물을 만듭니다.", pieceController.transform);
+                activeSkill.Plant(currentPiece);
+                ToastManager.Instance.ShowToast("악마 스킬 발동! 원하는 보드 한 칸에 독초 장애물을 만듭니다.", currentPiece.transform);
 
                 break;
             case "Fanatic":
                 Debug.Log("광신도 스킬 발동!");
-                ToastManager.Instance.ShowToast("광신도 스킬 발동! 주변에 있는 사제를 광신도로 만듭니다.", pieceController.transform);
+                ToastManager.Instance.ShowToast("광신도 스킬 발동! 주변에 있는 사제를 광신도로 만듭니다.", currentPiece.transform);
 
                 break;
             case "Knight":
                 Debug.Log("기사 스킬 발동!");
 
                 // 기사 스킬 : 진행했던 방향으로 1칸 움직임, 다 부숨
-                Vector2Int lastDirection = pieceController.GetLastMoveDirection();
-                activeSkill.MoveForward(pieceController, lastDirection);
-                ToastManager.Instance.ShowToast("기사 스킬 발동! 기사 앞에 있는 모든 장애물을 제거합니다.", pieceController.transform);
+                Vector2Int lastDirection = currentPiece.GetLastMoveDirection();
+                activeSkill.MoveForward(currentPiece, lastDirection);
+                ToastManager.Instance.ShowToast("기사 스킬 발동! 기사 앞에 있는 모든 장애물을 제거합니다.", currentPiece.transform);
 
                 break;
             case "Priest":
                 Debug.Log("사제 스킬 발동!");
 
                 GameManager.Instance.actionPointManager.AddAP(1);
-                ToastManager.Instance.ShowToast("사제 스킬 발동! AP를 추가로 1 더 얻습니다.", pieceController.transform);
+                ToastManager.Instance.ShowToast("사제 스킬 발동! AP를 추가로 1 더 얻습니다.", currentPiece.transform);
 
                 break;
             case "Thief":
                 Debug.Log("도둑 스킬 발동!");
 
                 // 도둑 스킬 : 원하는 방향으로 1칸 움직임, 컨트롤러 한번 더 띄움
-                ToastManager.Instance.ShowToast("도둑 스킬 발동! 원하는 방향으로 1칸 더 이동 가능해집니다.", pieceController.transform);
+                ToastManager.Instance.ShowToast("도둑 스킬 발동! 원하는 방향으로 1칸 더 이동 가능해집니다.", currentPiece.transform);
 
                 break;
             case "Painter":
                 Debug.Log("화가 스킬 발동!");
 
                 // 화가 스킬: 원하는 보드 한칸에 색깔을 칠함
-                activeSkill.Paint(pieceController);
+                activeSkill.Paint(currentPiece);
 
-                ToastManager.Instance.ShowToast("화가 스킬 발동! 원하는 보드 한 칸의 색상 변경합니다.", pieceController.transform);
+                ToastManager.Instance.ShowToast("화가 스킬 발동! 원하는 보드 한 칸의 색상 변경합니다.", currentPiece.transform);
 
 
                 break;

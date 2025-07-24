@@ -482,7 +482,7 @@ public class BoardManager : Singletone<BoardManager>
                 checkPos.y >= 0 && checkPos.y < boardSize)
             {
                 // 좀비나 고블린인지 확인
-                if (Board[checkPos.x, checkPos.y]?.Obstacle is ObstacleType.Goblin or ObstacleType.Zombie)
+                if (Board[checkPos.x, checkPos.y]?.Obstacle is ObstacleType.Slime or ObstacleType.Zombie)
                 {
                     return true;
                 }
