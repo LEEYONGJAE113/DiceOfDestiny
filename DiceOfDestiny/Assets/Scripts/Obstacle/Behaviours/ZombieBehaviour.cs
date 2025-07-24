@@ -38,8 +38,8 @@ public class ZombieBehaviour : MonoBehaviour
         }
         else
         {
-            if (nextTile.GetPiece().GetTopFace().classData.IsCombatClass || nextTile.GetPiece().GetPiece().debuff.IsStun)
-            {                
+            if (nextTile.GetPiece().GetTopFace().classData.IsCombatClass || nextTile.GetPiece().statusEffectController.IsStatusActive(StatusType.Stun))
+            {
                 AnimateObstacleHalfBack(zombie.nextStep, zombie);
                 zombie.nextStep = oppositeStep;
                 ToastManager.Instance.ShowToast("어림도 없지! <color=red>(팅!)</color>", nextTile.GetPiece().transform, 1f);
@@ -49,9 +49,14 @@ public class ZombieBehaviour : MonoBehaviour
                 AnimateZombieNyamNyam(zombie.nextStep, zombie);
                 zombie.nextStep = oppositeStep;
 
+                if (nextTile.GetPiece().GetTopFace().classData.className == "Priest")
+                {
+                    Debug.Log("사제는 기절을 무시합니다.");
+                    return;
+                }
                 Debug.Log("Piece Stun!");
                 var stunTurns = 2;
-                nextTile.GetPiece().GetPiece().debuff.SetStun(true, stunTurns);
+                nextTile.GetPiece().statusEffectController.SetStatus(StatusType.Stun, stunTurns);
                 ToastManager.Instance.ShowToast($"좀비한테 물려버렸습니다! {stunTurns}턴간 기절합니다.", nextTile.GetPiece().transform, 1f);
             }
         }

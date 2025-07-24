@@ -406,6 +406,21 @@ public class BoardManager : Singletone<BoardManager>
         }
     }
 
+    public void RemoveObstacle(Obstacle obstacle)
+    {
+        Vector2Int position = obstacle.obstaclePosition;
+
+        Tile tile = Board[position.x, position.y];
+        if (tile.Obstacle != ObstacleType.None)
+        {
+            if (obstacle != null)
+            {
+                ObstacleManager.Instance.RemoveSingleObstacle(obstacle.gameObject);
+                tile.Obstacle = ObstacleType.None;
+            }
+        }
+    }
+
     public void CreateObstacle(Vector2Int position, ObstacleType obstacleType)
     {
         if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)

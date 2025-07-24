@@ -13,7 +13,8 @@ public class ObstacleManager : MonoBehaviour
     [SerializeField] private GameObject puddlePrefab;
     [SerializeField] private GameObject chestPrefab;
     [SerializeField] private GameObject poisonousHerbPrefab;
-    [SerializeField] private GameObject unicornPrefab;
+    [SerializeField] private GameObject grassPrefab;
+    [SerializeField] private GameObject slimePrefab;
 
     public Dictionary<ObstacleType, GameObject> obstaclePrefabs;
 
@@ -21,7 +22,8 @@ public class ObstacleManager : MonoBehaviour
 
     private ZombieBehaviour zombieBehaviour;
     private PoisonousherbBehaviour poisonousherbBehaviour;
-    private PuddleBehaviour puddleBehaviour;
+    private PuddleBehaviour diseaseBehaviour;
+    private SlimeBehaviour slimeBehaviour;
 
     private void Awake()
     {
@@ -47,14 +49,16 @@ public class ObstacleManager : MonoBehaviour
             { ObstacleType.Puddle, puddlePrefab },
             { ObstacleType.Chest, chestPrefab },
             { ObstacleType.PoisonousHerb, poisonousHerbPrefab },
-            { ObstacleType.Unicorn, unicornPrefab },
+            { ObstacleType.Grass, grassPrefab },
+            { ObstacleType.Slime, slimePrefab },
         };
 
         currentObstacles = new List<GameObject>();
 
         zombieBehaviour = GetComponent<ZombieBehaviour>();
         poisonousherbBehaviour = GetComponent<PoisonousherbBehaviour>();
-        puddleBehaviour = GetComponent<PuddleBehaviour>();
+        diseaseBehaviour = GetComponent<PuddleBehaviour>();
+        slimeBehaviour = GetComponent<SlimeBehaviour>();
     }
 
     public void SetObstacle(GameObject obstacle)
@@ -75,9 +79,9 @@ public class ObstacleManager : MonoBehaviour
 
     public void UpdateObstacleStep()
     {
-        foreach (GameObject obstacle in currentObstacles)
+        for (int i = currentObstacles.Count - 1; i >= 0; i--) // foreach (GameObject obstacle in currentObstacles)
         {
-            Obstacle obstacleComponent = obstacle.GetComponent<Obstacle>();
+            Obstacle obstacleComponent = currentObstacles[i].GetComponent<Obstacle>();
 
             if (obstacleComponent.obstacleType == ObstacleType.Zombie) // 좀비
             {
@@ -87,9 +91,17 @@ public class ObstacleManager : MonoBehaviour
             {
                 poisonousherbBehaviour.DoPoisionousherbLogic(obstacleComponent);
             }
-            else if (obstacleComponent.obstacleType == ObstacleType.Puddle) // 독초
+            else if (obstacleComponent.obstacleType == ObstacleType.Puddle) // 물웅덩이
             {
-                puddleBehaviour.DoPuddleLogic(obstacleComponent);
+                diseaseBehaviour.DoPuddleLogic(obstacleComponent);
+            }
+            else if (obstacleComponent.obstacleType == ObstacleType.Grass) // 풀
+            {
+                diseaseBehaviour.DoGrassLogic(obstacleComponent);
+            }
+            else if (obstacleComponent.obstacleType == ObstacleType.Slime) // 슬라임
+            {
+                //slimeBehaviour.DoSlimeLogic(obstacleComponent);
             }
         }
     }
