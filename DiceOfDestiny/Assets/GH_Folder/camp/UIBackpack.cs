@@ -14,6 +14,7 @@ public class UIBackpack : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log("UIBackpack Start");
         BackpackOpenCloseButton.onClick.AddListener(onClickBackpackOpenCloseButton);
     }
 
@@ -25,6 +26,7 @@ public class UIBackpack : MonoBehaviour
 
     public void onClickPieceAppearButton(int index)
     {
+        Debug.Log(index + "번 피스 생성");
         StopAllCoroutines();
 
         if (!PieceManager.Instance.pieceInventory.slots[index].IsActivePiece())

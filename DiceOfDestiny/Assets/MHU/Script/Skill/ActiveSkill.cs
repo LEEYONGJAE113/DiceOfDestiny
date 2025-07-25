@@ -2,12 +2,12 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class PieceActiveSkill : MonoBehaviour
+public class ActiveSkill : MonoBehaviour
 {
     [SerializeField] private GameObject knightSkillEffect;
     [SerializeField] private GameObject demonSkillEffect;
     [SerializeField] private GameObject painterSkillEffect;
-    [SerializeField] private PainterActiveSkillUI painterSkillUI;
+    [SerializeField] private PainterActiveSkillUI painterActiveSkillUI;
 
     public void MoveForward(PieceController pieceController, Vector2Int moveDirection)
     {
@@ -39,30 +39,35 @@ public class PieceActiveSkill : MonoBehaviour
         GameObject skillEffect = null;
         if (knightSkillEffect != null)
         {
+            // 이펙트를 시작 위치에 생성
             skillEffect = Instantiate(knightSkillEffect, startPos, Quaternion.identity);
-            // 이펙트가 캐릭터를 따라가도록 설정
+            // 이펙트가 캐릭터를 따라가도록 부모로 설정
             skillEffect.transform.SetParent(pieceController.transform);
 
-            // 방향에 따라 이펙트 조정
+            // 방향에 따라 이펙트 조정 (기본: 왼쪽)
             if (moveDirection == Vector2Int.left)
             {
-                skillEffect.transform.localScale = new Vector3(1f, 1f, 1f);
-                skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, 90f);
-            }
-            else if (moveDirection == Vector2Int.right)
-            {
-                skillEffect.transform.localScale = new Vector3(-1f, 1f, 1f);
-                skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, 90f);
-            }
-            else if (moveDirection == Vector2Int.up)
-            {
+                // 왼쪽: 기본 방향이므로 변경 없음
                 skillEffect.transform.localScale = new Vector3(1f, 1f, 1f);
                 skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
             }
+            else if (moveDirection == Vector2Int.right)
+            {
+                // 오른쪽: x축 스케일 반전
+                skillEffect.transform.localScale = new Vector3(-1f, 1f, 1f);
+                skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+            }
+            else if (moveDirection == Vector2Int.up)
+            {
+                // 위쪽: -90도 회전 (왼쪽에서 위로)
+                skillEffect.transform.localScale = new Vector3(1f, 1f, 1f);
+                skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, -120f);
+            }
             else if (moveDirection == Vector2Int.down)
             {
+                // 아래쪽: 90도 회전 (왼쪽에서 아래로)
                 skillEffect.transform.localScale = new Vector3(1f, 1f, 1f);
-                skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, 180f);
+                skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, 60f);
             }
         }
         else
@@ -98,7 +103,7 @@ public class PieceActiveSkill : MonoBehaviour
         // 이동한 위치에서 스킬 발동
         if (SkillManager.Instance != null)
         {
-            SkillManager.Instance.TryActivateSkill(gridPos, pieceController);
+            SkillManager.Instance.TryActiveSkillCoroutine(gridPos, pieceController);
         }
         else
         {
@@ -112,6 +117,7 @@ public class PieceActiveSkill : MonoBehaviour
         }
     }
 
+    // 악마 스킬: 독초 심기
     public void Plant(PieceController pieceController)
     {
         StartCoroutine(PlantCoroutine(pieceController));
@@ -128,6 +134,7 @@ public class PieceActiveSkill : MonoBehaviour
         // 클릭 기다림
         yield return BoardSelectManager.Instance.WaitForTileClick();
 
+        SkillManager.Instance.IsSelectingProgress = true; // 타일 못 누르게 막아
         // 위치 불러오기
         Vector2Int gridPos = BoardSelectManager.Instance.lastClickedPosition;
 
@@ -155,8 +162,11 @@ public class PieceActiveSkill : MonoBehaviour
 
         // 장애물 설정
         BoardManager.Instance.CreateObstacle(gridPos, ObstacleType.PoisonousHerb);
+
+        SkillManager.Instance.IsSelectingProgress = false; // 타일 누를 수 있게
     }
 
+    // 화가 스킬: 색칠하기
     public void Paint(PieceController pieceController)
     {
         StartCoroutine(PaintCoroutine(pieceController));
@@ -168,40 +178,52 @@ public class PieceActiveSkill : MonoBehaviour
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
         // 타일 선택 이미지 띄우기
-        BoardSelectManager.Instance.HighlightTiles();
+        BoardSelectManager.Instance.AllHighlightTiles();
 
         // 클릭 기다림
         yield return BoardSelectManager.Instance.WaitForTileClick();
 
+        SkillManager.Instance.IsSelectingProgress = true; // 타일 못누르게 막아
+
         // 위치 불러오기
         Vector2Int gridPos = BoardSelectManager.Instance.lastClickedPosition;
 
-        
-
         // 화가 스킬 UI 표시
-        if (painterSkillUI != null)
+        if (painterActiveSkillUI != null)
         {
 
-            painterSkillUI.OnDisable(); // ui 초기화
-            painterSkillUI.ShowPalette();
+            painterActiveSkillUI.OnDisable(); // ui 초기화
+            painterActiveSkillUI.ShowPalette();
             // UI에서 색상 선택을 기다림
-            while (painterSkillUI.SelectedColor == TileColor.None)
+            while (painterActiveSkillUI.SelectedColor == TileColor.None)
             {
                 yield return null; // 색상이 선택될 때까지 대기
             }
             
             // 선택된 색상 가져오기
-            TileColor selectedColor = painterSkillUI.SelectedColor;
+            TileColor selectedColor = painterActiveSkillUI.SelectedColor;
 
             // 이펙트 생성
             if (painterSkillEffect != null)
             {
+                // 마지막으로 클릭한 타일 위치 가져오기
+                Vector2Int selectPos = BoardSelectManager.Instance.lastClickedPosition;
+
+
+                // Vector2Int를 Vector3로 변환
+                // 좌표값에 맞는 위치 하드 코딩
+                Vector3 effectPosition = new Vector3(
+                    selectPos.x -5.5f ,
+                    selectPos.y -5.8f,
+                    0f
+                );
+              
                 GameObject effect = Instantiate(
                     painterSkillEffect,
-                    pieceController.transform.position, // pieceController의 위치 사용
+                    effectPosition,
                     Quaternion.identity
                 );
-                Destroy(effect, 0.5f);
+                Destroy(effect, 1f);
             }
             else
             {
@@ -213,6 +235,8 @@ public class PieceActiveSkill : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
 
             BoardManager.Instance.SetTileColor(gridPos, selectedColor);
+
+            SkillManager.Instance.IsSelectingProgress = false; // 클릭 가능하게
 
         }
         else

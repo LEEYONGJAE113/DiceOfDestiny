@@ -7,22 +7,99 @@ using UnityEngine.UIElements;
 public class SkillManager : Singletone<SkillManager>
 {
     [SerializeField] public float blinkTime = 1.5f;
-    [SerializeField] private PieceController pieceController;
-    [SerializeField] private PieceActiveSkill pieceActiveSkill;
+    [SerializeField] private PieceController currentPiece;
 
+    private ActiveSkill activeSkill;
+    private PassiveSkill passiveSkill;
 
+    public bool IsSelectingProgress { get; set; } = false;
 
-    public void TryActivateSkill(Vector2Int position, PieceController piece)
+private void Awake()
     {
+        activeSkill = GetComponent<ActiveSkill>();
+        passiveSkill = GetComponent<PassiveSkill>();
+    }
+
+    // 패시브와 액티브 스킬을 순차적으로 실행
+    public void TrySkill(Vector2Int position, PieceController piece)
+    {
+        StartCoroutine(TrySkillSequence(position, piece));
+    }
+    private IEnumerator TrySkillSequence(Vector2Int position, PieceController piece)
+    {
+        // 1. 패시브 스킬 실행 및 완료 대기
+        yield return StartCoroutine(TryPassiveSkillCoroutine(position, piece));
+
+        // 2. 패시브 스킬 완료 후 액티브 스킬 실행
+        yield return StartCoroutine(TryActiveSkillCoroutine(position, piece));
+    }
+
+    private IEnumerator TryPassiveSkillCoroutine(Vector2Int position, PieceController piece)
+    {
+        ClassData classData = piece.GetTopFace().classData;
+
+        switch (classData.className)
+        {
+
+            case "Baby":
+                
+                // 아기 패시브 로직
+
+                break;
+
+            case "Demon":
+               
+
+                break;
+            case "Fanatic":
+                
+
+                // 광신도 패시브 로직
+                break;
+            case "Knight":
+                
+
+                // 기사 패시브 로직
+                StartCoroutine(passiveSkill.KnightPassiveSkill(piece));
+
+                break;
+            case "Priest":
+                
+
+                // 사제 패시브 로직
+                break;
+            case "Thief":
+                
+
+                // 도둑 패시브 로직
+                break;
+            case "Painter":
+               
+
+                // 화가 패시브 로직
+                break;
+            default:
+                
+
+                break;
+        }
+
+        yield return null;
+    }
+
+    public IEnumerator TryActiveSkillCoroutine(Vector2Int position, PieceController piece)
+    {
+        yield return new WaitForSeconds(0.1f); // 패시브 스킬이 완료될 때까지 잠시 대기
+
         // 주변 8칸 중 상단 컬러와 일치하는 칸 수 확인
         int matchCount = BoardManager.Instance.CountMatchingColors(position, piece.GetTopFace().color);
         if (matchCount >= 3)
         {
-            Vector3 abovePiece = piece.transform.position + Vector3.up * 1.2f;
-            ActivateSkill(piece.GetTopFace().classData);
+            //Vector3 abovePiece = piece.transform.position + Vector3.up * 1.2f;
+            DoActiveSkill(piece.GetTopFace().classData);
             List<Vector2Int> matchingTile = BoardManager.Instance.GetMatchingColorTiles(position, piece.GetTopFace().color);
-            StartCoroutine(SkillEffectCoroutine(piece.colorRenderer, position, matchingTile));
-            StartCoroutine(BoardReassign(piece, position));
+            yield return StartCoroutine(SkillEffectCoroutine(piece.colorRenderer, position, matchingTile));
+            yield return StartCoroutine(BoardReassign(piece, position));
         }
         else
         {
@@ -30,49 +107,59 @@ public class SkillManager : Singletone<SkillManager>
         }
     }
 
-    private void ActivateSkill(ClassData classData)
+    private void DoActiveSkill(ClassData classData)
     {
+        currentPiece = PieceManager.Instance.currentPiece; 
+
         switch (classData.className)
         {
             case "Baby":
                 Debug.Log("아기 스킬 발동!");
-                ToastManager.Instance.ShowToast("아기 스킬 발동! 원하는 말 한 칸 이동합니다.", pieceController.transform); // 나중에 스킬 메서드 생기면 그리로 이동
+                ToastManager.Instance.ShowToast("아기 스킬 발동! 원하는 말 한 칸 이동합니다.", currentPiece.transform); // 나중에 스킬 메서드 생기면 그리로 이동
 
                 break;
             case "Demon":
                 Debug.Log("악마 스킬 발동!");
-                DemonActiveSkill();
+                // 악마 스킬 : 원하는 보드 한칸에 독초 장애물을 만듬
+                activeSkill.Plant(currentPiece);
+                ToastManager.Instance.ShowToast("악마 스킬 발동! 원하는 보드 한 칸에 독초 장애물을 만듭니다.", currentPiece.transform);
 
                 break;
             case "Fanatic":
                 Debug.Log("광신도 스킬 발동!");
-                ToastManager.Instance.ShowToast("광신도 스킬 발동! 주변에 있는 사제를 광신도로 만듭니다.", pieceController.transform);
+                ToastManager.Instance.ShowToast("광신도 스킬 발동! 주변에 있는 사제를 광신도로 만듭니다.", currentPiece.transform);
 
                 break;
             case "Knight":
                 Debug.Log("기사 스킬 발동!");
 
-                KnightActiveSkill();
+                // 기사 스킬 : 진행했던 방향으로 1칸 움직임, 다 부숨
+                Vector2Int lastDirection = currentPiece.GetLastMoveDirection();
+                activeSkill.MoveForward(currentPiece, lastDirection);
+                ToastManager.Instance.ShowToast("기사 스킬 발동! 기사 앞에 있는 모든 장애물을 제거합니다.", currentPiece.transform);
 
                 break;
             case "Priest":
                 Debug.Log("사제 스킬 발동!");
 
-                PriestActiveSkill();
+                GameManager.Instance.actionPointManager.AddAP(1);
+                ToastManager.Instance.ShowToast("사제 스킬 발동! AP를 추가로 1 더 얻습니다.", currentPiece.transform);
 
                 break;
             case "Thief":
                 Debug.Log("도둑 스킬 발동!");
 
-                ThiefActiveSkill();
+                // 도둑 스킬 : 원하는 방향으로 1칸 움직임, 컨트롤러 한번 더 띄움
+                ToastManager.Instance.ShowToast("도둑 스킬 발동! 원하는 방향으로 1칸 더 이동 가능해집니다.", currentPiece.transform);
 
                 break;
             case "Painter":
                 Debug.Log("화가 스킬 발동!");
 
-                PainterActiveSkill();
+                // 화가 스킬: 원하는 보드 한칸에 색깔을 칠함
+                activeSkill.Paint(currentPiece);
 
-                ToastManager.Instance.ShowToast("화가 스킬 발동! 원하는 보드 한 칸의 색상 변경합니다.", pieceController.transform);
+                ToastManager.Instance.ShowToast("화가 스킬 발동! 원하는 보드 한 칸의 색상 변경합니다.", currentPiece.transform);
 
 
                 break;
@@ -80,50 +167,10 @@ public class SkillManager : Singletone<SkillManager>
                 Debug.LogError($"알 수 없는 클래스 : {classData.className}");
                 break;
         }
+
+        
     }
 
-    private void PriestActiveSkill()
-    {
-        GameManager.Instance.actionPointManager.AddAP(1);
-        ToastManager.Instance.ShowToast("사제 스킬 발동! AP를 추가로 1 더 얻습니다.", pieceController.transform);
-    }
-
-
-    private void ThiefActiveSkill()
-    {
-        // 도둑 스킬 : 원하는 방향으로 1칸 움직임, 컨트롤러 한번 더 띄움
-        ToastManager.Instance.ShowToast("도둑 스킬 발동! 원하는 방향으로 1칸 더 이동 가능해집니다.", pieceController.transform);
-    }
-
-    private void KnightActiveSkill()
-    {
-        // 기사 스킬 : 진행했던 방향으로 1칸 움직임, 다 부숨
-        Vector2Int lastDirection = pieceController.GetLastMoveDirection();
-
-
-        pieceActiveSkill.MoveForward(pieceController,lastDirection);
-
-
-        ToastManager.Instance.ShowToast("기사 스킬 발동! 기사 앞에 있는 모든 장애물을 제거합니다.", pieceController.transform);
-
-
-    }
-    private void DemonActiveSkill()
-    {
-        // 악마 스킬 : 원하는 보드 한칸에 독초 장애물을 만듬
-
-        pieceActiveSkill.Plant(pieceController);
-
-        ToastManager.Instance.ShowToast("악마 스킬 발동! 원하는 보드 한 칸에 독초 장애물을 만듭니다.", pieceController.transform);
-
-
-    }
-
-    private void PainterActiveSkill()
-    {
-        // 화가 스킬: 원하는 보드 한칸에 색깔을 칠함
-        pieceActiveSkill.Paint(pieceController);
-    }
 
     #region 스킬 발동 시 깜빡임, 보드 색상 재배치 코루틴
 
@@ -229,12 +276,10 @@ public class SkillManager : Singletone<SkillManager>
     }
     IEnumerator BoardReassign(PieceController piece, Vector2Int position)
     {
-        yield return new WaitForSeconds(0.1f + blinkTime);
+        yield return null;
         BoardManager.Instance.ReassignMatchingColorTiles(position, piece.GetTopFace().color);
         // 기물 움직일 수 있게
     }
 
     #endregion
-
-
 }

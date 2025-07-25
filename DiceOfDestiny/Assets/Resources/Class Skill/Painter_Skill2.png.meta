@@ -1,25 +1,34 @@
 fileFormatVersion: 2
-guid: b380fa2b364fc5742ba9156dea2ea7b1
+guid: c45cec4cb1f2d694d9c7ffc80fd8b713
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -9041393180804707144
-    second: Knight_Skill_0
+      213: 5190450911925607180
+    second: Painter_Skill2_0
   - first:
-      213: 4147875316157256486
-    second: Knight_Skill_1
+      213: -1015631513923822752
+    second: Painter_Skill2_1
   - first:
-      213: -7740222470982005412
-    second: Knight_Skill_2
+      213: 4090687474653859034
+    second: Painter_Skill2_2
   - first:
-      213: 8064460243949603237
-    second: Knight_Skill_3
+      213: 5476168096257263773
+    second: Painter_Skill2_3
   - first:
-      213: -7846379901176840949
-    second: Knight_Skill_4
+      213: -7916828703802869728
+    second: Painter_Skill2_4
   - first:
-      213: -8287878262187088851
-    second: Knight_Skill_5
+      213: 1481891753104267375
+    second: Painter_Skill2_5
+  - first:
+      213: -3626851921608519219
+    second: Painter_Skill2_6
+  - first:
+      213: -948089547823459868
+    second: Painter_Skill2_7
+  - first:
+      213: 4463615122235793320
+    second: Painter_Skill2_8
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -154,7 +163,29 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Knight_Skill_0
+      name: Painter_Skill2_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0b9d6daa9f280840800000000000000
+      internalID: 5190450911925607180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Painter_Skill2_1
       rect:
         serializedVersion: 2
         x: 32
@@ -167,16 +198,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 4bed7bf99ebc0934ba0626f6caf0ba22
-      internalID: 267283190
+      spriteID: 06bd0e5e480c7e1f0800000000000000
+      internalID: -1015631513923822752
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Knight_Skill_1
+      name: Painter_Skill2_2
       rect:
         serializedVersion: 2
         x: 64
@@ -189,16 +220,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: e9eac487928fbfe44903e72f206f59e4
-      internalID: 12791177
+      spriteID: adc02e5b59a05c830800000000000000
+      internalID: 4090687474653859034
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Knight_Skill_2
+      name: Painter_Skill2_3
       rect:
         serializedVersion: 2
         x: 96
@@ -211,16 +242,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 3c732205e64f5f940ae235fc40a5c76d
-      internalID: -1559731755
+      spriteID: d98cdbb9ed14ffb40800000000000000
+      internalID: 5476168096257263773
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Knight_Skill_3
+      name: Painter_Skill2_4
       rect:
         serializedVersion: 2
         x: 128
@@ -233,16 +264,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 92ab4b4b4660e86458298baf39d20f28
-      internalID: -2022625973
+      spriteID: 028b6323d36c12290800000000000000
+      internalID: -7916828703802869728
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Knight_Skill_4
+      name: Painter_Skill2_5
       rect:
         serializedVersion: 2
         x: 160
@@ -255,16 +286,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: a69f22f02ef83d74aa066f5924ee3ca5
-      internalID: 1513950048
+      spriteID: f685c53b2bcb09410800000000000000
+      internalID: 1481891753104267375
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Knight_Skill_5
+      name: Painter_Skill2_6
       rect:
         serializedVersion: 2
         x: 192
@@ -277,10 +308,98 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc1d497a465daadc0800000000000000
+      internalID: -3626851921608519219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Painter_Skill2_7
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e1d8b65495b7d2f0800000000000000
+      internalID: -948089547823459868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Painter_Skill2_8
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8af1deeed42f1fd30800000000000000
+      internalID: 4463615122235793320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Painter_Skill2_9
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 360b9100d14b6ca46aead1e612e63dbf
-      internalID: -770103611
+      spriteID: 5bc55f5d46e9975419f74a03fcde1c79
+      internalID: 609164559
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Painter_Skill2_10
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39ec46d03d1ebfe40b99abc62359075d
+      internalID: -463197146
       vertices: []
       indices: 
       edges: []
@@ -289,7 +408,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: aa386fa093895124a996249611e4aa1f
+    spriteID: b33343649c5349a4ca7b031336e90cd2
     internalID: 0
     vertices: []
     indices: 
@@ -299,12 +418,17 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Knight_Skill_0: 267283190
-      Knight_Skill_1: 12791177
-      Knight_Skill_2: -1559731755
-      Knight_Skill_3: -2022625973
-      Knight_Skill_4: 1513950048
-      Knight_Skill_5: -770103611
+      Painter_Skill2_0: 5190450911925607180
+      Painter_Skill2_1: -1015631513923822752
+      Painter_Skill2_10: -463197146
+      Painter_Skill2_2: 4090687474653859034
+      Painter_Skill2_3: 5476168096257263773
+      Painter_Skill2_4: -7916828703802869728
+      Painter_Skill2_5: 1481891753104267375
+      Painter_Skill2_6: -3626851921608519219
+      Painter_Skill2_7: -948089547823459868
+      Painter_Skill2_8: 4463615122235793320
+      Painter_Skill2_9: 609164559
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
