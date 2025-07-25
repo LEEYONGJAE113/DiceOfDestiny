@@ -1,28 +1,59 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryManager : MonoBehaviour
+public class InventoryManager : Singletone<InventoryManager>
 {
     public List<Piece> pieces = new List<Piece>();
     public List<PieceNet> pieceNets = new List<PieceNet>();
     public List<ClassSticker> classStickers = new List<ClassSticker>();
 
-
-
-    private void Start()
+    private void Awake()
     {
         TestInitialize();
+        Debug.Log(pieceNets.Count);
     }
 
     void TestInitialize()
     {
         // 테스트용 초기화
         Debug.Log("InventoryManager 초기화");
-        AddPiece(new Piece { name = "TestPiece1" });
-        AddPieceNet(new PieceNet { name = "TestPieceNet1" });
 
-        ClassSticker knightSticker =  new ClassSticker { name = "TestSticker1" };
-        AddSticker(new ClassSticker { name = "TestSticker1" });
+        PieceNet testPieceNet = new PieceNet();
+        testPieceNet.faces[0].color = TileColor.Red;
+        testPieceNet.faces[1].color = TileColor.Blue;
+        testPieceNet.faces[2].color = TileColor.Green;
+        testPieceNet.faces[3].color = TileColor.Yellow;
+        testPieceNet.faces[4].color = TileColor.Yellow;
+        testPieceNet.faces[5].color = TileColor.Purple;
+        AddPieceNet(testPieceNet);
+
+        testPieceNet = new PieceNet();
+        testPieceNet.faces[0].color = TileColor.Red;
+        testPieceNet.faces[1].color = TileColor.Red;
+        testPieceNet.faces[2].color = TileColor.Green;
+        testPieceNet.faces[3].color = TileColor.Green;
+        testPieceNet.faces[4].color = TileColor.Blue;
+        testPieceNet.faces[5].color = TileColor.Blue;
+        AddPieceNet(testPieceNet);
+
+        testPieceNet = new PieceNet();
+        testPieceNet.faces[0].color = TileColor.Red;
+        testPieceNet.faces[1].color = TileColor.Blue;
+        testPieceNet.faces[2].color = TileColor.Purple;
+        testPieceNet.faces[3].color = TileColor.Yellow;
+        testPieceNet.faces[4].color = TileColor.Blue;
+        testPieceNet.faces[5].color = TileColor.Purple;
+        AddPieceNet(testPieceNet);
+
+        testPieceNet = new PieceNet();
+        testPieceNet.faces[0].color = TileColor.Blue;
+        testPieceNet.faces[1].color = TileColor.Blue;
+        testPieceNet.faces[2].color = TileColor.Green;
+        testPieceNet.faces[3].color = TileColor.Yellow;
+        testPieceNet.faces[4].color = TileColor.Blue;
+        testPieceNet.faces[5].color = TileColor.Red;
+        AddPieceNet(testPieceNet);
+
     }
 
     public void AddPiece(Piece piece)
@@ -56,24 +87,16 @@ public class InventoryManager : MonoBehaviour
 
     public void AddPieceNet(PieceNet pieceNet)
     {
-        if (!pieceNets.Contains(pieceNet))
-        {
-            pieceNets.Add(pieceNet);
-            Debug.Log($"PieceNet 추가: {pieceNet.name}");
-        }
-        else
-        {
-            Debug.LogWarning($"이미 존재하는 PieceNet입니다: {pieceNet.name}");
-        }
+        pieceNets.Add(pieceNet);
     }
 
     public bool RemovePieceNet(PieceNet pieceNet)
     {
         bool removed = pieceNets.Remove(pieceNet);
         if (removed)
-            Debug.Log($"PieceNet 제거: {pieceNet.name}");
+            Debug.Log($"PieceNet 제거: {pieceNet}");
         else
-            Debug.LogWarning($"제거 실패 - PieceNet을 찾을 수 없음: {pieceNet.name}");
+            Debug.LogWarning($"제거 실패 - PieceNet을 찾을 수 없음: {pieceNet}");
 
         return removed;
     }

@@ -1,16 +1,12 @@
 using UnityEngine;
 
-public class PieceNet : MonoBehaviour
+public class PieceNet
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField] public Face[] faces = new Face[6]; // 6개 면 데이터
 
-    // Update is called once per frame
-    void Update()
+    public PieceNet()
     {
-        
+        for (int i = 0; i < 6; i++)
+            faces[i] = new Face(); // 각 요소도 인스턴스화 필요
     }
 }

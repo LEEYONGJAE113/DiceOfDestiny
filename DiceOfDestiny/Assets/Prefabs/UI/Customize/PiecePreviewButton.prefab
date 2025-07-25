@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 9140789484790933180}
   - component: {fileID: 7235285469432253040}
   - component: {fileID: -4545692873404204048}
+  - component: {fileID: 1623035282228494950}
   m_Layer: 5
   m_Name: PiecePreviewButton
   m_TagString: Untagged
@@ -137,6 +138,18 @@ MonoBehaviour:
   backgroundColor: {fileID: 9140789484790933180}
   button: {fileID: 7235285469432253040}
   classSticker: {fileID: 5685085717913662885}
+--- !u!225 &1623035282228494950
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4420756477264095231}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &4633392970499665985
 GameObject:
   m_ObjectHideFlags: 0

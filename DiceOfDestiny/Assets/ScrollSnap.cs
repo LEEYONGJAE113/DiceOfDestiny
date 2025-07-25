@@ -9,11 +9,46 @@ public class ScrollSnap : MonoBehaviour, IEndDragHandler, IBeginDragHandler
     public ScrollRect scrollRect;
 
     [Header("설정")]
-    public int itemCount = 6;            // 아이템 총 개수
+    private int itemCount;
     public float snapSpeed = 10f;        // 스냅 애니메이션 속도
 
     private bool isSnapping = false;
     private Coroutine snapCoroutine = null;
+
+
+    void Start()
+    {
+        itemCount = scrollRect.content.childCount;
+    }
+
+    private void Update()
+    {
+        UpdateVisuals();
+    }
+
+    void UpdateVisuals()
+    {
+        // 스크롤 위치 (0~1)
+        float scrollPos = scrollRect.horizontalNormalizedPosition;
+
+        // 중심에 가까운 인덱스 계산
+        float centerIndex = scrollPos * (itemCount - 1);
+
+        for (int i = 0; i < scrollRect.content.childCount; i++)
+        {
+            Transform item = scrollRect.content.GetChild(i);
+            CanvasGroup cg = item.GetComponent<CanvasGroup>();
+            if (cg == null) continue;
+
+            float distance = Mathf.Abs(i - centerIndex);
+
+            float alpha = Mathf.Lerp(1f, 0.5f, distance / 2f);
+            cg.alpha = alpha;
+
+            float scale = Mathf.Lerp(1f, 0.8f, distance / 2f);
+            item.localScale = Vector3.one * scale;
+        }
+    }
 
     public void OnBeginDrag(PointerEventData eventData)
     {

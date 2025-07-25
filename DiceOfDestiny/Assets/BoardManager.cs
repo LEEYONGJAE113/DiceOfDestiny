@@ -508,4 +508,17 @@ public class BoardManager : Singletone<BoardManager>
             return Board[position.x, position.y];
         }
     }
+
+    public Color GetColor(TileColor tileColor)
+    {
+        if ((int)tileColor < 0 || (int)tileColor >= tileColors.Length)
+        {
+            Debug.LogError($"Invalid TileColor: {tileColor}");
+            return Color.white; // 기본 색상 반환
+        }
+        else
+        {
+            return tileColors[(int)tileColor];
+        }
+    }
 }

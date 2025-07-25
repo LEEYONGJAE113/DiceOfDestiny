@@ -162,6 +162,8 @@ GameObject:
   - component: {fileID: 1906841108254243355}
   - component: {fileID: 4634690321322510627}
   - component: {fileID: 1093848521232648563}
+  - component: {fileID: 5568224666530822858}
+  - component: {fileID: 3101410662334079140}
   m_Layer: 5
   m_Name: PieceNetPreviewButton
   m_TagString: Untagged
@@ -276,6 +278,37 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5568224666530822858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6911938695811559320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d7bda1735b929f42bd1847db2e70591, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frontFace: {fileID: 8981390719702198863}
+  backFace: {fileID: 1209855289710328777}
+  leftFace: {fileID: 8397784232838045787}
+  rightFace: {fileID: 6304712646317345815}
+  topFace: {fileID: 592962229775063370}
+  bottomFace: {fileID: 1424683132393960745}
+  button: {fileID: 1093848521232648563}
+--- !u!225 &3101410662334079140
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6911938695811559320}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &7180567003694750462
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,7 +471,7 @@ GameObject:
   - component: {fileID: 5622682079076956009}
   - component: {fileID: 6304712646317345815}
   m_Layer: 5
-  m_Name: RiightFace
+  m_Name: RightFace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
