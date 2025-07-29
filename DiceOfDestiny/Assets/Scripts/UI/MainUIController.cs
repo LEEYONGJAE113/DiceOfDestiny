@@ -25,15 +25,15 @@ public class MainUIController : MonoBehaviour
 
     private void OnContinueClicked()
     {
-        string lastScene = PlayerPrefs.GetString("LastScene", "GameScene");
+        string lastScene = PlayerPrefs.GetString("LastScene", "GH_GameScene");
         SceneManager.LoadScene(lastScene);
     }
 
     private void OnNewGameClicked()
     {
-        PlayerPrefs.SetString("LastScene", "GameScene");
+        PlayerPrefs.SetString("LastScene", "GH_GameScene");
         PlayerPrefs.SetInt("SaveExists", 1);
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene("GH_GameScene");
     }
     private void OnSettingsClicked()
     {
