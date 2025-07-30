@@ -126,6 +126,4 @@ public class SlimeBehaviour : Obstacle, IObstacleBehaviour
             });
         }
     }
-
-
 }

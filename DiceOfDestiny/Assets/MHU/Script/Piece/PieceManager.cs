@@ -14,7 +14,7 @@ public class PieceManager : Singletone<PieceManager>
             EventManager.Instance.TriggerEvent(AllEventNames.PIECE_COUNT_CHANGED);
         }
     }
-    private List<PieceState> pieceStates = new();
+    private List<PieceState> pieceStates = new();   
     public GameObject[] piecePrefabs;
     [SerializeField] public PieceController currentPiece; // 현재 내가 조종중인 말
 

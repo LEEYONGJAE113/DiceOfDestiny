@@ -29,8 +29,6 @@ public class PieceController : MonoBehaviour
 
     void Start()
     {
-        //gridPosition = new Vector2Int(0, 0);
-
         statusEffectController = GetComponent<StatusEffectController>();
     }
 
@@ -135,7 +133,7 @@ public class PieceController : MonoBehaviour
                 RotateToTopFace(moveDirection);
                 UpdateTopFace(moveDirection); // 윗면 업데이트
 
-                //RotateHalfBack(moveDirection);
+                
 
                 ObstacleManager.Instance.UpdateObstacleStep();
             }
@@ -320,7 +318,7 @@ public class PieceController : MonoBehaviour
 
         isMoving = false;
 
-        
+        BoardSelectManager.Instance.PieceHighlightTiles(gridPosition);
 
         // 스킬 발동
         if (SkillManager.Instance != null)
@@ -332,7 +330,6 @@ public class PieceController : MonoBehaviour
         {
             Debug.LogError("SkillManager.Instance is null!");
         }
-
     }
 
     public void RotateHalfBack(Vector2Int moveDirection)
@@ -462,7 +459,11 @@ public class PieceController : MonoBehaviour
         piece = newPiece;
     }
 
-
+    public void SetTopFace()
+    {
+        classRenderer.sprite = piece.faces[2].classData.sprite;
+        colorRenderer.color = BoardManager.Instance.tileColors[(int)piece.faces[2].color];
+    }
 
 
     //public Vector2Int GetGridPosition()

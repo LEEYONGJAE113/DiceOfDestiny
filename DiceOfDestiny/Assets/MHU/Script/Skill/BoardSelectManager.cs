@@ -7,6 +7,8 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
     [Header("이펙트 설정")]
     [SerializeField] private GameObject highlight; // 빛나는 이펙트 프리팹 (빈 타일용)
     [SerializeField] private GameObject notHighlight; // 빛나지 않는 이펙트 프리팹 (장애물 타일용)
+    [SerializeField] private GameObject pieceHighlight; // 피스 선택용
+
     [Header("클릭된 타일")]
     [SerializeField] public Vector2Int lastClickedPosition; // 마지막 클릭된 타일 위치
 
@@ -17,6 +19,7 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
     public bool restrictObstacle = true;
 
     private Dictionary<Vector2Int, GameObject> activeEffects; // 활성화된 이펙트 저장
+    private GameObject activePieceEffect;
     private BoardManager boardManager;
 
     private void Awake()
@@ -81,6 +84,18 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
                 }
             }
         }
+    }
+
+    public void PieceHighlightTiles(Vector2Int pos)
+    {
+        if (activePieceEffect != null)
+            Destroy(activePieceEffect);
+
+        GameObject pieceEffectPrefab = pieceHighlight;
+
+        activePieceEffect = Instantiate(pieceEffectPrefab, new Vector3(boardManager.boardTransform.position.x + pos.x,
+            boardManager.boardTransform.position.y + pos.y, -1),
+            Quaternion.identity, boardManager.boardTransform);
     }
 
     // 모든 이펙트 제거

@@ -4,7 +4,6 @@ using UnityEngine;
 public class Piece : ScriptableObject
 {
     public int pieceNumber;
-    public Sprite sprite;
     [SerializeField] public Face[] faces = new Face[6]; // 6개 면 데이터
 }
 

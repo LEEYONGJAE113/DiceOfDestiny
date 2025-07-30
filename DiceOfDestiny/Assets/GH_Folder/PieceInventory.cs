@@ -16,7 +16,7 @@ public class PieceInventory : MonoBehaviour
         public void AddPiece(Piece _piece)
         {
             this.pieceNumber = _piece.pieceNumber;
-            this.image.sprite = _piece.sprite;
+            this.image.sprite = _piece.faces[2].classData.sprite;
             this.piece = _piece;
         }
 
@@ -31,12 +31,17 @@ public class PieceInventory : MonoBehaviour
         {
             return piece != null;
         }
+
+        public Piece GetPiece()
+        {
+            return piece;
+        }
     }
 
     public List<Slot> slots = new List<Slot>();
     public Slot selectedSlot = null;
 
-    private void Start()
+    private void Awake()
     {
         for (int i = 0; i < 3; i++)
         {
