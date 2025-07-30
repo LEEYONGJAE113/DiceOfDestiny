@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -8,19 +9,16 @@ public class ActiveSkill : MonoBehaviour
     [SerializeField] private GameObject knightSkillEffect;
     [SerializeField] private GameObject demonSkillEffect;
     [SerializeField] private GameObject painterSkillEffect;
+    [SerializeField] private GameObject fanaticSkillEffect;
+    [SerializeField] private GameObject priestSkillEffect;
+
     [SerializeField] private PainterActiveSkillUI painterActiveSkillUI;
 
-    public void MoveForward(PieceController pieceController, Vector2Int moveDirection)
+    // 기사 스킬: 앞으로 이동
+    public IEnumerator MoveForward(PieceController pieceController, Vector2Int moveDirection)
     {
-        StartCoroutine(MoveForwardCoroutine(pieceController, moveDirection));
-    }
-
-    private IEnumerator MoveForwardCoroutine(PieceController pieceController, Vector2Int moveDirection)
-    {
-        // 깜빡임 대기
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
-        // 유효한 이동 방향인지 확인
         if (moveDirection != Vector2Int.up && moveDirection != Vector2Int.down &&
             moveDirection != Vector2Int.right && moveDirection != Vector2Int.left)
         {
@@ -28,45 +26,36 @@ public class ActiveSkill : MonoBehaviour
             yield break;
         }
 
-        // 마지막 방향으로 이동 애니메이션
         Vector3 moveVec = new Vector3(moveDirection.x, moveDirection.y, 0);
-        float moveDuration = 0.4f; // 이동 시간
+        float moveDuration = 0.4f;
         float time = 0f;
 
         Vector3 startPos = pieceController.transform.position;
         Vector3 endPos = startPos + moveVec;
 
-        // 스킬 이펙트 생성
         GameObject skillEffect = null;
         if (knightSkillEffect != null)
         {
-            // 이펙트를 시작 위치에 생성
             skillEffect = Instantiate(knightSkillEffect, startPos, Quaternion.identity);
-            // 이펙트가 캐릭터를 따라가도록 부모로 설정
             skillEffect.transform.SetParent(pieceController.transform);
 
-            // 방향에 따라 이펙트 조정 (기본: 왼쪽)
             if (moveDirection == Vector2Int.left)
             {
-                // 왼쪽: 기본 방향이므로 변경 없음
                 skillEffect.transform.localScale = new Vector3(1f, 1f, 1f);
                 skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
             }
             else if (moveDirection == Vector2Int.right)
             {
-                // 오른쪽: x축 스케일 반전
                 skillEffect.transform.localScale = new Vector3(-1f, 1f, 1f);
                 skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
             }
             else if (moveDirection == Vector2Int.up)
             {
-                // 위쪽: -90도 회전 (왼쪽에서 위로)
                 skillEffect.transform.localScale = new Vector3(1f, 1f, 1f);
                 skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, -120f);
             }
             else if (moveDirection == Vector2Int.down)
             {
-                // 아래쪽: 90도 회전 (왼쪽에서 아래로)
                 skillEffect.transform.localScale = new Vector3(1f, 1f, 1f);
                 skillEffect.transform.localRotation = Quaternion.Euler(0f, 0f, 60f);
             }
@@ -76,7 +65,6 @@ public class ActiveSkill : MonoBehaviour
             Debug.LogWarning("Skill effect prefab is not assigned!");
         }
 
-        // 부드러운 이동 애니메이션
         while (time < moveDuration)
         {
             float t = time / moveDuration;
@@ -86,60 +74,44 @@ public class ActiveSkill : MonoBehaviour
             yield return null;
         }
 
-        // 실제 그리드 위치 설정
         pieceController.transform.position = endPos;
         Vector2Int gridPos = pieceController.gridPosition;
         gridPos += moveDirection;
         pieceController.gridPosition = gridPos;
 
-        // 이동한 위치에 장애물 확인
         bool hasObstacle = BoardManager.Instance.IsEmptyTile(gridPos);
 
         if (!hasObstacle)
         {
-            // 이동한 위치에서 장애물 제거
             BoardManager.Instance.RemoveObstacleAtPosition(gridPos);
         }
 
-        // 이동한 위치에서 스킬 발동
         if (SkillManager.Instance != null)
         {
-            SkillManager.Instance.TryActiveSkillCoroutine(gridPos, pieceController);
+            SkillManager.Instance.TrySkill(gridPos, pieceController);
         }
         else
         {
             Debug.LogError("SkillManager.Instance is null!");
         }
 
-        // 스킬 이펙트 제거
         if (skillEffect != null)
         {
-            Destroy(skillEffect, 0.5f); // 0.5초 후 제거
+            Destroy(skillEffect, 0.5f);
         }
     }
 
     // 악마 스킬: 독초 심기
-    public void Plant(PieceController pieceController)
+    public IEnumerator Plant(PieceController pieceController)
     {
-        StartCoroutine(PlantCoroutine(pieceController));
-    }
-
-    IEnumerator PlantCoroutine(PieceController pieceController)
-    {
-        // 깜빡임 대기
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
-        // 타일 선택 이미지 띄우기
         BoardSelectManager.Instance.HighlightTiles();
-
-        // 클릭 기다림
         yield return BoardSelectManager.Instance.WaitForTileClick();
 
-        SkillManager.Instance.IsSelectingProgress = true; // 타일 못 누르게 막아
-        // 위치 불러오기
+        SkillManager.Instance.IsSelectingProgress = true;
         Vector2Int gridPos = BoardSelectManager.Instance.lastClickedPosition;
 
-        // 이펙트 생성
         if (demonSkillEffect != null)
         {
             GameObject effect = Instantiate(
@@ -158,66 +130,42 @@ public class ActiveSkill : MonoBehaviour
             Debug.LogWarning("DemonSkillEffect is not assigned!");
         }
 
-        // 0.5초 대기
         yield return new WaitForSeconds(0.5f);
-
-        // 장애물 설정
         BoardManager.Instance.CreateObstacle(gridPos, ObstacleType.PoisonousHerb);
-
-        SkillManager.Instance.IsSelectingProgress = false; // 타일 누를 수 있게
+        SkillManager.Instance.IsSelectingProgress = false;
     }
 
     // 화가 스킬: 색칠하기
-    public void Paint(PieceController pieceController)
+    public IEnumerator Paint(PieceController pieceController)
     {
-        StartCoroutine(PaintCoroutine(pieceController));
-    }
-
-    IEnumerator PaintCoroutine(PieceController pieceController)
-    {
-        // 깜빡임 대기
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
-        // 타일 선택 이미지 띄우기
         BoardSelectManager.Instance.AllHighlightTiles();
-
-        // 클릭 기다림
         yield return BoardSelectManager.Instance.WaitForTileClick();
 
-        SkillManager.Instance.IsSelectingProgress = true; // 타일 못누르게 막아
-
-        // 위치 불러오기
+        SkillManager.Instance.IsSelectingProgress = true;
         Vector2Int gridPos = BoardSelectManager.Instance.lastClickedPosition;
 
-        // 화가 스킬 UI 표시
         if (painterActiveSkillUI != null)
         {
-
-            painterActiveSkillUI.OnDisable(); // ui 초기화
+            painterActiveSkillUI.OnDisable();
             painterActiveSkillUI.ShowPalette();
-            // UI에서 색상 선택을 기다림
             while (painterActiveSkillUI.SelectedColor == TileColor.None)
             {
-                yield return null; // 색상이 선택될 때까지 대기
+                yield return null;
             }
-            
-            // 선택된 색상 가져오기
+
             TileColor selectedColor = painterActiveSkillUI.SelectedColor;
 
-            // 이펙트 생성
             if (painterSkillEffect != null)
             {
-                // 마지막으로 클릭한 타일 위치 가져오기
                 Vector2Int selectPos = BoardSelectManager.Instance.lastClickedPosition;
-
-                // Vector2Int를 Vector3로 변환
-                // 좌표값에 맞는 위치 하드 코딩
                 Vector3 effectPosition = new Vector3(
-                    selectPos.x -5.5f ,
-                    selectPos.y -5.8f,
+                    selectPos.x - 5.5f,
+                    selectPos.y - 5.8f,
                     0f
                 );
-              
+
                 GameObject effect = Instantiate(
                     painterSkillEffect,
                     effectPosition,
@@ -230,14 +178,9 @@ public class ActiveSkill : MonoBehaviour
                 Debug.LogWarning("PainterSkillEffect is not assigned!");
             }
 
-
-            // 0.5초 대기
             yield return new WaitForSeconds(0.5f);
-
             BoardManager.Instance.SetTileColor(gridPos, selectedColor);
-
-            SkillManager.Instance.IsSelectingProgress = false; // 클릭 가능하게
-
+            SkillManager.Instance.IsSelectingProgress = false;
         }
         else
         {
@@ -245,19 +188,86 @@ public class ActiveSkill : MonoBehaviour
         }
     }
 
-    public void ConvertToFanatic(PieceController piece)
-    {
-         StartCoroutine(ConvertToFanaticCoroutine(piece));
-    }
-
-    IEnumerator ConvertToFanaticCoroutine(PieceController piece)
+    public IEnumerator ConvertToFanatic(PieceController piece)
     {
         yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
 
-        // 주변 8칸 중 피스가 있으면?
+        List<Vector2Int> surroundList = BoardManager.Instance.GetTilePositions(DirectionType.Eight, piece.gridPosition);
 
-        // 기물이 있으면? or 사제가 있으면
+        bool converted = false;
+        foreach (PieceController targetPiece in PieceManager.Instance.Pieces)
+        {
+            if (targetPiece == null || targetPiece == piece) continue;
 
-        // 윗면의 직업을 광신도로 바꾼다.
+            if (surroundList.Contains(targetPiece.gridPosition))
+            {
+                for (int i = 0; i < 6; i++)
+                {
+                    Face face = targetPiece.GetFace(i);
+                    if (face.classData.className == "Priest")
+                    {
+                       
+                        targetPiece.ChangeClass(i, "Fanatic");
+                        Debug.Log($"Converted Priest to Fanatic on face {i} at position {targetPiece.gridPosition}");
+                        converted = true;
+
+                        if (fanaticSkillEffect != null)
+                        {
+                            GameObject effect = Instantiate(
+                                fanaticSkillEffect,
+                                new Vector3(
+                                    BoardManager.Instance.boardTransform.position.x + targetPiece.gridPosition.x,
+                                    BoardManager.Instance.boardTransform.position.y + targetPiece.gridPosition.y,
+                                    -1),
+                                Quaternion.identity,
+                                BoardManager.Instance.boardTransform
+                            );
+                            Destroy(effect, 0.5f);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!converted)
+        {
+            ToastManager.Instance.ShowToast("주변에 사제가 없어 아무 일도 일어나지 않았습니다.", piece.transform);
+        }
+        else
+        {
+            
+            //ToastManager.Instance.ShowToast("성공", piece.transform);
+        }
+    }
+
+    // 사제 스킬
+    public IEnumerator HealAP()
+    {
+        yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
+
+        if (priestSkillEffect != null)
+        {
+            GameObject effect = Instantiate(
+                priestSkillEffect,
+                new Vector3(
+                    BoardManager.Instance.boardTransform.position.x + PieceManager.Instance.currentPiece.gridPosition.x,
+                    BoardManager.Instance.boardTransform.position.y + PieceManager.Instance.currentPiece.gridPosition.y,
+                    -1),
+                Quaternion.identity,
+                BoardManager.Instance.boardTransform
+            );
+            Destroy(effect, 0.5f);
+        }
+        else
+        {
+            Debug.LogWarning("PriestSkillEffect is not assigned!");
+
+        }
+    }
+
+
+    public IEnumerator MoveToBaby(PieceController piece)
+    {
+        yield return new WaitForSeconds(SkillManager.Instance.blinkTime + 0.1f);
     }
 }

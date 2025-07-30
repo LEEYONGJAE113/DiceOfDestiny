@@ -6,10 +6,12 @@ public class PassiveSkill : MonoBehaviour
 {
     [SerializeField] private GameObject knightPassiveEffect;
     [SerializeField] private GameObject demonPassiveEffect;
-    [SerializeField] private float knightPassiveEffectDuration = 0.5f;
-    [SerializeField] private float demonPassiveEffectDuration = 0.5f;
+    [SerializeField] private GameObject fanaticPassiveEffect;
+    [SerializeField] private GameObject priestPassiveEffect;
 
-    public IEnumerator KnightPassiveSkill(PieceController pieceController)
+
+    // 기사 패시브 스킬 : 전방 3칸에 슬라임과 좀비 장애물 제거
+    public IEnumerator KnightAttack(PieceController pieceController)
     {
         if (pieceController == null || knightPassiveEffect == null)
         {
@@ -63,7 +65,7 @@ public class PassiveSkill : MonoBehaviour
                 }
             }
 
-            yield return new WaitForSeconds(knightPassiveEffectDuration);
+            yield return new WaitForSeconds(0.5f);
             foreach (var skillEffect in skillEffects)
             {
                 if (skillEffect != null)
@@ -78,11 +80,12 @@ public class PassiveSkill : MonoBehaviour
         }
     }
 
-    public IEnumerator DemonPassiveSkill(PieceController pieceController)
+    // 악마 공격 스킬
+    public IEnumerator DemonAttack(PieceController pieceController)
     {
         if (pieceController == null || demonPassiveEffect == null)
         {
-            Debug.LogWarning("PieceController or devilPassiveEffect is null.");
+            Debug.LogWarning("PieceController or demonPassiveEffect is null.");
             yield break;
         }
 
@@ -97,7 +100,6 @@ public class PassiveSkill : MonoBehaviour
                 (obstacle.obstacleType == ObstacleType.Slime || obstacle.obstacleType == ObstacleType.Zombie))
             {
                 hasTarget = true;
-                
                 break;
             }
         }
@@ -108,19 +110,20 @@ public class PassiveSkill : MonoBehaviour
             List<GameObject> skillEffects = new List<GameObject>();
             Vector2Int lastMoveDirection = PieceManager.Instance.currentPiece.GetLastMoveDirection();
 
-            // 전방 3칸에 대해 이펙트 3개 생성, 위치는 pieceController.transform.position
-            for (int i = 0; i < forwardList.Count; i++)
+            // 전방 3칸 타일 위치에 이펙트 생성
+            foreach (var pos in forwardList)
             {
-                Vector3 effectPos = pieceController.transform.position;
+                // 그리드 위치를 월드 위치로 변환 (pieceController.transform.position 사용 유지)
+                Vector3 effectPos = pos + new Vector2(-5.5f, -5.5f); // 타일 중앙 위치
 
-                // 회전 각도 설정
-                float rotationZ;
-                if (i == 0) // 전방 1칸
-                    rotationZ = 0f; // 0도
-                else if (i == 1) // 좌 대각선
-                    rotationZ = -60f; // -60도
-                else // 우 대각선
-                    rotationZ = 60f; // 60도
+                // 타일의 인덱스를 기준으로 회전 각도 설정
+                int index = forwardList.IndexOf(pos);
+                float rotationZ = index switch
+                {
+                    0 => 0f,    // 전방 1칸
+                    1 => -60f,  // 좌 대각선
+                    _ => 60f    // 우 대각선
+                };
 
                 // 이동 방향에 따라 회전 각도 조정
                 if (lastMoveDirection == new Vector2Int(0, -1)) // 하
@@ -138,18 +141,17 @@ public class PassiveSkill : MonoBehaviour
                 );
                 skillEffects.Add(skillEffect);
 
-
-                var targetObstacle = BoardManager.Instance.ReturnObstacleByPosition(forwardList[i]);
+                var targetObstacle = BoardManager.Instance.ReturnObstacleByPosition(pos);
                 if (targetObstacle != null &&
                     (targetObstacle.obstacleType == ObstacleType.Slime || targetObstacle.obstacleType == ObstacleType.Zombie))
                 {
-                    BoardManager.Instance.RemoveObstacleAtPosition(forwardList[i]);
-                    Debug.Log($"장애물 제거됨: ({forwardList[i].x}, {forwardList[i].y})");
+                    BoardManager.Instance.RemoveObstacleAtPosition(pos);
+                    Debug.Log($"장애물 제거됨: ({pos.x}, {pos.y})");
                 }
-
             }
+
             // 이펙트 지속 시간 대기
-            yield return new WaitForSeconds(demonPassiveEffectDuration);
+            yield return new WaitForSeconds(0.5f);
 
             // 모든 이펙트 제거
             foreach (var skillEffect in skillEffects)
@@ -159,11 +161,112 @@ public class PassiveSkill : MonoBehaviour
                     Destroy(skillEffect);
                 }
             }
+        }
+        else
+        {
+            yield return null;
+        }
+    }
 
-            if (!hasTarget)
+    //광신도 공격 스킬
+    public IEnumerator FanaticAttack(PieceController pieceController)
+    {
+        if (pieceController == null || fanaticPassiveEffect == null)
+        {
+            Debug.LogWarning("PieceController 또는 fanaticPassiveEffect가 null입니다.");
+            yield break;
+        }
+
+        // 대각선 타일 위치 가져오기
+        List<Vector2Int> diagonalList = BoardManager.Instance.GetTilePositions(DirectionType.Diagonal, pieceController.gridPosition);
+
+        bool hasTarget = false;
+        for (int i = 0; i < diagonalList.Count; i++)
+        {
+            var obstacle = BoardManager.Instance.ReturnObstacleByPosition(diagonalList[i]);
+            if (obstacle != null && obstacle.obstacleType == ObstacleType.Slime)
             {
-                yield return null;
+                hasTarget = true;
+                Debug.Log($"광신도가 공격 대상 찾음: ({diagonalList[i].x}, {diagonalList[i].y})");
+                break;
             }
         }
+
+        if (hasTarget)
+        {
+            List<GameObject> skillEffects = new List<GameObject>();
+            // 대각선 방향과 회전 각도 설정
+            (Vector2Int direction, float rotationZ)[] directions = new[]
+            {
+            (new Vector2Int(1, 1), 45f),    // 우상
+            (new Vector2Int(1, -1), -45f),  // 우하
+            (new Vector2Int(-1, 1), 135f),  // 좌상
+            (new Vector2Int(-1, -1), -135f) // 좌하
+        };
+
+            // 대각선 타일 위치에 이펙트 생성
+            foreach (var pos in diagonalList)
+            {
+                // 그리드 위치를 월드 위치로 변환
+                Vector3 effectPos = pos + new Vector2(-5.5f, -5f); // 타일 중앙 위치
+
+                Vector2Int dir = pos - pieceController.gridPosition;
+                
+                Quaternion rotation = Quaternion.Euler(0f, 0f, 0f);
+                GameObject skillEffect = Instantiate(
+                    fanaticPassiveEffect,
+                    effectPos,
+                    rotation
+                );
+                skillEffects.Add(skillEffect);
+
+                var targetObstacle = BoardManager.Instance.ReturnObstacleByPosition(pos);
+                if (targetObstacle != null && targetObstacle.obstacleType == ObstacleType.Slime)
+                {
+                    BoardManager.Instance.RemoveObstacleAtPosition(pos);
+                    Debug.Log($"장애물 제거됨: ({pos.x}, {pos.y})");
+                }
+            }
+
+            yield return new WaitForSeconds(0.5f);
+            foreach (var skillEffect in skillEffects)
+            {
+                if (skillEffect != null)
+                {
+                    Destroy(skillEffect);
+                }
+            }
+        }
+        else
+        {
+            yield return null;
+        }
+    }
+
+    // 사제 패시브 스킬
+    public IEnumerator Halo()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        if (priestPassiveEffect != null)
+        {
+            GameObject effect = Instantiate(
+                priestPassiveEffect,
+                new Vector3(
+                    BoardManager.Instance.boardTransform.position.x + PieceManager.Instance.currentPiece.gridPosition.x,
+                    BoardManager.Instance.boardTransform.position.y + PieceManager.Instance.currentPiece.gridPosition.y,
+                    -1),
+                Quaternion.identity,
+                BoardManager.Instance.boardTransform
+            );
+            Destroy(effect, 0.5f);
+        }
+        else
+        {
+            Debug.LogWarning("PriestSkillEffect is not assigned!");
+
+        }
+
+        
     }
 }

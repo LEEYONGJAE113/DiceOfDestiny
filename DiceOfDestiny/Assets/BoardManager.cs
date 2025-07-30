@@ -402,8 +402,7 @@ public class BoardManager : Singletone<BoardManager>
 
     /// <summary>
     /// DirectionTyped에 따라 4방향, 8방향, 대각선, 굴러온 방향 기준 전방 3칸을 반환한다.
-    /// 인자는 타입, 좌표값, 마지막 방향(굴러온 방향)으로 받는다.
-    /// 마지막 방향은 안 넣어주면 null값으로 처리된다.
+    /// 인자는 타입, 좌표값을 받는다.
     /// </summary>
     /// <param name="directionType"></param>
     /// <param name="gridPosition"></param>
@@ -414,8 +413,6 @@ public class BoardManager : Singletone<BoardManager>
 
     public List<Vector2Int> GetTilePositions(DirectionType directionType, Vector2Int gridPosition)
     {
-        //Vector2Int? lastDirection = null; // 굴러온 방향이 없을 경우 null로 초기화
-
         Vector2Int currentPieceLastDirection = PieceManager.Instance.currentPiece.GetLastMoveDirection();
         List<Vector2Int> positions = new List<Vector2Int>();
 
