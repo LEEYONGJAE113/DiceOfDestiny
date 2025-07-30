@@ -4,7 +4,7 @@ using System.Drawing;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
-public class CustomizingPiece : MonoBehaviour
+public class CustomizingPieceController : MonoBehaviour
 {
     [SerializeField] GameObject frontFace;
     [SerializeField] GameObject backFace;
@@ -224,6 +224,7 @@ public class CustomizingPiece : MonoBehaviour
             float scale = Mathf.Lerp(1f, 0f, t);
             float backScale = Mathf.Lerp(1f, 0f, t * 2f); // Back face scales faster to hide it
 
+            backFace.transform.localScale = new Vector3(backScale, 1f, 1f);
             topFace.transform.localScale = new Vector3(1f, scale, 1f);
             bottomFace.transform.localScale = new Vector3(1f, scale, 1f);
             leftFace.transform.localScale = new Vector3(scale, 1f, 1f);
@@ -318,37 +319,71 @@ public class CustomizingPiece : MonoBehaviour
 
     // 회전 영역
     float inflateAmount = 0.3f;
-    float rotateDuration = 4f;
+    float rotateDuration = 1.2f;
 
     public void OnClickLeftTurnButton()
     {
-        StartCoroutine(RotateCustomizePiece(leftFace, frontFace));
+        StartCoroutine(RotateCustomizePiece(Directions.Left));
     }
     public void OnClickRightTurnButton()
     {
-        StartCoroutine(RotateCustomizePiece(rightFace, frontFace));
+        StartCoroutine(RotateCustomizePiece(Directions.Right));
     }
-    public void OnClickTopTurnButton()
+    public void OnClickUpTurnButton()
     {
+        StartCoroutine(RotateCustomizePiece(Directions.Up));
     }
-    public void OnClickBottomTurnButton()
+    public void OnClickDownTurnButton()
     {
+        StartCoroutine(RotateCustomizePiece(Directions.Down));
     }
 
-    IEnumerator RotateCustomizePiece(GameObject expandFace, GameObject contractFace)
+    IEnumerator RotateCustomizePiece(Directions dir)
     {
-        float elapsTime = 0f;
+        RectTransform expandRect = null;
+        RectTransform contractRect = null;
 
-        Vector3 moveVec = Vector3.left;
+        GameObject expandFace = null;
+        GameObject contractFace = null;
 
-        RectTransform expandRect = expandFace.GetComponent<RectTransform>();
-        RectTransform contractRect = contractFace.GetComponent<RectTransform>();
+        Vector3 moveVec = Vector3.zero;
+
+        bool isHorizontal = (dir == Directions.Left || dir == Directions.Right);
+
+        switch (dir)
+        {
+            case Directions.Left:
+                moveVec = Vector3.right;
+                expandFace = rightFace;
+                contractFace = frontFace;
+                break;
+            case Directions.Right:
+                moveVec = Vector3.left;
+                expandFace = leftFace;
+                contractFace = frontFace;
+                break;
+            case Directions.Up:
+                moveVec = Vector3.down;
+                expandFace = bottomFace;
+                contractFace = frontFace;
+                break;
+            case Directions.Down:
+                moveVec = Vector3.up;
+                expandFace = topFace;
+                contractFace = frontFace;
+                break;
+        }
+
+        expandRect = expandFace.GetComponent<RectTransform>();
+        contractRect = contractFace.GetComponent<RectTransform>();
+
+        float elapsTime = 0f;      
 
         Vector2 expandStartPos = expandRect.anchoredPosition;
         Vector2 contractStartPos = contractRect.anchoredPosition;
         Vector2 anchorPoint = contractRect.anchoredPosition;
 
-        Vector2 moveRightOffset = Vector2.right * contractRect.rect.width / 2f; ;
+        Vector2 moveDirOffset = -moveVec * contractRect.rect.width / 2f; ;
 
         float totalOffsetAccum = 0f;
 
@@ -361,26 +396,29 @@ public class CustomizingPiece : MonoBehaviour
             float expandScale = Mathf.Lerp(0f, totalScale, t);
             float contractScale = Mathf.Lerp(totalScale, 0f, t);
 
-            expandFace.transform.localScale = new Vector3(expandScale, 1f, 1f);
-            contractFace.transform.localScale = new Vector3(contractScale, 1f, 1f);
+            expandFace.transform.localScale = isHorizontal ?
+                new Vector3(expandScale, 1f, 1f) :
+                new Vector3(1f, expandScale, 1f);
 
-            float expandWidth = expandRect.rect.width * expandScale;
-            float contractWidth = contractRect.rect.width * contractScale;
+            contractFace.transform.localScale = isHorizontal ?
+                new Vector3(contractScale, 1f, 1f) :
+                new Vector3(1f, contractScale, 1f);
 
-            float distance = (expandWidth / 2f) + (contractWidth / 2f);
+            float expandSize = (isHorizontal ? expandRect.rect.width : expandRect.rect.height) * expandScale;
+            float contractScaledSize = (isHorizontal ? contractRect.rect.width : contractRect.rect.height) * contractScale;
+
+            float distance = (expandSize / 2f) + (contractScaledSize / 2f);
             Vector2 offset = (Vector2)(moveVec * distance * 0.5f);
 
             totalOffsetAccum += offset.magnitude * Time.deltaTime / (rotateDuration / Time.deltaTime);
 
-            Vector2 correction = moveVec * totalOffsetAccum;
+            Vector2 driftOffset = Vector2.Lerp(Vector2.zero, moveDirOffset, t);
 
-            Vector2 driftOffset = Vector2.Lerp(Vector2.zero, moveRightOffset, t);
+            Vector2 contractPos = anchorPoint + driftOffset;
+            Vector2 expandPos = anchorPoint + (Vector2)(moveVec * distance) + driftOffset;
 
-            float contractRightEdge = contractWidth / 2f;
-            float expandLeftEdge = expandWidth / 2f;
-
-            contractRect.anchoredPosition = anchorPoint + driftOffset;
-            expandRect.anchoredPosition = anchorPoint + (Vector2)(moveVec * (contractRightEdge + expandLeftEdge)) + driftOffset;
+            contractRect.anchoredPosition = contractPos;
+            expandRect.anchoredPosition = expandPos;
 
             elapsTime += Time.deltaTime;
             yield return null;
@@ -389,6 +427,57 @@ public class CustomizingPiece : MonoBehaviour
         expandFace.transform.localScale = Vector3.one;
         contractFace.transform.localScale = Vector3.zero;
         expandRect.anchoredPosition = contractStartPos;
+
+
+        GameObject temp;
+
+
+        switch (dir)
+        {
+            case Directions.Left:
+                temp = frontFace;
+                frontFace = rightFace;
+                rightFace = backFace;
+                backFace = leftFace;
+                leftFace = temp;
+                break;
+
+            case Directions.Right:
+                temp = frontFace;
+                frontFace = leftFace;
+                leftFace = backFace;
+                backFace = rightFace;
+                rightFace = temp;
+                break;
+
+            case Directions.Up:
+                temp = frontFace;
+                frontFace = bottomFace;
+                bottomFace = backFace;
+                backFace = topFace;
+                topFace = temp;
+                break;
+
+            case Directions.Down:
+                temp = frontFace;
+                frontFace = topFace;
+                topFace = backFace;
+                backFace = bottomFace;
+                bottomFace = temp;
+                break;
+        }
+
+        float size = frontFace.GetComponent<RectTransform>().rect.width;
+
+        Vector2 zeroPos = new Vector2(-380, 0);
+
+        frontFace.GetComponent<RectTransform>().anchoredPosition = zeroPos;
+        backFace.GetComponent<RectTransform>().anchoredPosition = zeroPos;
+
+        leftFace.GetComponent<RectTransform>().anchoredPosition = zeroPos + new Vector2(-size, 0);
+        rightFace.GetComponent<RectTransform>().anchoredPosition = zeroPos + new Vector2(size, 0);
+        topFace.GetComponent<RectTransform>().anchoredPosition = zeroPos + new Vector2(0, size);
+        bottomFace.GetComponent<RectTransform>().anchoredPosition = zeroPos + new Vector2(0, -size);
 
     }
 }
