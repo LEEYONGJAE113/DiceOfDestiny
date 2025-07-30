@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics.Contracts;
 using System.Drawing;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -314,4 +315,80 @@ public class CustomizingPiece : MonoBehaviour
         StartCoroutine(ScatterFaces());
     }
 
+
+    // 회전 영역
+    float inflateAmount = 0.3f;
+    float rotateDuration = 4f;
+
+    public void OnClickLeftTurnButton()
+    {
+        StartCoroutine(RotateCustomizePiece(leftFace, frontFace));
+    }
+    public void OnClickRightTurnButton()
+    {
+        StartCoroutine(RotateCustomizePiece(rightFace, frontFace));
+    }
+    public void OnClickTopTurnButton()
+    {
+    }
+    public void OnClickBottomTurnButton()
+    {
+    }
+
+    IEnumerator RotateCustomizePiece(GameObject expandFace, GameObject contractFace)
+    {
+        float elapsTime = 0f;
+
+        Vector3 moveVec = Vector3.left;
+
+        RectTransform expandRect = expandFace.GetComponent<RectTransform>();
+        RectTransform contractRect = contractFace.GetComponent<RectTransform>();
+
+        Vector2 expandStartPos = expandRect.anchoredPosition;
+        Vector2 contractStartPos = contractRect.anchoredPosition;
+        Vector2 anchorPoint = contractRect.anchoredPosition;
+
+        Vector2 moveRightOffset = Vector2.right * contractRect.rect.width / 2f; ;
+
+        float totalOffsetAccum = 0f;
+
+        while (elapsTime < rotateDuration)
+        {
+            float t = elapsTime / rotateDuration;
+
+            float totalScale = 1f + inflateAmount * Mathf.Sin(Mathf.PI * t);
+
+            float expandScale = Mathf.Lerp(0f, totalScale, t);
+            float contractScale = Mathf.Lerp(totalScale, 0f, t);
+
+            expandFace.transform.localScale = new Vector3(expandScale, 1f, 1f);
+            contractFace.transform.localScale = new Vector3(contractScale, 1f, 1f);
+
+            float expandWidth = expandRect.rect.width * expandScale;
+            float contractWidth = contractRect.rect.width * contractScale;
+
+            float distance = (expandWidth / 2f) + (contractWidth / 2f);
+            Vector2 offset = (Vector2)(moveVec * distance * 0.5f);
+
+            totalOffsetAccum += offset.magnitude * Time.deltaTime / (rotateDuration / Time.deltaTime);
+
+            Vector2 correction = moveVec * totalOffsetAccum;
+
+            Vector2 driftOffset = Vector2.Lerp(Vector2.zero, moveRightOffset, t);
+
+            float contractRightEdge = contractWidth / 2f;
+            float expandLeftEdge = expandWidth / 2f;
+
+            contractRect.anchoredPosition = anchorPoint + driftOffset;
+            expandRect.anchoredPosition = anchorPoint + (Vector2)(moveVec * (contractRightEdge + expandLeftEdge)) + driftOffset;
+
+            elapsTime += Time.deltaTime;
+            yield return null;
+        }
+
+        expandFace.transform.localScale = Vector3.one;
+        contractFace.transform.localScale = Vector3.zero;
+        expandRect.anchoredPosition = contractStartPos;
+
+    }
 }
