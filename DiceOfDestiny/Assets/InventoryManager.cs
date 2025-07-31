@@ -5,7 +5,7 @@ public class InventoryManager : Singletone<InventoryManager>
 {
     public List<Piece> pieces = new List<Piece>();
     public List<PieceNet> pieceNets = new List<PieceNet>();
-    public Dictionary<ClassSticker, int> classStickers = new Dictionary<ClassSticker, int>();
+    public Dictionary<ClassData, int> classStickers = new Dictionary<ClassData, int>();
 
 
     public GameObject CustomizePieceController;
@@ -13,6 +13,12 @@ public class InventoryManager : Singletone<InventoryManager>
 
     [Header("class Data")]
     public ClassData knightClassData;
+    public ClassData demonClassData;
+    public ClassData babyClassData;
+    public ClassData fanaticClassData;
+    public ClassData thiefClassData;
+    public ClassData preistClassData;
+    public ClassData painterClassData;
 
     private void Awake()
     {
@@ -60,10 +66,40 @@ public class InventoryManager : Singletone<InventoryManager>
         testPieceNet.faces[5].color = TileColor.Red;
         AddPieceNet(testPieceNet);
 
-        for(int i = 0; i < 10; i++)
+        for(int i = 0; i < 5; i++)
         {
             ClassSticker testSticker = new ClassSticker();
             testSticker.classData = knightClassData;
+            AddSticker(testSticker);
+        }   
+        for(int i = 0; i < 5; i++)
+        {
+            ClassSticker testSticker = new ClassSticker();
+            testSticker.classData = demonClassData;
+            AddSticker(testSticker);
+        } 
+        for(int i = 0; i < 5; i++)
+        {
+            ClassSticker testSticker = new ClassSticker();
+            testSticker.classData = thiefClassData;
+            AddSticker(testSticker);
+        }  
+        for(int i = 0; i < 5; i++)
+        {
+            ClassSticker testSticker = new ClassSticker();
+            testSticker.classData = painterClassData;
+            AddSticker(testSticker);
+        }  
+        for(int i = 0; i < 5; i++)
+        {
+            ClassSticker testSticker = new ClassSticker();
+            testSticker.classData = babyClassData;
+            AddSticker(testSticker);
+        } 
+        for(int i = 0; i < 5; i++)
+        {
+            ClassSticker testSticker = new ClassSticker();
+            testSticker.classData = fanaticClassData;
             AddSticker(testSticker);
         }
 
@@ -112,27 +148,12 @@ public class InventoryManager : Singletone<InventoryManager>
     }
 
     public void AddSticker(ClassSticker sticker)
-    {            
-        if(classStickers.ContainsKey(sticker))
-        {
-            classStickers[sticker]++;
-            Debug.Log($"Sticker 추가: {sticker.name}, 현재 개수: {classStickers[sticker]}");
-        }
-        else
-        {
-            classStickers.Add(sticker, 1);
-            Debug.Log($"새 Sticker 추가: {sticker.name}");
-        }
-    }
-
-    public bool RemoveSticker(ClassSticker sticker)
     {
-        bool removed = classStickers.Remove(sticker);
-        if (removed)
-            Debug.Log($"Sticker 제거: {sticker.name}");
-        else
-            Debug.LogWarning($"제거 실패 - Sticker를 찾을 수 없음: {sticker.name}");
+        var key = sticker.classData;
 
-        return removed;
+        if (classStickers.ContainsKey(key))
+            classStickers[key]++;
+        else
+            classStickers[key] = 1;
     }
 }

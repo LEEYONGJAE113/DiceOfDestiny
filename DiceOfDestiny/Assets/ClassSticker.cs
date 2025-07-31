@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ClassSticker : MonoBehaviour
+public class ClassSticker
 {
     public ClassData classData;
 }

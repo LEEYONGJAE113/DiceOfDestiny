@@ -33,7 +33,6 @@ public class CustomizingPieceController : MonoBehaviour
     {
         if (isFolded)
         {
-            Instantiate(frontFace, transform);
         }
         else
         {

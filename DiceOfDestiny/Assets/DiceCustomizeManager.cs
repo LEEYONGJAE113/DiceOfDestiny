@@ -1,6 +1,8 @@
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DiceCustomizeManager : MonoBehaviour
 {
@@ -21,10 +23,25 @@ public class DiceCustomizeManager : MonoBehaviour
 
     List<PiecePreviewButton> piecePreviewButtonList = new List<PiecePreviewButton>();
 
+    public GameObject stickerDrawer;
+
+    public GameObject stickerSourcePrefab;
+
     private void Start()
     {
         InitializePiecesCaruselUI();
         InitializePieceNetCaruselUI();
+
+        InitializeStickerDrawer();
+    }
+
+    private void InitializeStickerDrawer()
+    {
+        foreach (var sticker in InventoryManager.Instance.classStickers)
+        {
+            GameObject stickerSource = Instantiate(stickerSourcePrefab, stickerDrawer.GetComponent<ScrollRect>().content.transform);
+            stickerSource.GetComponent<StickerSource>().stickerSprite.sprite = sticker.Key.sprite;
+        }
     }
 
     public void InitializePiecesCaruselUI()
@@ -44,7 +61,6 @@ public class DiceCustomizeManager : MonoBehaviour
             PieceNet pieceNet = InventoryManager.Instance.pieceNets[i];
             PieceNetPreviewButton button = Instantiate(pieceNetPreviewButtonPrefab, pieceNetContent.transform).GetComponent<PieceNetPreviewButton>();
             button.InitializePieceNetPreviewButton(pieceNet, () => OnClickPieceNetPreviewButton(pieceNet));
-            Debug.Log($"Initialized PieceNetPreviewButton for {pieceNet}");
         }
     }
 
