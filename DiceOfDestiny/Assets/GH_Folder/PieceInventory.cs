@@ -15,7 +15,7 @@ public class PieceInventory : MonoBehaviour
 
         public void AddPiece(Piece _piece)
         {
-            this.pieceNumber = _piece.pieceNumber;
+            this.pieceNumber = _piece.PieceNumber;
             this.image.sprite = _piece.faces[2].classData.sprite;
             this.piece = _piece;
         }
