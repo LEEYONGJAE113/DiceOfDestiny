@@ -10,6 +10,7 @@ public class PoisonousherbBehaviour : Obstacle, IObstacleBehaviour
             if (currentTile.GetPiece().GetTopFace().classData.className == "Priest")
             {
                 Debug.Log("저주를 무시합니다.");
+                ToastManager.Instance.ShowToast("제게 저주는 통하지 않습니다.", currentTile.GetPiece().transform, 1f);
                 BoardManager.Instance.RemoveObstacle(this);
                 return;
             }
@@ -21,6 +22,7 @@ public class PoisonousherbBehaviour : Obstacle, IObstacleBehaviour
                 GameManager.Instance.actionPointManager.AddAP(point);
                 Debug.Log($"악마가 독초를 밟아 행동력 +{point}");
                 ToastManager.Instance.ShowToast($"독초를 밟아 {point} 행동력을 얻었습니다.", currentPiece.transform, 1f);
+                BoardManager.Instance.RemoveObstacle(this);
                 return;
             }
 
@@ -30,7 +32,9 @@ public class PoisonousherbBehaviour : Obstacle, IObstacleBehaviour
 
             if (currentTile.GetPiece().GetTopFace().classData.className == "Baby")
             {
-                Debug.Log("아기는 독초를 못밟습니다.");
+                Debug.Log("아기는 독초를 못 밟습니다.");
+                ToastManager.Instance.ShowToast("아기는 독초를 밟을 수 없습니다.", currentTile.GetPiece().transform, 1f);
+                BoardManager.Instance.RemoveObstacle(this);
                 return;
             }
 

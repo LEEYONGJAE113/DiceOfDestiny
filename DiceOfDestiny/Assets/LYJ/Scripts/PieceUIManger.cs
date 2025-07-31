@@ -8,6 +8,7 @@ public class PieceUIManager : Singletone<PieceUIManager>
     [SerializeField, Tooltip("현재 선택 중")] private GameObject SelectingUI;
     [SerializeField, Tooltip("선택 불가")] private GameObject CantSelectUI;
 
+    private int pieceIndex;
     private Dictionary<States, GameObject> uiDic;
 
     void Awake()
@@ -25,7 +26,7 @@ public class PieceUIManager : Singletone<PieceUIManager>
         };
     }
 
-    public void CreatePieceUI(States state, GameObject parent)
+    public void CreatePieceUI(States state, GameObject parent) // 뜯어야함
     {
         if (uiDic.TryGetValue(state, out GameObject newUIObj))
         {
@@ -33,7 +34,7 @@ public class PieceUIManager : Singletone<PieceUIManager>
         }
     }
 
-    public void ErasePieceUI(GameObject parent)
+    public void ErasePieceUI(GameObject parent) // 뜯어야함
     {
         RectTransform[] allUIs = parent.GetComponentsInChildren<RectTransform>();
 

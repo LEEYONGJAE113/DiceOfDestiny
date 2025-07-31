@@ -30,11 +30,13 @@ public class PassiveSkill : MonoBehaviour
                 (new Vector2Int(1, 0), -90f)   // 우
             };
 
+            ToastManager.Instance.ShowToast("기사 패시브 발동! 주변 4방향을 공격합니다.", pieceController.transform);
+
             foreach (var (dir, rotationZ) in directions)
             {
                 Vector2Int targetPos = pieceController.gridPosition + dir;
 
-                {
+                {                    
                     // 이펙트 위치
                     Vector3 effectPos = pieceController.transform.position;
 

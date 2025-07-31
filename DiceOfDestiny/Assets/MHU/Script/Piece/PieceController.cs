@@ -73,14 +73,17 @@ public class PieceController : MonoBehaviour
 
             if (statusEffectController.IsStatusActive(StatusType.Stun)) // if (piece.debuff.IsStun)
             {
+                int stunTurn = statusEffectController.GetRemainingTurn(StatusType.Stun);
                 Debug.Log("Piece is stunned!");
-                ToastManager.Instance.ShowToast(message: $"기물이 기절했습니다! ? 턴간 이동할 수 없습니다.", transform);
+                ToastManager.Instance.ShowToast(message: $"기물이 기절했습니다! {stunTurn}턴간 이동할 수 없습니다.", transform);
                 return;
             }
 
             if (statusEffectController.IsStatusActive(StatusType.Disease) && GameManager.Instance.actionPointManager.currentAP < 2)
             {
+                int DiseaseTurn = statusEffectController.GetRemainingTurn(StatusType.Disease);
                 Debug.Log("Piece is diseased!");
+                ToastManager.Instance.ShowToast(message: $"기물이 질병에 걸렸습니다! {DiseaseTurn}턴간 행동이 제한됩니다.", transform);
                 return;
             }
 

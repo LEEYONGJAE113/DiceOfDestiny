@@ -28,6 +28,15 @@ public class StatusEffectController : MonoBehaviour
             effect.Set(true, turn);
         }
     }
+    public int GetRemainingTurn(StatusType type)
+    {
+        if (statusEffects.TryGetValue(type, out StatusEffect effect) && effect.IsActive)
+        {
+            return effect.RemainingTurn;
+        }
+
+        return 0;
+    }
 
     public bool IsStatusActive(StatusType type)
     {

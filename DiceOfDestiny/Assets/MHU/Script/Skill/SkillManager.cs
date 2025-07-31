@@ -61,7 +61,6 @@ private void Awake()
 
                 // 기사 패시브 로직
                 StartCoroutine(passiveSkill.KnightPassiveSkill(piece));
-
                 break;
             case "Priest":
                 
@@ -115,14 +114,14 @@ private void Awake()
         {
             case "Baby":
                 Debug.Log("아기 스킬 발동!");
-                ToastManager.Instance.ShowToast("아기 스킬 발동! 원하는 말 한 칸 이동합니다.", currentPiece.transform); // 나중에 스킬 메서드 생기면 그리로 이동
+                ToastManager.Instance.ShowToast("아기 스킬 발동! 원하는 말을 주변으로 이동시킵니다.", currentPiece.transform); // 나중에 스킬 메서드 생기면 그리로 이동
 
                 break;
             case "Demon":
                 Debug.Log("악마 스킬 발동!");
                 // 악마 스킬 : 원하는 보드 한칸에 독초 장애물을 만듬
                 activeSkill.Plant(currentPiece);
-                ToastManager.Instance.ShowToast("악마 스킬 발동! 원하는 보드 한 칸에 독초 장애물을 만듭니다.", currentPiece.transform);
+                ToastManager.Instance.ShowToast("악마 스킬 발동! 원하는 보드 한 칸에 독초를 심습니다.", currentPiece.transform);
 
                 break;
             case "Fanatic":
@@ -141,19 +140,20 @@ private void Awake()
                 BoardManager.Instance.Board[currentPiece.gridPosition.x + lastDirection.x, currentPiece.gridPosition.y + lastDirection.y].SetPiece(currentPiece);
                 BoardSelectManager.Instance.PieceHighlightTiles(currentPiece.gridPosition + lastDirection);
 
-                ToastManager.Instance.ShowToast("기사 스킬 발동! 기사 앞에 있는 모든 장애물을 제거합니다.", currentPiece.transform);
+                ToastManager.Instance.ShowToast("기사 스킬 발동! 전방에 있는 모든 장애물을 제거합니다.", currentPiece.transform);
 
                 break;
             case "Priest":
                 Debug.Log("사제 스킬 발동!");
 
+                int beforeAP = GameManager.Instance.actionPointManager.currentAP;
                 GameManager.Instance.actionPointManager.AddAP(1);
-                ToastManager.Instance.ShowToast("사제 스킬 발동! AP를 추가로 1 더 얻습니다.", currentPiece.transform);
+                int addedAP = GameManager.Instance.actionPointManager.currentAP - beforeAP;
+                ToastManager.Instance.ShowToast($"사제 스킬 발동! AP를 추가로 {addedAP}만큼 더 얻습니다.", currentPiece.transform);
 
                 break;
             case "Thief":
                 Debug.Log("도둑 스킬 발동!");
-
                 // 도둑 스킬 : 원하는 방향으로 1칸 움직임, 컨트롤러 한번 더 띄움
                 ToastManager.Instance.ShowToast("도둑 스킬 발동! 원하는 방향으로 1칸 더 이동 가능해집니다.", currentPiece.transform);
 
@@ -163,9 +163,7 @@ private void Awake()
 
                 // 화가 스킬: 원하는 보드 한칸에 색깔을 칠함
                 activeSkill.Paint(currentPiece);
-
-                ToastManager.Instance.ShowToast("화가 스킬 발동! 원하는 보드 한 칸의 색상 변경합니다.", currentPiece.transform);
-
+                ToastManager.Instance.ShowToast("화가 스킬 발동! 원하는 타일의 색상을 변경합니다.", currentPiece.transform);
 
                 break;
             default:

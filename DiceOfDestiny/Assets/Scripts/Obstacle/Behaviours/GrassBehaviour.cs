@@ -8,6 +8,13 @@ public class GrassBehaviour : Obstacle, IObstacleBehaviour
 
         if (currentTile.GetPiece() != null)
         {
+            if (currentTile.GetPiece().GetTopFace().classData.className == "Baby")
+            {
+                Debug.Log("아기는 풀을 밟지 못 합니다.");
+                ToastManager.Instance.ShowToast("아기는 풀을 밟지 못 합니다.", currentTile.GetPiece().transform, 1f);
+                return;
+            }
+
             if (currentTile.GetPiece().statusEffectController.IsStatusActive(StatusType.Disease))
                 return;
 
@@ -15,11 +22,13 @@ public class GrassBehaviour : Obstacle, IObstacleBehaviour
 
             if (rand > 0)
             {
-                Debug.Log("90퍼 확률로 질병을 극복했습니다.");
+                Debug.Log("90%의 확률로 질병을 극복했습니다.");
+                ToastManager.Instance.ShowToast("90%의 확률로 질병을 극복했습니다.", currentTile.GetPiece().transform, 1f);
             }
             else
             {
-                Debug.Log("10퍼 확률로 질병에 걸렸습니다.");
+                Debug.Log("10%의 확률로 질병에 걸렸습니다.");
+                ToastManager.Instance.ShowToast("10%의 확률로 질병에 걸렸습니다.", currentTile.GetPiece().transform, 1f);
                 if (currentTile.GetPiece().GetTopFace().classData.className == "Baby")
                 {
                     GoHand(currentTile.GetPiece());
@@ -29,11 +38,6 @@ public class GrassBehaviour : Obstacle, IObstacleBehaviour
                 currentTile.GetPiece().statusEffectController.SetStatus(StatusType.Disease, 2);
             }
 
-            if (currentTile.GetPiece().GetTopFace().classData.className == "Baby")
-            {
-                Debug.Log("아기는 풀을 못밟습니다.");
-                return;
-            }
 
             BoardManager.Instance.RemoveObstacle(this);
         }
