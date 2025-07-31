@@ -36,15 +36,23 @@ public class UIBackpack : MonoBehaviour
 
         SpawnPieceObject.GetComponent<Button>().onClick.AddListener(onClickSpawnPieceButton);
 
+        // Refresh 함수 구독
+        EventManager.Instance.AddListener("Refresh", _ => Refresh());
+        
         // 기물 선택 UI의 기물 윗면 새로고침
+        Refresh();
+    }
+
+    public void Refresh()
+    {
         for (int i = 0; i < ChoicePieceImageColorImage.Length; i++)
         {
             currentPiece = PieceManager.Instance.pieceInventory.slots[i].GetPiece();
             ChoicePieceImageColorImage[i].color = BoardManager.Instance.tileColors[(int)currentPiece.faces[2].color];
             ChoicePieceClassImage[i].sprite = currentPiece.faces[2].classData.sprite;
         }
-        
     }
+
     public void onClickBackpackOpenCloseButton()
     {
         UIPieceGroup.SetActive(!UIPieceGroup.activeSelf);
@@ -93,6 +101,9 @@ public class UIBackpack : MonoBehaviour
                         BoardManager.Instance.boardTransform.position.y + gridPos.y),
             Quaternion.identity);
 
+        ChoiceTopFaceWindow.SetActive(false);
+
+        // 현재 조작중인 기물로 초기화
         PieceController currentPieceController = piece.GetComponent<PieceController>();
 
         // 보드 판 내부 좌표 초기화

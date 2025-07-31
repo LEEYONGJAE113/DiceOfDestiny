@@ -88,14 +88,19 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
 
     public void PieceHighlightTiles(Vector2Int pos)
     {
-        if (activePieceEffect != null)
-            Destroy(activePieceEffect);
+        DestroyPieceHighlightTile();
 
         GameObject pieceEffectPrefab = pieceHighlight;
 
         activePieceEffect = Instantiate(pieceEffectPrefab, new Vector3(boardManager.boardTransform.position.x + pos.x,
             boardManager.boardTransform.position.y + pos.y, -1),
             Quaternion.identity, boardManager.boardTransform);
+    }
+
+    public void DestroyPieceHighlightTile()
+    {
+        if (activePieceEffect != null)
+            Destroy(activePieceEffect);
     }
 
     // 모든 이펙트 제거

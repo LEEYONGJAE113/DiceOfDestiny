@@ -23,6 +23,12 @@ public class PuddleBehaviour : Obstacle, IObstacleBehaviour
             {
                 Debug.Log("확률 50%로 질병에 걸렸습니다.");
                 ToastManager.Instance.ShowToast("확률 50%로 질병에 걸렸습니다.", currentPiece.transform, 1f);
+
+                if (currentTile.GetPiece().GetTopFace().classData.className == "Baby")
+                {
+                    GoHand(currentTile.GetPiece());
+                }
+
                 // 질병 디버프 걸리는 함수 실행
                 currentTile.GetPiece().statusEffectController.SetStatus(StatusType.Disease, 2);
             }

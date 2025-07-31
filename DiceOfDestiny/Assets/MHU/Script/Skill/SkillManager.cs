@@ -139,7 +139,6 @@ private void Awake()
 
                 BoardManager.Instance.Board[currentPiece.gridPosition.x, currentPiece.gridPosition.y].SetPiece(null);
                 BoardManager.Instance.Board[currentPiece.gridPosition.x + lastDirection.x, currentPiece.gridPosition.y + lastDirection.y].SetPiece(currentPiece);
-
                 BoardSelectManager.Instance.PieceHighlightTiles(currentPiece.gridPosition + lastDirection);
 
                 ToastManager.Instance.ShowToast("기사 스킬 발동! 기사 앞에 있는 모든 장애물을 제거합니다.", currentPiece.transform);
