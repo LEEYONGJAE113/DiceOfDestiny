@@ -34,21 +34,7 @@ public class PieceManager : Singletone<PieceManager>
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            if (pieces.Count <= 0 || pieces[0] == null) return;
-            currentPiece = pieces[0];
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            if (pieces.Count <= 1 || pieces[1] == null) return;
-            currentPiece = pieces[1];
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            if (pieces.Count <= 2 || pieces[2] == null) return;
-            currentPiece = pieces[2];
-        }
+        
     }
 
     public void DrawAllPieceUIs()
