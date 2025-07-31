@@ -5,12 +5,18 @@ public class InventoryManager : Singletone<InventoryManager>
 {
     public List<Piece> pieces = new List<Piece>();
     public List<PieceNet> pieceNets = new List<PieceNet>();
-    public List<ClassSticker> classStickers = new List<ClassSticker>();
+    public Dictionary<ClassSticker, int> classStickers = new Dictionary<ClassSticker, int>();
+
+
+    public GameObject CustomizePieceController;
+
+
+    [Header("class Data")]
+    public ClassData knightClassData;
 
     private void Awake()
     {
         TestInitialize();
-        Debug.Log(pieceNets.Count);
     }
 
     void TestInitialize()
@@ -54,19 +60,18 @@ public class InventoryManager : Singletone<InventoryManager>
         testPieceNet.faces[5].color = TileColor.Red;
         AddPieceNet(testPieceNet);
 
+        for(int i = 0; i < 10; i++)
+        {
+            ClassSticker testSticker = new ClassSticker();
+            testSticker.classData = knightClassData;
+            AddSticker(testSticker);
+        }
+
     }
 
     public void AddPiece(Piece piece)
     {
-        if (!pieces.Contains(piece))
-        {
-            pieces.Add(piece);
-            Debug.Log($"Piece 추가: {piece.name}");
-        }
-        else
-        {
-            Debug.LogWarning($"이미 존재하는 Piece입니다: {piece.name}");
-        }
+        pieces.Add(piece);
     }
 
     public bool RemovePiece(Piece piece)
@@ -107,15 +112,16 @@ public class InventoryManager : Singletone<InventoryManager>
     }
 
     public void AddSticker(ClassSticker sticker)
-    {
-        if (!classStickers.Contains(sticker))
+    {            
+        if(classStickers.ContainsKey(sticker))
         {
-            classStickers.Add(sticker);
-            Debug.Log($"Sticker 추가: {sticker.name}");
+            classStickers[sticker]++;
+            Debug.Log($"Sticker 추가: {sticker.name}, 현재 개수: {classStickers[sticker]}");
         }
         else
         {
-            Debug.LogWarning($"이미 존재하는 Sticker입니다: {sticker.name}");
+            classStickers.Add(sticker, 1);
+            Debug.Log($"새 Sticker 추가: {sticker.name}");
         }
     }
 
@@ -129,10 +135,4 @@ public class InventoryManager : Singletone<InventoryManager>
 
         return removed;
     }
-
-    public List<ClassSticker> GetStickers()
-    {
-        return new List<ClassSticker>(classStickers);
-    }
-
 }

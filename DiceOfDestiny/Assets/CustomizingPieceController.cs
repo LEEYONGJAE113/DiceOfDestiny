@@ -21,18 +21,26 @@ public class CustomizingPieceController : MonoBehaviour
     [SerializeField] private float gatherDuration = 0.5f;
     [SerializeField] private float space = 30;
 
+    GameObject stickerPrefab;
+
 
     public void Start()
     {
+
+    }
+
+    public void InitializeCustomizePiece()
+    {
         if (isFolded)
         {
-
+            Instantiate(frontFace, transform);
         }
         else
         {
 
         }
     }
+
 
     public void Toggle()
     {
