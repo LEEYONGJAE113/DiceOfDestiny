@@ -10,15 +10,9 @@ public class PoisonousherbBehaviour : Obstacle, IObstacleBehaviour
             if (currentTile.GetPiece().GetTopFace().classData.className == "Priest")
             {
                 Debug.Log("저주를 무시합니다.");
-<<<<<<< HEAD
-                BoardManager.Instance.RemoveObstacle(herb);
-                SkillManager.Instance.PriestPassive();
-                
-
-=======
                 ToastManager.Instance.ShowToast("제게 저주는 통하지 않습니다.", currentTile.GetPiece().transform, 1f);
                 BoardManager.Instance.RemoveObstacle(this);
->>>>>>> main
+                SkillManager.Instance.PriestPassive();
                 return;
             }
 
