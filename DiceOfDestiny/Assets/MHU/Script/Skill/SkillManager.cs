@@ -12,6 +12,8 @@ public class SkillManager : Singletone<SkillManager>
     private ActiveSkill activeSkill;
     private PassiveSkill passiveSkill;
 
+    public float DelayTime { get; set; } = 0f;
+
     public bool IsSelectingProgress { get; set; } = false;
 
     private void Awake()
@@ -27,17 +29,15 @@ public class SkillManager : Singletone<SkillManager>
     }
     private IEnumerator TrySkillSequence(Vector2Int position, PieceController piece)
     {
+        
+
         // 1. 패시브 스킬 실행 및 완료 대기
         yield return StartCoroutine(TryPassiveSkillCoroutine(position, piece));
 
+        yield return new WaitForSeconds(DelayTime); // 패시브 스킬이 완료될 때까지 대기, 현재 사제만 사용
+
         // 2. 패시브 스킬 완료 후 액티브 스킬 실행
         yield return StartCoroutine(TryActiveSkillCoroutine(position, piece));
-    }
-
-    // 패시브 스킬만 실행하는 메서드
-    public void Trypassiveskill(Vector2Int position, PieceController piece)
-    {
-        StartCoroutine(TryPassiveSkillCoroutine(position, piece));
     }
 
     public void PriestPassive()
@@ -74,7 +74,7 @@ public class SkillManager : Singletone<SkillManager>
                 break;
             case "Priest":
                 // 사제 패시브 로직
-                
+
 
                 break;
             case "Thief":
@@ -104,7 +104,6 @@ public class SkillManager : Singletone<SkillManager>
             List<Vector2Int> matchingTile = BoardManager.Instance.GetMatchingColorTiles(position, piece.GetTopFace().color);
 
             yield return StartCoroutine(SkillEffectCoroutine(piece.colorRenderer, position, matchingTile));
-            yield return StartCoroutine(BoardReassign(piece, position));
         }
         else
         {
@@ -155,6 +154,7 @@ public class SkillManager : Singletone<SkillManager>
                 // 사제 스킬 : 행동력을 1 추가
 
                 GameManager.Instance.actionPointManager.AddAP(1);
+                StartCoroutine(activeSkill.HealAP());
                 ToastManager.Instance.ShowToast("사제 스킬 발동! AP를 추가로 1 더 얻습니다.", currentPiece.transform);
 
                 break;
@@ -283,13 +283,8 @@ public class SkillManager : Singletone<SkillManager>
         {
             renderer.color = originalColor;
         }
-    }
-    IEnumerator BoardReassign(PieceController piece, Vector2Int position)
-    {
-        yield return null;
-        BoardManager.Instance.ReassignMatchingColorTiles(position, piece.GetTopFace().color);
-        // 기물 움직일 수 있게
-    }
 
+        BoardManager.Instance.ReassignMatchingColorTiles(position, PieceManager.Instance.currentPiece.GetTopFace().color);
+    }
     #endregion
 }

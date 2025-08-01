@@ -12,6 +12,7 @@ public class PoisonousherbBehaviour : MonoBehaviour
                 Debug.Log("저주를 무시합니다.");
                 BoardManager.Instance.RemoveObstacle(herb);
                 SkillManager.Instance.PriestPassive();
+                
 
                 return;
             }

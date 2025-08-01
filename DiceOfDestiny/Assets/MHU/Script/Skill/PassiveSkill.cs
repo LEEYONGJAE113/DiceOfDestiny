@@ -246,7 +246,10 @@ public class PassiveSkill : MonoBehaviour
     // 사제 패시브 스킬
     public IEnumerator Halo()
     {
-        yield return new WaitForSeconds(0.5f);
+        SkillManager.Instance.DelayTime = 2f;
+        yield return new WaitForSeconds(0.8f); // 기물이 굴러가는 시간
+
+        ToastManager.Instance.ShowToast("사제가 독초의 저주를 무시합니다.", PieceManager.Instance.currentPiece.transform);
 
         if (priestPassiveEffect != null)
         {
@@ -267,6 +270,7 @@ public class PassiveSkill : MonoBehaviour
 
         }
 
-        
+        SkillManager.Instance.DelayTime = 0f;
+        yield return new WaitForSeconds(0.5f);
     }
 }
