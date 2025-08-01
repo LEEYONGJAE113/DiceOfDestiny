@@ -48,6 +48,8 @@ public class UIBackpack : MonoBehaviour
         for (int i = 0; i < ChoicePieceImageColorImage.Length; i++)
         {
             currentPiece = PieceManager.Instance.pieceInventory.slots[i].GetPiece();
+            if (currentPiece == null)
+                return;
             ChoicePieceImageColorImage[i].color = BoardManager.Instance.tileColors[(int)currentPiece.faces[2].color];
             ChoicePieceClassImage[i].sprite = currentPiece.faces[2].classData.sprite;
         }
@@ -84,7 +86,7 @@ public class UIBackpack : MonoBehaviour
         SpawnPieceObject.GetComponent<Image>().sprite = currentPiece.faces[2].classData.sprite;
     }
 
-    IEnumerator SpawnPiece(int index)
+    IEnumerator SpawnPiece()
     {
         // 타일 선택 이미지 띄우기
         BoardSelectManager.Instance.HighlightTiles();
@@ -92,11 +94,13 @@ public class UIBackpack : MonoBehaviour
         // 클릭 기다림
         yield return BoardSelectManager.Instance.WaitForTileClick();
 
+        // =====================[ 생성 시작 ]=====================
+
         // 위치 불러오기
         Vector2Int gridPos = BoardSelectManager.Instance.lastClickedPosition;
 
         // 피스 생성
-        GameObject piece = Instantiate(PieceManager.Instance.piecePrefabs[index],
+        GameObject piece = Instantiate(PieceManager.Instance.piecePrefabs[currentIndex],
             new Vector2(BoardManager.Instance.boardTransform.position.x + gridPos.x,
                         BoardManager.Instance.boardTransform.position.y + gridPos.y),
             Quaternion.identity);
@@ -121,9 +125,13 @@ public class UIBackpack : MonoBehaviour
         // 현재 선택 피스
         PieceManager.Instance.SetCurrentPiece(currentPieceController);
 
+        // =====================[ 생성 종료 ]=====================
+
+        ChoicePieceClassImage[currentIndex].sprite = null;
+
         // 슬롯에 있는 피스 제거
-        Debug.Log(index + "번 피스 제거");
-        PieceManager.Instance.pieceInventory.slots[index].RemovePiece();
+        Debug.Log(currentIndex + "번 피스 제거");
+        PieceManager.Instance.pieceInventory.slots[currentIndex].RemovePiece();
     }
 
 
@@ -138,7 +146,7 @@ public class UIBackpack : MonoBehaviour
         }
 
         // 피스 스폰
-        StartCoroutine(SpawnPiece(currentIndex));
+        StartCoroutine(SpawnPiece());
     }
 
     public void onClickUpdateTopFace(int dir)

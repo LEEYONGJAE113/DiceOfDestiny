@@ -9,21 +9,17 @@ public class PieceInventory : MonoBehaviour
     public class Slot
     {
         [SerializeField] private int pieceNumber;
-        [SerializeField] private Image image;
-
         [SerializeField] private Piece piece;
 
         public void AddPiece(Piece _piece)
         {
             this.pieceNumber = _piece.PieceNumber;
-            this.image.sprite = _piece.faces[2].classData.sprite;
             this.piece = _piece;
         }
 
         public void RemovePiece()
         {
             pieceNumber = 0;
-            image.sprite = null;
             piece = null;
         }
 
@@ -35,6 +31,10 @@ public class PieceInventory : MonoBehaviour
         public Piece GetPiece()
         {
             return piece;
+        }
+        public void SetPiece(Piece _piece)
+        {
+            this.piece = _piece;
         }
     }
 
