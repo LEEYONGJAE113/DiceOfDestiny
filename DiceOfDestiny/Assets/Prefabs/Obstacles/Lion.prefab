@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1393387302011551558}
   - component: {fileID: 4345480612495017223}
-  - component: {fileID: 6852578832406306446}
+  - component: {fileID: 614695822228776237}
   m_Layer: 0
   m_Name: Lion
   m_TagString: Untagged
@@ -88,7 +88,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6852578832406306446
+--- !u!114 &614695822228776237
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,10 +97,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7333959039673425380}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c568a3fd7a5caec4eb02dfcc9228df6d, type: 3}
+  m_Script: {fileID: 11500000, guid: 8e4572d1c684eb6429d61355baf9e3a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obstacleType: 3
+  obstacleType: 0
   nextStep: 4
   obstaclePosition: {x: 0, y: 0}
   isWalkable: 0
+  isAttackReady: 0
+  standByAttack: 0

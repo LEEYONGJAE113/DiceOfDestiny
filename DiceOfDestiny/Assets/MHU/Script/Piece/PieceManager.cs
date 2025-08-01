@@ -14,7 +14,7 @@ public class PieceManager : Singletone<PieceManager>
             EventManager.Instance.TriggerEvent(AllEventNames.PIECE_COUNT_CHANGED);
         }
     }
-    private List<PieceState> pieceStates = new();
+    private List<PieceState> pieceStates = new();   
     public GameObject[] piecePrefabs;
     [SerializeField] public PieceController currentPiece; // 현재 내가 조종중인 말
 
@@ -34,21 +34,7 @@ public class PieceManager : Singletone<PieceManager>
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            if (pieces.Count <= 0 || pieces[0] == null) return;
-            currentPiece = pieces[0];
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            if (pieces.Count <= 1 || pieces[1] == null) return;
-            currentPiece = pieces[1];
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            if (pieces.Count <= 2 || pieces[2] == null) return;
-            currentPiece = pieces[2];
-        }
+        
     }
 
     public void DrawAllPieceUIs()

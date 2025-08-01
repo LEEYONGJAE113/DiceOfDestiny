@@ -15,15 +15,11 @@ public class ObstacleManager : MonoBehaviour
     [SerializeField] private GameObject poisonousHerbPrefab;
     [SerializeField] private GameObject grassPrefab;
     [SerializeField] private GameObject slimePrefab;
+    [SerializeField] private GameObject slimeDdongPrefab;
 
     public Dictionary<ObstacleType, GameObject> obstaclePrefabs;
 
     public List<GameObject> currentObstacles;
-
-    private ZombieBehaviour zombieBehaviour;
-    private PoisonousherbBehaviour poisonousherbBehaviour;
-    private PuddleBehaviour diseaseBehaviour;
-    private SlimeBehaviour slimeBehaviour;
 
     private void Awake()
     {
@@ -51,14 +47,10 @@ public class ObstacleManager : MonoBehaviour
             { ObstacleType.PoisonousHerb, poisonousHerbPrefab },
             { ObstacleType.Grass, grassPrefab },
             { ObstacleType.Slime, slimePrefab },
+            { ObstacleType.SlimeDdong, slimeDdongPrefab },
         };
 
         currentObstacles = new List<GameObject>();
-
-        zombieBehaviour = GetComponent<ZombieBehaviour>();
-        poisonousherbBehaviour = GetComponent<PoisonousherbBehaviour>();
-        diseaseBehaviour = GetComponent<PuddleBehaviour>();
-        slimeBehaviour = GetComponent<SlimeBehaviour>();
     }
 
     public void SetObstacle(GameObject obstacle)
@@ -79,30 +71,12 @@ public class ObstacleManager : MonoBehaviour
 
     public void UpdateObstacleStep()
     {
-        for (int i = currentObstacles.Count - 1; i >= 0; i--) // foreach (GameObject obstacle in currentObstacles)
+        for (int i = currentObstacles.Count - 1; i >= 0; i--)
         {
-            Obstacle obstacleComponent = currentObstacles[i].GetComponent<Obstacle>();
+            var behaviour = currentObstacles[i].GetComponent<IObstacleBehaviour>();
 
-            if (obstacleComponent.obstacleType == ObstacleType.Zombie) // 좀비
-            {
-                zombieBehaviour.DoZombieLogic(obstacleComponent);
-            }
-            else if (obstacleComponent.obstacleType == ObstacleType.PoisonousHerb) // 독초
-            {
-                poisonousherbBehaviour.DoPoisionousherbLogic(obstacleComponent);
-            }
-            else if (obstacleComponent.obstacleType == ObstacleType.Puddle) // 물웅덩이
-            {
-                diseaseBehaviour.DoPuddleLogic(obstacleComponent);
-            }
-            else if (obstacleComponent.obstacleType == ObstacleType.Grass) // 풀
-            {
-                diseaseBehaviour.DoGrassLogic(obstacleComponent);
-            }
-            else if (obstacleComponent.obstacleType == ObstacleType.Slime) // 슬라임
-            {
-                //slimeBehaviour.DoSlimeLogic(obstacleComponent);
-            }
+            if (behaviour != null)
+                behaviour.DoLogic();
         }
     }
 

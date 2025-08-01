@@ -76,6 +76,7 @@ public class ActionPointManager : MonoBehaviour
         if (currentAP <= 0)
         {
             Debug.Log("행동력이 없습니다.");
+            ToastManager.Instance.ShowToast("행동력이 없습니다.", transform);
             return;
         }
         currentAP -= _minusAP;
@@ -125,6 +126,7 @@ public class ActionPointManager : MonoBehaviour
         if (testGameState == TestGameState.Dice)
         {
             Debug.Log("먼저 주사위를 굴리세요.");
+            ToastManager.Instance.ShowToast("먼저 주사위를 굴리세요.", transform);
             return;
         }
 

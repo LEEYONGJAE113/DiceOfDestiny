@@ -31,8 +31,6 @@ public class PieceController : MonoBehaviour
 
     void Start()
     {
-        //gridPosition = new Vector2Int(0, 0);
-
         statusEffectController = GetComponent<StatusEffectController>();
     }
 
@@ -88,20 +86,24 @@ public class PieceController : MonoBehaviour
 
             if (statusEffectController.IsStatusActive(StatusType.Stun)) // if (piece.debuff.IsStun)
             {
+                int stunTurn = statusEffectController.GetRemainingTurn(StatusType.Stun);
                 Debug.Log("Piece is stunned!");
-                ToastManager.Instance.ShowToast(message: $"기물이 기절했습니다! ? 턴간 이동할 수 없습니다.", transform);
+                ToastManager.Instance.ShowToast(message: $"기물이 기절했습니다! {stunTurn}턴간 이동할 수 없습니다.", transform);
                 return;
             }
 
             if (statusEffectController.IsStatusActive(StatusType.Disease) && GameManager.Instance.actionPointManager.currentAP < 2)
             {
+                int DiseaseTurn = statusEffectController.GetRemainingTurn(StatusType.Disease);
                 Debug.Log("Piece is diseased!");
+                ToastManager.Instance.ShowToast(message: $"기물이 질병에 걸렸습니다! {DiseaseTurn}턴간 행동이 제한됩니다.", transform);
                 return;
             }
 
             // 이동하는 곳에 장애물이 있으면
             Debug.Log("Obstacle Name : " + BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle);
-            if (BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle != ObstacleType.None)
+            if (BoardManager.Instance.Board[newPosition.x, newPosition.y].Obstacle != ObstacleType.None ||
+                BoardManager.Instance.Board[newPosition.x, newPosition.y].GetPiece() != null)
             {
                 // 밟을 수 없다면
                 if (!BoardManager.Instance.Board[newPosition.x, newPosition.y].isWalkable)
@@ -147,7 +149,7 @@ public class PieceController : MonoBehaviour
                 RotateToTopFace(moveDirection);
                 UpdateTopFace(moveDirection); // 윗면 업데이트
 
-                //RotateHalfBack(moveDirection);
+                
 
                 ObstacleManager.Instance.UpdateObstacleStep();
             }
@@ -332,7 +334,7 @@ public class PieceController : MonoBehaviour
 
         isMoving = false;
 
-        
+        BoardSelectManager.Instance.PieceHighlightTiles(gridPosition);
 
         // 스킬 발동
         if (SkillManager.Instance != null)
@@ -344,7 +346,6 @@ public class PieceController : MonoBehaviour
         {
             Debug.LogError("SkillManager.Instance is null!");
         }
-
     }
 
     public void RotateHalfBack(Vector2Int moveDirection)
@@ -474,7 +475,11 @@ public class PieceController : MonoBehaviour
         piece = newPiece;
     }
 
-
+    public void SetTopFace()
+    {
+        classRenderer.sprite = piece.faces[2].classData.sprite;
+        colorRenderer.color = BoardManager.Instance.tileColors[(int)piece.faces[2].color];
+    }
 
 
     //public Vector2Int GetGridPosition()

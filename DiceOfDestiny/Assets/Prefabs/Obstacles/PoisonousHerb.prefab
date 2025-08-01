@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7680442456460273085}
   - component: {fileID: 1664445941547185293}
-  - component: {fileID: 4341709889857620316}
+  - component: {fileID: 8257345008056174196}
   - component: {fileID: 2091286422239821357}
   m_Layer: 0
   m_Name: PoisonousHerb
@@ -89,7 +89,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4341709889857620316
+--- !u!114 &8257345008056174196
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7749113738094060414}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c568a3fd7a5caec4eb02dfcc9228df6d, type: 3}
+  m_Script: {fileID: 11500000, guid: 8382af9f5df938b4194c58c0cb051362, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   obstacleType: 8
