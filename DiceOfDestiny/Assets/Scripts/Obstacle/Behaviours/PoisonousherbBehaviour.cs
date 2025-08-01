@@ -12,6 +12,7 @@ public class PoisonousherbBehaviour : Obstacle, IObstacleBehaviour
                 Debug.Log("저주를 무시합니다.");
                 ToastManager.Instance.ShowToast("제게 저주는 통하지 않습니다.", currentTile.GetPiece().transform, 1f);
                 BoardManager.Instance.RemoveObstacle(this);
+                SkillManager.Instance.PriestPassive();
                 return;
             }
 

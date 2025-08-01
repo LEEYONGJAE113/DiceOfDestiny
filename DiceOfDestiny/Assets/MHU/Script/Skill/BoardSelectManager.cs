@@ -12,7 +12,7 @@ public class BoardSelectManager : Singletone<BoardSelectManager>
     [Header("클릭된 타일")]
     [SerializeField] public Vector2Int lastClickedPosition; // 마지막 클릭된 타일 위치
 
-    private bool isWaitingForClick = false; // 클릭 대기 상태
+    private bool isWaitingForClick = false; // 클릭 대기 상태, 타일 클릭 비동기적 반환
 
 
     // 장애물 타일 클릭 제한 여부 (true면 장애물 타일 클릭 불가, false면 가능)
