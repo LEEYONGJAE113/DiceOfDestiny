@@ -125,6 +125,9 @@ public class UIBackpack : MonoBehaviour
         // 현재 선택 피스
         PieceManager.Instance.SetCurrentPiece(currentPieceController);
 
+        // 피스 선택 테두리 생성
+        BoardSelectManager.Instance.PieceHighlightTiles(currentPieceController.gridPosition);
+
         // =====================[ 생성 종료 ]=====================
 
         ChoicePieceClassImage[currentIndex].sprite = null;
