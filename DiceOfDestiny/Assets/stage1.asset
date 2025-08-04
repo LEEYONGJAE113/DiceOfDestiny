@@ -40,3 +40,5 @@ MonoBehaviour:
   - type: 3
     weight: 2
   obstacleDensity: 0.2
+  stageNumber: 1
+  stageTitle: Beginning

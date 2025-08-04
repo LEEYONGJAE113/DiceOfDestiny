@@ -92,7 +92,7 @@ public class PieceController : MonoBehaviour
                 return;
             }
 
-            if (statusEffectController.IsStatusActive(StatusType.Disease) && GameManager.Instance.actionPointManager.currentAP < 2)
+            if (statusEffectController.IsStatusActive(StatusType.Disease) && GameManager.Instance.actionPointManager.CurrentAP < 2)
             {
                 int DiseaseTurn = statusEffectController.GetRemainingTurn(StatusType.Disease);
                 Debug.Log("Piece is diseased!");

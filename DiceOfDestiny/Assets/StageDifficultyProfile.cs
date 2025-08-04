@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(fileName ="StageDifficultyProfile", menuName = "Stage/StageDifficultyProfile")]
@@ -7,7 +6,7 @@ public class StageDifficultyProfile : ScriptableObject
 {
     [Header("ColorSetting")]
     public int minimumColorEnsure;
-    public int weightPower = 10; // ³ôÀ»¼ö·Ï °¡ÁßÄ¡°¡ °­ÇÏ°Ô ¹İ¿µµÊ. 
+    public int weightPower = 10; // ë†’ì„ìˆ˜ë¡ ê°€ì¤‘ì¹˜ê°€ ê°•í•˜ê²Œ ë°˜ì˜ë¨. 
     [Range(1, 20)] public int redWeight = 0;
     [Range(1, 20)] public int greenWeight = 0;
     [Range(1, 20)] public int blueWeight = 0;
@@ -18,6 +17,10 @@ public class StageDifficultyProfile : ScriptableObject
     [Header("Obstacle Settings")]
     public List<ObstacleWeight> availableObstacle;
     [Range(0,1)] public float obstacleDensity = 0.2f;
+
+    [Header("Banner")]
+    public int stageNumber = 1;
+    public string stageTitle = "STAGE 1";
 }
 
 [System.Serializable]
