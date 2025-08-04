@@ -1115,6 +1115,7 @@ GameObject:
   - component: {fileID: 676392993}
   - component: {fileID: 676392995}
   - component: {fileID: 676392994}
+  - component: {fileID: 676392996}
   m_Layer: 5
   m_Name: BackFace
   m_TagString: Untagged
@@ -1180,6 +1181,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 676392992}
   m_CullTransparentMesh: 1
+--- !u!114 &676392996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 676392992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67e032f81e7172a4883c8aaee9942dca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  draggableSticker: {fileID: 0}
 --- !u!1 &693174954
 GameObject:
   m_ObjectHideFlags: 0
@@ -1898,6 +1912,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1250975025}
   - component: {fileID: 1250975026}
+  - component: {fileID: 1250975027}
   m_Layer: 5
   m_Name: StickerDrawer
   m_TagString: Untagged
@@ -1955,6 +1970,18 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1250975027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1250975024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0649d884a0c5544997aedd59caf90c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1348368635
 GameObject:
   m_ObjectHideFlags: 0
@@ -4314,6 +4341,7 @@ GameObject:
   - component: {fileID: 2123216962}
   - component: {fileID: 2123216964}
   - component: {fileID: 2123216963}
+  - component: {fileID: 2123216965}
   m_Layer: 5
   m_Name: RightFace
   m_TagString: Untagged
@@ -4379,6 +4407,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2123216961}
   m_CullTransparentMesh: 1
+--- !u!114 &2123216965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2123216961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67e032f81e7172a4883c8aaee9942dca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  draggableSticker: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
