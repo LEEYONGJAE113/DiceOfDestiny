@@ -38,7 +38,7 @@ public class UIBackpack : MonoBehaviour
 
         // Refresh 함수 구독
         EventManager.Instance.AddListener("Refresh", _ => Refresh());
-        
+
         // 기물 선택 UI의 기물 윗면 새로고침
         Refresh();
     }
@@ -89,7 +89,7 @@ public class UIBackpack : MonoBehaviour
     IEnumerator SpawnPiece()
     {
         // 타일 선택 이미지 띄우기
-        BoardSelectManager.Instance.HighlightTiles();
+        BoardSelectManager.Instance.StartHighlightTiles();
 
         // 클릭 기다림
         yield return BoardSelectManager.Instance.WaitForTileClick();
@@ -99,11 +99,17 @@ public class UIBackpack : MonoBehaviour
         // 위치 불러오기
         Vector2Int gridPos = BoardSelectManager.Instance.lastClickedPosition;
 
+        if (gridPos.y > 0)
+        {
+            Debug.Log("기물은 첫번째 줄에만 배치 가능합니다.");
+            yield break;
+        }
+
         // 피스 생성
         GameObject piece = Instantiate(PieceManager.Instance.piecePrefabs[currentIndex],
-            new Vector2(BoardManager.Instance.boardTransform.position.x + gridPos.x,
-                        BoardManager.Instance.boardTransform.position.y + gridPos.y),
-            Quaternion.identity);
+        new Vector2(BoardManager.Instance.boardTransform.position.x + gridPos.x,
+                    BoardManager.Instance.boardTransform.position.y + gridPos.y),
+        Quaternion.identity);
 
         ChoiceTopFaceWindow.SetActive(false);
 

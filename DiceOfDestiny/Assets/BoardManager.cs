@@ -15,7 +15,8 @@ public enum TileColor
 public class BoardManager : Singletone<BoardManager>
 {
     [Header("Board Size Settings")]
-    [SerializeField] public int boardSize = 11;
+    [SerializeField] public int boardSize = 13;
+    public int boardSizeY;
     [SerializeField] private GameObject tilePrefab;
     [SerializeField] public Transform boardTransform;
     public Tile[,] Board { get; set; }
@@ -37,6 +38,8 @@ public class BoardManager : Singletone<BoardManager>
 
     void Start()
     {
+        boardSizeY = boardSize + 2;
+
         GenerateBoard();
     }
 
@@ -47,11 +50,11 @@ public class BoardManager : Singletone<BoardManager>
 
     private void GenerateBoard()
     {
-        Board = new Tile[boardSize, boardSize];
+        Board = new Tile[boardSize, boardSizeY];
 
         for (int x = 0; x < boardSize; x++)
         {
-            for (int y = 0; y < boardSize; y++)
+            for (int y = 0; y < boardSizeY; y++)
             {
                 GameObject tileObject = Instantiate(tilePrefab, new Vector3(boardTransform.position.x + x, boardTransform.position.y + y, 0), Quaternion.identity, boardTransform);
                 tileObject.name = $"Tile_{x}_{y}";
@@ -115,7 +118,7 @@ public class BoardManager : Singletone<BoardManager>
         int idx = 0;
         for (int x = 0; x < boardSize; x++)
         {
-            for (int y = 0; y < boardSize; y++)
+            for (int y = 1; y < boardSize+1; y++)
             {
                 Board[x, y].SetTileColor(tileColors[colorIndices[idx]]);
                 switch (colorIndices[idx])
@@ -177,7 +180,7 @@ public class BoardManager : Singletone<BoardManager>
         idx = 0;
         for (int x = 0; x < boardSize; x++)
         {
-            for (int y = 0; y < boardSize; y++)
+            for (int y = 1; y < boardSize+1; y++)
             {
                 Board[x, y].Obstacle = obstacleIndices[idx];
                 // 장애물 생성
@@ -199,7 +202,7 @@ public class BoardManager : Singletone<BoardManager>
 
     public Obstacle ReturnObstacleByPosition(Vector2Int position)
     {
-        if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
+        if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSizeY)
         {
             Debug.LogError("Position out of bounds");
             return null;
@@ -221,7 +224,7 @@ public class BoardManager : Singletone<BoardManager>
 
     public bool IsEmptyTile(Vector2Int position)
     {
-        if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
+        if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSizeY)
         {
             // Debug.LogError("Position out of bounds");
             return false;
@@ -258,7 +261,7 @@ public class BoardManager : Singletone<BoardManager>
         {
             Vector2Int checkPos = position + dir;
             if (checkPos.x >= 0 && checkPos.x < boardSize &&
-                checkPos.y >= 0 && checkPos.y < boardSize)
+                checkPos.y >= 0 && checkPos.y < boardSizeY)
             {
                 if (Board[checkPos.x, checkPos.y] != null &&
                     Board[checkPos.x, checkPos.y].TileColor == targetColor)
@@ -292,7 +295,7 @@ public class BoardManager : Singletone<BoardManager>
         {
             Vector2Int checkPos = position + dir;
             if (checkPos.x >= 0 && checkPos.x < boardSize &&
-                checkPos.y >= 0 && checkPos.y < boardSize)
+                checkPos.y >= 0 && checkPos.y < boardSizeY)
             {
                 if (Board[checkPos.x, checkPos.y] != null &&
                     Board[checkPos.x, checkPos.y].TileColor == targetColor)
@@ -324,7 +327,7 @@ public class BoardManager : Singletone<BoardManager>
         {
             Vector2Int checkPos = position + dir;
             if (checkPos.x >= 0 && checkPos.x < boardSize &&
-                checkPos.y >= 0 && checkPos.y < boardSize &&
+                checkPos.y >= 0 && checkPos.y < boardSizeY &&
                 Board[checkPos.x, checkPos.y] != null &&
                 Board[checkPos.x, checkPos.y].TileColor == targetColor)
             {
@@ -366,7 +369,7 @@ public class BoardManager : Singletone<BoardManager>
         {
             Vector2Int checkPos = position + dir;
             if (checkPos.x >= 0 && checkPos.x < boardSize &&
-                checkPos.y >= 0 && checkPos.y < boardSize &&
+                checkPos.y >= 0 && checkPos.y < boardSizeY &&
                 Board[checkPos.x, checkPos.y] != null)
             {
                 // 무작위 색상 인덱스 선택
@@ -388,7 +391,7 @@ public class BoardManager : Singletone<BoardManager>
     }
     public void RemoveObstacleAtPosition(Vector2Int position)
     {
-        if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
+        if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSizeY)
         {
             Debug.LogError("Position out of bounds");
             return;
@@ -423,7 +426,7 @@ public class BoardManager : Singletone<BoardManager>
 
     public void CreateObstacle(Vector2Int position, ObstacleType obstacleType)
     {
-        if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
+        if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSizeY)
         {
             Debug.LogError("Position out of bounds");
             return;
@@ -479,7 +482,7 @@ public class BoardManager : Singletone<BoardManager>
             Vector2Int checkPos = pos + dir;
             // 경계 조건을 먼저 확인
             if (checkPos.x >= 0 && checkPos.x < boardSize &&
-                checkPos.y >= 0 && checkPos.y < boardSize)
+                checkPos.y >= 0 && checkPos.y < boardSizeY)
             {
                 // 좀비나 고블린인지 확인
                 if (Board[checkPos.x, checkPos.y]?.Obstacle is ObstacleType.Slime or ObstacleType.Zombie)
@@ -506,7 +509,7 @@ public class BoardManager : Singletone<BoardManager>
         {
             Vector2Int checkPos = pos + dir;
             if (checkPos.x >= 0 && checkPos.x < boardSize &&
-                checkPos.y >= 0 && checkPos.y < boardSize &&
+                checkPos.y >= 0 && checkPos.y < boardSizeY &&
                 Board[checkPos.x, checkPos.y] != null &&
                 Board[checkPos.x, checkPos.y].Obstacle != ObstacleType.None)
             {
@@ -530,7 +533,7 @@ public class BoardManager : Singletone<BoardManager>
         foreach (Vector2Int checkPos in tiles)
         {
             if (checkPos.x >= 0 && checkPos.x < boardSize &&
-                checkPos.y >= 0 && checkPos.y < boardSize &&
+                checkPos.y >= 0 && checkPos.y < boardSizeY &&
                 Board[checkPos.x, checkPos.y] != null &&
                 Board[checkPos.x, checkPos.y].Obstacle != ObstacleType.None)
             {
@@ -543,7 +546,7 @@ public class BoardManager : Singletone<BoardManager>
     public void SetTileColor(Vector2Int position, TileColor targetColor)
     {
         // 위치 유효성 검사
-        if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
+        if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSizeY)
         {
             Debug.LogError($"Position out of bounds: {position}");
             return;
@@ -591,7 +594,7 @@ public class BoardManager : Singletone<BoardManager>
 
     public Tile GetTile(Vector2Int position)
     {
-        if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSize)
+        if (position.x < 0 || position.x >= boardSize || position.y < 0 || position.y >= boardSizeY)
         {
             return null;
         }
