@@ -1,4 +1,3 @@
-// StageBannerManager.cs
 using UnityEngine;
 
 public sealed class StageBannerManager : MonoBehaviour

@@ -34,6 +34,10 @@ public sealed class StageBannerController : MonoBehaviour
 
     private IEnumerator PlayRoutine()
     {
+        // Activate the banner
+        cg.alpha = 0f;
+        gameObject.SetActive(true);
+
         // Fade-in
         yield return Fade(0f, 1f, fadeDuration);
 
@@ -46,6 +50,10 @@ public sealed class StageBannerController : MonoBehaviour
 
         // Reset
         bannerRect.anchoredPosition = _initPos;
+
+        // Deactivate the banner
+        cg.alpha = 0f;
+        gameObject.SetActive(false);
     }
 
     private IEnumerator Fade(float from, float to, float duration)

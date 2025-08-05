@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName ="StageDifficultyProfile", menuName = "Stage/StageDifficultyProfile")]
-public class StageDifficultyProfile : ScriptableObject
+[CreateAssetMenu(fileName = "StageData", menuName = "Stage/StageData")]
+public class StageData : ScriptableObject
 {
+    [field: SerializeField] public string StageName { get; private set; }
+
     [Header("ColorSetting")]
     public int minimumColorEnsure;
     public int weightPower = 10; // 높을수록 가중치가 강하게 반영됨. 

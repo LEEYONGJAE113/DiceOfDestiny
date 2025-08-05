@@ -76,7 +76,7 @@ public class BoardManager : Singletone<BoardManager>
         }
     }
 
-    public void SetBoard(StageDifficultyProfile profile)
+    public void SetBoard(StageData profile)
     {
         // 가중치에 맞게 색을 설정하는 부분
         colorIndices = new List<int>();
