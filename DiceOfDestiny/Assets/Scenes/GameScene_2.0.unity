@@ -1949,7 +1949,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knightPassiveEffect: {fileID: 4995246630371947538, guid: 4bba21ca3d140ae47913b0d87a6f606f, type: 3}
+  demonPassiveEffect: {fileID: 2847281042695623499, guid: 2ad3be61a72af884f9cb1cc4c0c3ce24, type: 3}
   knightPassiveEffectDuration: 0.5
+  demonPassiveEffectDuration: 0.5
 --- !u!1 &855870361
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,9 @@
 using DG.Tweening;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
@@ -21,8 +24,7 @@ public class PieceController : MonoBehaviour
     [SerializeField] private SpriteRenderer classRenderer;
     [SerializeField] public SpriteRenderer colorRenderer;
 
-
-
+   
     bool isMoving = false; // 이동 중인지 여부
 
     public StatusEffectController statusEffectController;
@@ -54,6 +56,17 @@ public class PieceController : MonoBehaviour
                 moveDirection = Vector2Int.left;
             else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
                 moveDirection = Vector2Int.right;
+
+            else if (Input.GetKeyDown(KeyCode.O)) // 스테이지 시작
+            {
+                PieceFaceManager.Instance.SavePieceFaceData(0);
+                ToastManager.Instance.ShowToast("0번 피스 저장 !", PieceManager.Instance.currentPiece.transform);
+            }
+            else if (Input.GetKeyDown(KeyCode.P)) // 스테이지 끝
+            {
+                PieceFaceManager.Instance.RestorePieceFaceData(0);
+                ToastManager.Instance.ShowToast("0번 피스 복구 !", PieceManager.Instance.currentPiece.transform);
+            }
         }
 
         if (moveDirection != Vector2Int.zero)
@@ -531,6 +544,49 @@ public class PieceController : MonoBehaviour
                 return Vector2Int.zero;
         }
 
+    }
+
+    // 기물 직업 변경 메소드, 면 인덱스, 변경할 클래스 이름을 인자로 받음
+    public void ChangeClass(int faceIndex, string newClassName)
+    {
+        if (faceIndex < 0 || faceIndex >= piece.faces.Length)
+        {
+            Debug.LogError($"Invalid face index: {faceIndex}");
+            return;
+        }
+
+        // 새로운 클래스 데이터 찾기 (ClassData는 ScriptableObject로 가정)
+        ClassData newClassData = Resources.Load<ClassData>($"Data/Class/{newClassName}");
+        if (newClassData == null)
+        {
+            Debug.LogError($"ClassData for {newClassName} not found!");
+            return;
+        }
+
+        // 해당 면의 클래스 데이터 변경
+        piece.faces[faceIndex].classData = newClassData;
+
+        // 윗면(인덱스 2)이라면 렌더러 업데이트
+        if (faceIndex == 2)
+        {
+            classRenderer.sprite = newClassData.sprite;
+        }
+    }
+
+    public void SetFaceColor(int faceIndex, TileColor color)
+    {
+        if (faceIndex < 0 || faceIndex >= piece.faces.Length)
+        {
+            Debug.LogError($"Invalid face index: {faceIndex}");
+            return;
+        }
+        // 해당 면의 색상 변경
+        piece.faces[faceIndex].color = color;
+        // 윗면(인덱스 2)이라면 색상 렌더러 업데이트
+        if (faceIndex == 2)
+        {
+            colorRenderer.color = BoardManager.Instance.tileColors[(int)color];
+        }
     }
 
 }
