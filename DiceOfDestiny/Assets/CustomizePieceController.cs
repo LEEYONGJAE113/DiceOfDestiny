@@ -1,11 +1,9 @@
 using System.Collections;
-using System.Diagnostics.Contracts;
-using System.Drawing;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
-public class CustomizingPieceController : MonoBehaviour
+using UnityEngine.UI;
+public class CustomizePieceController : MonoBehaviour
 {
+    [Header("Dice Faces")]
     [SerializeField] GameObject frontFace;
     [SerializeField] GameObject backFace;
     [SerializeField] GameObject leftFace;
@@ -16,12 +14,19 @@ public class CustomizingPieceController : MonoBehaviour
     bool isFolded = false;
     bool isFolding = false;
 
+    [Header("Animation Setting")]
     [SerializeField] private float foldDuration = 1.0f;
     [SerializeField] private float enlargeDuration = 1.0f;
     [SerializeField] private float gatherDuration = 0.5f;
     [SerializeField] private float space = 30;
 
-    GameObject stickerPrefab;
+    [Header("Rotate Buttons")]
+    [SerializeField] Button leftTurnButton;
+    [SerializeField] Button rightTurnButton;
+    [SerializeField] Button upTurnButton;
+    [SerializeField] Button downTurnButton;
+
+    public GameObject draggableStickerPrefab;
 
 
     public void Start()
@@ -29,17 +34,96 @@ public class CustomizingPieceController : MonoBehaviour
 
     }
 
-    public void InitializeCustomizePiece()
+    public void InitializeCustomizePieceMode(Piece piece)
     {
-        if (isFolded)
-        {
-        }
-        else
-        {
+        isFolded = true;
+        DiceCustomizeManager.Instance.isFolded = true;
 
-        }
-    }
+        transform.localScale = Vector3.one * 2f;  // Fold 상태는 2배 스케일
+        transform.localPosition = new Vector3(550f, 0f, 0f);  // Fold 위치
+        frontFace.GetComponent<RectTransform>().anchoredPosition = new Vector2(-380, 0);
 
+        float size = frontFace.GetComponent<RectTransform>().rect.width;
+        Vector2 zeroPos = new Vector2(-380, 0);
+
+        // 모두 중심에 위치시키고, 스케일 축소
+        frontFace.GetComponent<RectTransform>().anchoredPosition = zeroPos;
+        backFace.GetComponent<RectTransform>().anchoredPosition = zeroPos;
+        leftFace.GetComponent<RectTransform>().anchoredPosition = zeroPos;
+        rightFace.GetComponent<RectTransform>().anchoredPosition = zeroPos;
+        topFace.GetComponent<RectTransform>().anchoredPosition = zeroPos;
+        bottomFace.GetComponent<RectTransform>().anchoredPosition = zeroPos;
+
+        // 중심 외에는 숨김 처리 (스케일 0)
+        frontFace.transform.localScale = Vector3.one;
+        backFace.transform.localScale = new Vector3(1f, 0f, 1f);
+        leftFace.transform.localScale = new Vector3(0f, 1f, 1f);
+        rightFace.transform.localScale = new Vector3(0f, 1f, 1f);
+        topFace.transform.localScale = new Vector3(1f, 0f, 1f);
+        bottomFace.transform.localScale = new Vector3(1f, 0f, 1f);
+
+        GameObject draggableSticker;
+        draggableSticker = Instantiate(draggableStickerPrefab, frontFace.transform);
+        draggableSticker.GetComponent<DraggableSticker>().Initialize(piece.faces[2].classData);
+        frontFace.GetComponentInChildren<StickerFace>().Initialize(draggableSticker.GetComponent<DraggableSticker>());
+
+        draggableSticker = Instantiate(draggableStickerPrefab, backFace.transform);
+        draggableSticker.GetComponent<DraggableSticker>().Initialize(piece.faces[0].classData);
+        backFace.GetComponentInChildren<StickerFace>().Initialize(draggableSticker.GetComponent<DraggableSticker>());
+
+        draggableSticker = Instantiate(draggableStickerPrefab, leftFace.transform);
+        draggableSticker.GetComponent<DraggableSticker>().Initialize(piece.faces[1].classData);
+        leftFace.GetComponentInChildren<StickerFace>().Initialize(draggableSticker.GetComponent<DraggableSticker>());
+
+        draggableSticker = Instantiate(draggableStickerPrefab, rightFace.transform);
+        draggableSticker.GetComponent<DraggableSticker>().Initialize(piece.faces[3].classData);
+        rightFace.GetComponentInChildren<StickerFace>().Initialize(draggableSticker.GetComponent<DraggableSticker>());
+
+        draggableSticker = Instantiate(draggableStickerPrefab, topFace.transform);
+        draggableSticker.GetComponent<DraggableSticker>().Initialize(piece.faces[5].classData);
+        topFace.GetComponentInChildren<StickerFace>().Initialize(draggableSticker.GetComponent<DraggableSticker>());
+
+        draggableSticker = Instantiate(draggableStickerPrefab, bottomFace.transform);
+        draggableSticker.GetComponent<DraggableSticker>().Initialize(piece.faces[4].classData);
+        bottomFace.GetComponentInChildren<StickerFace>().Initialize(draggableSticker.GetComponent<DraggableSticker>());
+
+        ShowRotateButtons();
+    }   
+    public void InitializeCustomizePieceNetMode(PieceNet pieceNet)
+    {
+        isFolded = false;
+        DiceCustomizeManager.Instance.isFolded = false;
+
+        transform.localScale = Vector3.one;
+        transform.localPosition = Vector3.zero;
+
+        float size = frontFace.GetComponent<RectTransform>().rect.width;
+        Vector2 zeroPos = new Vector2(-380, 0);
+
+        frontFace.GetComponent<RectTransform>().anchoredPosition = zeroPos;
+        backFace.GetComponent<RectTransform>().anchoredPosition = zeroPos + new Vector2(size * 2, 0);
+        leftFace.GetComponent<RectTransform>().anchoredPosition = zeroPos + new Vector2(-size, 0);
+        rightFace.GetComponent<RectTransform>().anchoredPosition = zeroPos + new Vector2(size, 0);
+        topFace.GetComponent<RectTransform>().anchoredPosition = zeroPos + new Vector2(0, size);
+        bottomFace.GetComponent<RectTransform>().anchoredPosition = zeroPos + new Vector2(0, -size);
+
+        frontFace.transform.localScale = Vector3.one;
+        backFace.transform.localScale = Vector3.one;
+        leftFace.transform.localScale = Vector3.one;
+        rightFace.transform.localScale = Vector3.one;
+        topFace.transform.localScale = Vector3.one;
+        bottomFace.transform.localScale = Vector3.one;
+
+        frontFace.GetComponentInChildren<StickerFace>().Initialize(pieceNet.faces[2].color);
+        backFace.GetComponentInChildren<StickerFace>().Initialize(pieceNet.faces[0].color);
+        leftFace.GetComponentInChildren<StickerFace>().Initialize(pieceNet.faces[1].color);
+        rightFace.GetComponentInChildren<StickerFace>().Initialize(pieceNet.faces[3].color);
+        topFace.GetComponentInChildren<StickerFace>().Initialize(pieceNet.faces[5].color);
+        bottomFace.GetComponentInChildren<StickerFace>().Initialize(pieceNet.faces[4].color);
+
+        HideRotateButtons();   
+
+}
 
     public void Toggle()
     {
@@ -50,7 +134,6 @@ public class CustomizingPieceController : MonoBehaviour
         else
         {
             FoldToDice();
-
         }
     }
 
@@ -67,6 +150,7 @@ public class CustomizingPieceController : MonoBehaviour
         if (isFolding || !isFolded)
             return;
         isFolding = true;
+        HideRotateButtons();
         StartCoroutine(CompressOverTime());
         StartCoroutine(MoveOverTime(true));
     }
@@ -115,7 +199,9 @@ public class CustomizingPieceController : MonoBehaviour
         transform.localScale = new Vector3(2f, 2f, 2f); // Ensure final scale is set
 
         isFolded = true;
+        DiceCustomizeManager.Instance.isFolded = true;
         isFolding = false;
+        ShowRotateButtons();
     }
 
     IEnumerator CompressOverTime()
@@ -203,6 +289,7 @@ public class CustomizingPieceController : MonoBehaviour
         }
         isFolding = false;
         isFolded = false;
+        DiceCustomizeManager.Instance.isFolded = false;
     }
 
 
@@ -486,5 +573,23 @@ public class CustomizingPieceController : MonoBehaviour
         topFace.GetComponent<RectTransform>().anchoredPosition = zeroPos + new Vector2(0, size);
         bottomFace.GetComponent<RectTransform>().anchoredPosition = zeroPos + new Vector2(0, -size);
 
+
+
+    }
+
+    public void ShowRotateButtons()
+    {
+        leftTurnButton.gameObject.SetActive(true);
+        rightTurnButton.gameObject.SetActive(true);
+        upTurnButton.gameObject.SetActive(true);
+        downTurnButton.gameObject.SetActive(true);
+
+    }
+    public void HideRotateButtons()
+    {
+        leftTurnButton.gameObject.SetActive(false);
+        rightTurnButton.gameObject.SetActive(false);
+        upTurnButton.gameObject.SetActive(false);
+        downTurnButton.gameObject.SetActive(false);
     }
 }

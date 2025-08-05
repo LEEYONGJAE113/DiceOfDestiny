@@ -1,16 +1,16 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StickerFace : MonoBehaviour
 {
-    [HideInInspector] public DraggableSticker draggableSticker;
+    public DraggableSticker draggableSticker;
 
-    private void Start()
-    {
-        
-    }
-
-    public void Initialize(DraggableSticker sticker = null)
+    public void Initialize(DraggableSticker sticker)
     {
         draggableSticker = sticker;
+    }
+    public void Initialize(TileColor color)
+    {
+        this.gameObject.GetComponent<Image>().color = BoardManager.Instance.GetColor(color);
     }
 }

@@ -7,10 +7,6 @@ public class InventoryManager : Singletone<InventoryManager>
     public List<PieceNet> pieceNets = new List<PieceNet>();
     public Dictionary<ClassData, int> classStickers = new Dictionary<ClassData, int>();
 
-
-    public GameObject CustomizePieceController;
-
-
     [Header("class Data")]
     public ClassData knightClassData;
     public ClassData demonClassData;

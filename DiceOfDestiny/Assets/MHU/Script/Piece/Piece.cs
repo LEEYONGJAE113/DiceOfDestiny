@@ -4,6 +4,9 @@ using UnityEngine;
 public class Piece : ScriptableObject
 {
     [SerializeField] public Face[] faces = new Face[6]; // 6개 면 데이터
+    //   4
+    // 1 2 3 0
+    //   5
     public Buff buff = new Buff();
     public Debuff debuff = new Debuff();
 

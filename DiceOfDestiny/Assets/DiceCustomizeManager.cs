@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DiceCustomizeManager : MonoBehaviour
+public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
 {
     [SerializeField] private GameObject cutomizePanel;
     [SerializeField] private GameObject carouselUIPanel;
@@ -18,14 +18,17 @@ public class DiceCustomizeManager : MonoBehaviour
     [SerializeField] private GameObject pieceNetPreviewButtonPrefab;
     [SerializeField] private GameObject pieceNetContent;
 
-    [Header("ClassData")]
-    [SerializeField] private ClassData[] classDatas;
-
     List<PiecePreviewButton> piecePreviewButtonList = new List<PiecePreviewButton>();
+
+    List<PieceNetPreviewButton> pieceNetPreviewButtonList = new List<PieceNetPreviewButton>();
 
     public GameObject stickerDrawer;
 
     public GameObject stickerSourcePrefab;
+
+    public CustomizePieceController customizePieceContoller;
+
+    public bool isFolded;
 
     private void Start()
     {
@@ -35,13 +38,19 @@ public class DiceCustomizeManager : MonoBehaviour
         InitializeStickerDrawer();
     }
 
-    private void InitializeStickerDrawer()
+    public void UpdateCaruselUI()
     {
-        foreach (var sticker in InventoryManager.Instance.classStickers)
+        foreach (var button in piecePreviewButtonList)
         {
-            GameObject stickerSource = Instantiate(stickerSourcePrefab, stickerDrawer.GetComponent<ScrollRect>().content.transform);
-            stickerSource.GetComponent<StickerSource>().stickerSprite.sprite = sticker.Key.sprite;
+            Destroy(button.gameObject);
         }
+        piecePreviewButtonList.Clear();
+        foreach (var button in pieceNetPreviewButtonList)
+        {
+            Destroy(button.gameObject);
+        }
+        InitializePiecesCaruselUI();
+        InitializePieceNetCaruselUI();
     }
 
     public void InitializePiecesCaruselUI()
@@ -61,16 +70,41 @@ public class DiceCustomizeManager : MonoBehaviour
             PieceNet pieceNet = InventoryManager.Instance.pieceNets[i];
             PieceNetPreviewButton button = Instantiate(pieceNetPreviewButtonPrefab, pieceNetContent.transform).GetComponent<PieceNetPreviewButton>();
             button.InitializePieceNetPreviewButton(pieceNet, () => OnClickPieceNetPreviewButton(pieceNet));
+            pieceNetPreviewButtonList.Add(button);
         }
     }
 
+    private void InitializeStickerDrawer()
+    {
+        foreach (var sticker in InventoryManager.Instance.classStickers)
+        {
+            GameObject stickerSource = Instantiate(stickerSourcePrefab, stickerDrawer.GetComponent<ScrollRect>().content.transform);
+            stickerSource.GetComponent<StickerSource>().classSticker = new ClassSticker();
+            stickerSource.GetComponent<StickerSource>().classSticker.classData = sticker.Key;
+            stickerSource.GetComponent<Image>().sprite = sticker.Key.sprite;
+            stickerSource.GetComponent<StickerSource>().stickerCount.text = "x " + sticker.Value.ToString();
+        }
+    }
+
+    public void UpdateStickerDrawer()
+    {
+        foreach (Transform child in stickerDrawer.GetComponent<ScrollRect>().content)
+        {
+            Destroy(child.gameObject);
+        }
+        InitializeStickerDrawer();
+    }
+    
+
     public void OnClickPiecePreviewButton(Piece piece)
     {
+        customizePieceContoller.InitializeCustomizePieceMode(piece);
         ChangeToCustomizePanel();
     }
 
     public void OnClickPieceNetPreviewButton(PieceNet pieceNet)
     {
+        customizePieceContoller.InitializeCustomizePieceNetMode(pieceNet);
         ChangeToCustomizePanel();
     }
 
