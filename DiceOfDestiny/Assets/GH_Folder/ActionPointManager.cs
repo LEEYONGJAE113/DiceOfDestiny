@@ -72,14 +72,21 @@ public class ActionPointManager : MonoBehaviour
 
     public void Reset()
     {
-        currentTurnNum = 1;
+        CurrentTurn = 1;
         
         Init();
+    }
+    public void Init()
+    {
+        GameState = GameState.Dice;
+        CurrentDiceValue = 0;
+        SetAP(0,0);
+        NotifyChange();
     }
 
     public void AddAP(int _plusAP)
     {
-        actionPoint.Add(amount);
+        actionPoint.Add(_plusAP);
         NotifyChange();
     }
 

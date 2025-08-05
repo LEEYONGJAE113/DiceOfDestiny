@@ -79,8 +79,6 @@ public sealed class StageManager : Singletone<StageManager>
         currentStage = stageProfiles[stageIndex];
 
         StageLoaded?.Invoke(currentStage);
-        bannerManager?.ShowBanner(currentStage.stageNumber,
-                                  currentStage.stageTitle);
 
         StartCoroutine(DeferredStartStage());
         return true;

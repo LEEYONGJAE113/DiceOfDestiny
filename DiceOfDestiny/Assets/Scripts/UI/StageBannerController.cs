@@ -28,21 +28,21 @@ public sealed class StageBannerController : MonoBehaviour
     {
         stageText.text = $"STAGE {stageNumber} – {stageTitle}";
 
+        gameObject.SetActive(true);
+
         StopAllCoroutines();
         StartCoroutine(PlayRoutine());
     }
 
     private IEnumerator PlayRoutine()
     {
-        // Activate the banner
         cg.alpha = 0f;
-        gameObject.SetActive(true);
 
         // Fade-in
         yield return Fade(0f, 1f, fadeDuration);
 
         // Hold
-        yield return new WaitForSeconds(holdDuration);
+        yield return new WaitForSecondsRealtime(holdDuration);
 
         // Slide + Fade-out
         var targetPos = _initPos + slideOffset;
@@ -52,7 +52,6 @@ public sealed class StageBannerController : MonoBehaviour
         bannerRect.anchoredPosition = _initPos;
 
         // Deactivate the banner
-        cg.alpha = 0f;
         gameObject.SetActive(false);
     }
 

@@ -13,6 +13,7 @@ public sealed class StageBannerManager : MonoBehaviour
     public void ShowBanner(int number, string title)
     {
         instance ??= Instantiate(bannerPrefab, transform);
+        instance.gameObject.SetActive(true);
         instance.Show(number, title);
     }
 }
