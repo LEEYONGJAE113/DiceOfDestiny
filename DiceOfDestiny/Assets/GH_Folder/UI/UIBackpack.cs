@@ -47,9 +47,12 @@ public class UIBackpack : MonoBehaviour
     {
         for (int i = 0; i < ChoicePieceImageColorImage.Length; i++)
         {
+            Debug.Log("Enter Refresh");
+
             currentPiece = PieceManager.Instance.pieceInventory.slots[i].GetPiece();
             if (currentPiece == null)
                 return;
+            Debug.Log("piece no null");
             ChoicePieceImageColorImage[i].color = BoardManager.Instance.tileColors[(int)currentPiece.faces[2].color];
             ChoicePieceClassImage[i].sprite = currentPiece.faces[2].classData.sprite;
         }
@@ -76,6 +79,9 @@ public class UIBackpack : MonoBehaviour
             ChoiceTopFaceWindow.SetActive(true);
 
         currentPiece = PieceManager.Instance.pieceInventory.selectedSlot.GetPiece();
+
+        if (currentPiece == null)
+            return;
 
         // 기물 선택 UI의 기물 윗면 새로고침
         ChoicePieceImageColorImage[currentIndex].color = BoardManager.Instance.tileColors[(int)currentPiece.faces[2].color];

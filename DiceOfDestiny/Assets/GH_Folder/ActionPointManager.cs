@@ -23,8 +23,6 @@ public class ActionPointManager : MonoBehaviour
 
     void Start()
     {
-        testGameState = TestGameState.Dice;
-
         Init();
     }
 
@@ -60,8 +58,17 @@ public class ActionPointManager : MonoBehaviour
 
     public void Init()
     {
+        testGameState = TestGameState.Dice;
+        currentDiceNum = 0;
         currentAP = 0;
         GameManager.Instance.actionPointUI.Refresh();
+    }
+
+    public void Reset()
+    {
+        currentTurnNum = 1;
+        
+        Init();
     }
 
     public void AddAP(int _plusAP)
@@ -75,12 +82,10 @@ public class ActionPointManager : MonoBehaviour
     {
         if (currentAP <= 0)
         {
-            Debug.Log("행동력이 없습니다.");
             ToastManager.Instance.ShowToast("행동력이 없습니다.", transform);
             return;
         }
         currentAP -= _minusAP;
-        Debug.Log("현재 행동력 : " + currentAP);
 
         // UI Refresh
         GameManager.Instance.actionPointUI.Refresh();
@@ -133,8 +138,6 @@ public class ActionPointManager : MonoBehaviour
         PieceManager.Instance.DecreaseDebuffAllPieces();
 
         currentTurnNum++;
-
-        testGameState = TestGameState.Dice;
 
         Init();
     }

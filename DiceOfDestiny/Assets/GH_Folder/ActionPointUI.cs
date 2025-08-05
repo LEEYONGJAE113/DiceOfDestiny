@@ -23,7 +23,7 @@ public class ActionPointUI : MonoBehaviour
     public void Refresh()
     {
         currentState.text = "State : " + GameManager.Instance.actionPointManager.testGameState.ToString();
-        currentTurn.text = "Turn : " + GameManager.Instance.actionPointManager.currentTurnNum;
+        currentTurn.text = "Turn : " + GameManager.Instance.actionPointManager.currentTurnNum.ToString();
 
         Dice.text = "Dice : " + GameManager.Instance.actionPointManager.currentDiceNum.ToString();
         AP.text = "AP : " + GameManager.Instance.actionPointManager.currentAP.ToString();

@@ -35,4 +35,13 @@ public class StageManger : MonoBehaviour
         ObstacleManager.Instance.RemoveAllObstacle();
         BoardManager.Instance.SetBoard(currentProfile);
     }
+
+    public void NextStage()
+    {
+        ++stageIndex;
+        currentProfile = stageProfiles[stageIndex];
+
+        ObstacleManager.Instance.RemoveAllObstacle();
+        BoardManager.Instance.SetBoard(currentProfile);
+    }
 }
