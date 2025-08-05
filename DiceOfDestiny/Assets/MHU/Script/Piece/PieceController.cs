@@ -84,7 +84,7 @@ public class PieceController : MonoBehaviour
                 return;
             }
 
-            if (statusEffectController.IsStatusActive(StatusType.Stun)) // if (piece.debuff.IsStun)
+            if (statusEffectController.IsStatusActive(StatusType.Stun))
             {
                 int stunTurn = statusEffectController.GetRemainingTurn(StatusType.Stun);
                 Debug.Log("Piece is stunned!");
@@ -114,7 +114,7 @@ public class PieceController : MonoBehaviour
             }
 
             if (newPosition.x >= 0 && newPosition.x < BoardManager.Instance.boardSize &&
-                newPosition.y >= 0 && newPosition.y < BoardManager.Instance.boardSize)
+                newPosition.y >= 0 && newPosition.y < BoardManager.Instance.boardSizeY)
             {
                 if (PieceManager.Instance == null)
                 {
@@ -149,7 +149,7 @@ public class PieceController : MonoBehaviour
                 RotateToTopFace(moveDirection);
                 UpdateTopFace(moveDirection); // 윗면 업데이트
 
-                
+                StartCoroutine(CheckStageClearAfterMove(newPosition));
 
                 ObstacleManager.Instance.UpdateObstacleStep();
             }
@@ -332,9 +332,9 @@ public class PieceController : MonoBehaviour
         classRenderer.transform.localScale = Vector3.one;
         colorRenderer.transform.localScale = Vector3.one;
 
-        isMoving = false;
-
         BoardSelectManager.Instance.PieceHighlightTiles(gridPosition);
+
+        isMoving = false;
 
         // 스킬 발동
         if (SkillManager.Instance != null)
@@ -455,6 +455,22 @@ public class PieceController : MonoBehaviour
         Destroy(newColorObj);
 
         isMoving = false;
+    }
+
+    private IEnumerator CheckStageClearAfterMove(Vector2Int newPosition)
+    {
+        // 이동 애니메이션이 끝날 때까지 대기
+        while (isMoving)
+            yield return null;
+
+        // 도착 지점이라면
+        if (newPosition.y == BoardManager.Instance.boardSizeY - 1)
+        {
+            BoardManager.Instance.Board[newPosition.x, newPosition.y].SetPiece(null);
+            TempManager.Instance.StageClear();
+
+            Destroy(this.gameObject);
+        }
     }
 
     public Face GetFace(int index)

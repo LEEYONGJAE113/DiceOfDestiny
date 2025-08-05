@@ -70,7 +70,14 @@ public class ActionPointManager : MonoBehaviour
         OnValueChanged?.Invoke();
     }
 
-    public void AddAP(int amount)
+    public void Reset()
+    {
+        currentTurnNum = 1;
+        
+        Init();
+    }
+
+    public void AddAP(int _plusAP)
     {
         actionPoint.Add(amount);
         NotifyChange();
