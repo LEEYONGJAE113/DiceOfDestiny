@@ -103,4 +103,4 @@ MonoBehaviour:
   obstacleType: 9
   nextStep: 4
   obstaclePosition: {x: 0, y: 0}
-  isWalkable: 0
+  isWalkable: 1

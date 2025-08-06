@@ -10,13 +10,14 @@ public class Singletone<T> : MonoBehaviour where T : MonoBehaviour
         {
             if (_instance == null)
             {
-                _instance = (T)FindAnyObjectByType(typeof(T));
+                _instance = FindAnyObjectByType<T>();
+
                 if (_instance == null)
                 {
-                    string singletonName = typeof(T).ToString();
-                    GameObject singtoneObj = new GameObject(singletonName);
+                    GameObject singletoneObj = new GameObject(typeof(T).Name);
+                    _instance = singletoneObj.AddComponent<T>();
 
-                    _instance = singtoneObj.AddComponent<T>();
+                    DontDestroyOnLoad(singletoneObj);
                 }
             }
             return _instance;
@@ -25,14 +26,14 @@ public class Singletone<T> : MonoBehaviour where T : MonoBehaviour
 
     private void Awake()
     {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
+        if (_instance == null)
         {
             _instance = this as T;
             DontDestroyOnLoad(gameObject);
+        }
+        else if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
         }
     }
 

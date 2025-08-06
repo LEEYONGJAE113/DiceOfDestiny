@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class PieceManager_LYJ : Singletone<PieceManager_LYJ>
 {
+    private const string PIECE_DATA_PATH = "PieceData";
+
+    private List<Piece> allPieceDatas = new List<Piece>();
     List<PieceController> pieces = new List<PieceController>();
     public List<PieceController> Pieces
     {
@@ -19,6 +22,7 @@ public class PieceManager_LYJ : Singletone<PieceManager_LYJ>
 
     void Awake()
     {
+        LoadAllPieceDatas();
         UpdatePieceManagerLists();
     }
 
@@ -53,11 +57,23 @@ public class PieceManager_LYJ : Singletone<PieceManager_LYJ>
 
     //
 
-    public void AddPiece(PieceController newPiece)
+    public void AddPiece(PieceController newPiece, int pieceNumber)
     {
+        Piece targetData = null;
+        if (pieceNumber < allPieceDatas.Count)
+        {
+            targetData = allPieceDatas.Find(data => data.PieceNumber == pieceNumber);
+        }
+        if (targetData == null)
+        {
+            Debug.Log($"<color=#30ffae>Can not found Piece with Number {pieceNumber}</color>");
+            Debug.Log($"<color=#30ffae>Can not add Piece</color>");
+            return;
+        }
+
         pieces.Add(newPiece);
+        newPiece.Init(targetData);
         Pieces = pieces;
-        // newPiece.Init();
         newPiece.SetInGame(true);
     }
 
@@ -68,6 +84,19 @@ public class PieceManager_LYJ : Singletone<PieceManager_LYJ>
         targetPiece.SetInGame(false);
     }
 
-    
+    private void LoadAllPieceDatas()
+    {
+        Piece[] loadedDatas = Resources.LoadAll<Piece>(PIECE_DATA_PATH);
+
+        if (loadedDatas.Length == 0)
+        {
+            Debug.Log($"<color=#30ffae>Can not found Piece data in \'Resources/{PIECE_DATA_PATH}\'.</color>");
+        }
+
+        allPieceDatas = new List<Piece>(loadedDatas);
+
+        Debug.Log($"<color=#30ffae>Loaded Pieces : {allPieceDatas.Count}");
+    }
+
 
 }

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1019993887704860530}
   - component: {fileID: 8221773383474538137}
-  - component: {fileID: 7651287421777679167}
+  - component: {fileID: 9190360085300862956}
   - component: {fileID: 1839094912385742136}
   m_Layer: 0
   m_Name: Zombie
@@ -89,7 +89,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7651287421777679167
+--- !u!114 &9190360085300862956
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2465335938598337309}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c568a3fd7a5caec4eb02dfcc9228df6d, type: 3}
+  m_Script: {fileID: 11500000, guid: 4bb45da4b15f47944a8f21c8310a08b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   obstacleType: 0
@@ -115,7 +115,7 @@ Animator:
   m_GameObject: {fileID: 2465335938598337309}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 80a877ec631bc974babc668f3516e3ae, type: 2}
+  m_Controller: {fileID: 9100000, guid: 4ad586a1d8758b445979f9f25df5128b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
