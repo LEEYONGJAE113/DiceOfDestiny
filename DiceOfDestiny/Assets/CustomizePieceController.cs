@@ -26,8 +26,16 @@ public class CustomizePieceController : MonoBehaviour
     [SerializeField] Button upTurnButton;
     [SerializeField] Button downTurnButton;
 
+    [Header("Complete/Delete Button")]
+    [SerializeField] Button completeButton;
+    [SerializeField] Button deleteButton;
+
+    [Header("draggable Sticker prefab")]
     public GameObject draggableStickerPrefab;
 
+    bool pieceMode = false; // true면 Piece, false면 PieceNet
+    Piece piece; // 현재 Piece 데이터
+    PieceNet pieceNet; // 현재 PieceNet 데이터
 
     public void Start()
     {
@@ -36,8 +44,13 @@ public class CustomizePieceController : MonoBehaviour
 
     public void InitializeCustomizePieceMode(Piece piece)
     {
+        this.piece = piece;
+
         isFolded = true;
         DiceCustomizeManager.Instance.isFolded = true;
+        pieceMode = true;
+
+        deleteButton.gameObject.SetActive(true);
 
         transform.localScale = Vector3.one * 2f;  // Fold 상태는 2배 스케일
         transform.localPosition = new Vector3(550f, 0f, 0f);  // Fold 위치
@@ -62,37 +75,58 @@ public class CustomizePieceController : MonoBehaviour
         topFace.transform.localScale = new Vector3(1f, 0f, 1f);
         bottomFace.transform.localScale = new Vector3(1f, 0f, 1f);
 
+        // 각 면의 스티커 제거
+        ClearAllDraggableSticker();
+
+        // 각 면의 스티커 초기화
         GameObject draggableSticker;
         draggableSticker = Instantiate(draggableStickerPrefab, frontFace.transform);
         draggableSticker.GetComponent<DraggableSticker>().Initialize(piece.faces[2].classData);
-        frontFace.GetComponentInChildren<StickerFace>().Initialize(draggableSticker.GetComponent<DraggableSticker>());
+        frontFace.GetComponent<Image>().color = BoardManager.Instance.GetColor(piece.faces[2].color);
+        frontFace.GetComponent<StickerFace>().tileColor = piece.faces[2].color;
+        frontFace.GetComponent<StickerFace>().Initialize(draggableSticker.GetComponent<DraggableSticker>());
 
         draggableSticker = Instantiate(draggableStickerPrefab, backFace.transform);
         draggableSticker.GetComponent<DraggableSticker>().Initialize(piece.faces[0].classData);
-        backFace.GetComponentInChildren<StickerFace>().Initialize(draggableSticker.GetComponent<DraggableSticker>());
+        backFace.GetComponent<Image>().color = BoardManager.Instance.GetColor(piece.faces[0].color);
+        backFace.GetComponent<StickerFace>().tileColor = piece.faces[0].color;
+        backFace.GetComponent<StickerFace>().Initialize(draggableSticker.GetComponent<DraggableSticker>());
 
         draggableSticker = Instantiate(draggableStickerPrefab, leftFace.transform);
         draggableSticker.GetComponent<DraggableSticker>().Initialize(piece.faces[1].classData);
-        leftFace.GetComponentInChildren<StickerFace>().Initialize(draggableSticker.GetComponent<DraggableSticker>());
+        leftFace.GetComponent<Image>().color = BoardManager.Instance.GetColor(piece.faces[1].color);
+        leftFace.GetComponent<StickerFace>().tileColor = piece.faces[1].color;
+        leftFace.GetComponent<StickerFace>().Initialize(draggableSticker.GetComponent<DraggableSticker>());
 
         draggableSticker = Instantiate(draggableStickerPrefab, rightFace.transform);
         draggableSticker.GetComponent<DraggableSticker>().Initialize(piece.faces[3].classData);
-        rightFace.GetComponentInChildren<StickerFace>().Initialize(draggableSticker.GetComponent<DraggableSticker>());
+        rightFace.GetComponent<Image>().color = BoardManager.Instance.GetColor(piece.faces[3].color);
+        rightFace.GetComponent<StickerFace>().tileColor = piece.faces[3].color;
+        rightFace.GetComponent<StickerFace>().Initialize(draggableSticker.GetComponent<DraggableSticker>());
 
         draggableSticker = Instantiate(draggableStickerPrefab, topFace.transform);
         draggableSticker.GetComponent<DraggableSticker>().Initialize(piece.faces[5].classData);
-        topFace.GetComponentInChildren<StickerFace>().Initialize(draggableSticker.GetComponent<DraggableSticker>());
+        topFace.GetComponent<Image>().color = BoardManager.Instance.GetColor(piece.faces[5].color);
+        topFace.GetComponent<StickerFace>().tileColor = piece.faces[5].color;
+        topFace.GetComponent<StickerFace>().Initialize(draggableSticker.GetComponent<DraggableSticker>());
 
         draggableSticker = Instantiate(draggableStickerPrefab, bottomFace.transform);
         draggableSticker.GetComponent<DraggableSticker>().Initialize(piece.faces[4].classData);
-        bottomFace.GetComponentInChildren<StickerFace>().Initialize(draggableSticker.GetComponent<DraggableSticker>());
+        bottomFace.GetComponent<Image>().color = BoardManager.Instance.GetColor(piece.faces[4].color);
+        bottomFace.GetComponent<StickerFace>().tileColor = piece.faces[4].color;
+        bottomFace.GetComponent<StickerFace>().Initialize(draggableSticker.GetComponent<DraggableSticker>());
 
         ShowRotateButtons();
-    }   
+    }
     public void InitializeCustomizePieceNetMode(PieceNet pieceNet)
     {
+        this.pieceNet = pieceNet;
+
         isFolded = false;
         DiceCustomizeManager.Instance.isFolded = false;
+        pieceMode = false;
+
+        deleteButton.gameObject.SetActive(false);
 
         transform.localScale = Vector3.one;
         transform.localPosition = Vector3.zero;
@@ -101,11 +135,11 @@ public class CustomizePieceController : MonoBehaviour
         Vector2 zeroPos = new Vector2(-380, 0);
 
         frontFace.GetComponent<RectTransform>().anchoredPosition = zeroPos;
-        backFace.GetComponent<RectTransform>().anchoredPosition = zeroPos + new Vector2(size * 2, 0);
-        leftFace.GetComponent<RectTransform>().anchoredPosition = zeroPos + new Vector2(-size, 0);
-        rightFace.GetComponent<RectTransform>().anchoredPosition = zeroPos + new Vector2(size, 0);
-        topFace.GetComponent<RectTransform>().anchoredPosition = zeroPos + new Vector2(0, size);
-        bottomFace.GetComponent<RectTransform>().anchoredPosition = zeroPos + new Vector2(0, -size);
+        backFace.GetComponent<RectTransform>().anchoredPosition = zeroPos + new Vector2(size * 2, 0) + new Vector2(space * 2,0);
+        leftFace.GetComponent<RectTransform>().anchoredPosition = zeroPos + new Vector2(-size, 0) + new Vector2(-space, 0);
+        rightFace.GetComponent<RectTransform>().anchoredPosition = zeroPos + new Vector2(size, 0) + new Vector2(space, 0);
+        topFace.GetComponent<RectTransform>().anchoredPosition = zeroPos + new Vector2(0, size) + new Vector2(0, space);
+        bottomFace.GetComponent<RectTransform>().anchoredPosition = zeroPos + new Vector2(0, -size) + new Vector2(0, -space);
 
         frontFace.transform.localScale = Vector3.one;
         backFace.transform.localScale = Vector3.one;
@@ -114,6 +148,9 @@ public class CustomizePieceController : MonoBehaviour
         topFace.transform.localScale = Vector3.one;
         bottomFace.transform.localScale = Vector3.one;
 
+        // 각 면의 스티커 제거
+        ClearAllDraggableSticker();
+
         frontFace.GetComponentInChildren<StickerFace>().Initialize(pieceNet.faces[2].color);
         backFace.GetComponentInChildren<StickerFace>().Initialize(pieceNet.faces[0].color);
         leftFace.GetComponentInChildren<StickerFace>().Initialize(pieceNet.faces[1].color);
@@ -121,9 +158,27 @@ public class CustomizePieceController : MonoBehaviour
         topFace.GetComponentInChildren<StickerFace>().Initialize(pieceNet.faces[5].color);
         bottomFace.GetComponentInChildren<StickerFace>().Initialize(pieceNet.faces[4].color);
 
-        HideRotateButtons();   
+        HideRotateButtons();
 
-}
+    }
+
+    void ClearAllDraggableSticker()
+    {
+        TryDestroySticker(frontFace);
+        TryDestroySticker(backFace);
+        TryDestroySticker(leftFace);
+        TryDestroySticker(rightFace);
+        TryDestroySticker(topFace);
+        TryDestroySticker(bottomFace);
+    }
+    void TryDestroySticker(GameObject face)
+    {
+        DraggableSticker sticker = face.GetComponentInChildren<DraggableSticker>();
+        if (sticker != null)
+        {
+            Destroy(sticker.gameObject);
+        }
+    }
 
     public void Toggle()
     {
@@ -142,7 +197,7 @@ public class CustomizePieceController : MonoBehaviour
         if (isFolding || isFolded)
             return;
         isFolding = true;
-        StartCoroutine(GatherFaces());        
+        StartCoroutine(GatherFaces());
     }
 
     public void UnFoldToDiceNet()
@@ -220,7 +275,7 @@ public class CustomizePieceController : MonoBehaviour
 
         StartCoroutine(UnFoldToDiceNetCoroutine());
     }
-    
+
     IEnumerator GatherFaces()
     {
         float elapsedTime = 0f;
@@ -253,6 +308,13 @@ public class CustomizePieceController : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+
+        backFace.transform.position = backFaceTargetPosition;
+        leftFace.transform.position = leftFaceTargetPosition;
+        rightFace.transform.position = rightFaceTargetPosition;
+        topFace.transform.position = topFaceTargetPosition;
+        bottomFace.transform.position = bottomTargetFacePosition;
+
         StartCoroutine(FoldToDiceCoroutine());
     }
 
@@ -287,6 +349,14 @@ public class CustomizePieceController : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+
+        backFace.transform.position = backFaceTargetPosition;
+        leftFace.transform.position = leftFaceTargetPosition;
+        rightFace.transform.position = rightFaceTargetPosition;
+        topFace.transform.position = topFaceTargetPosition;
+        bottomFace.transform.position = bottomTargetFacePosition;
+
+
         isFolding = false;
         isFolded = false;
         DiceCustomizeManager.Instance.isFolded = false;
@@ -327,14 +397,14 @@ public class CustomizePieceController : MonoBehaviour
             backFace.transform.position = Vector3.Lerp(backFacePosition, backFaceTargetPosition, t);
             leftFace.transform.position = Vector3.Lerp(leftFacePosition, leftFaceTargetPosition, t);
             rightFace.transform.position = Vector3.Lerp(rightFacePosition, rightFaceTargetPosition, t);
-            topFace.transform.position = Vector3.Lerp(topFacePosition, topFaceTargetPosition , t);
-            bottomFace.transform.position = Vector3.Lerp(bottomFacePosition, bottomFaceTargetPosition, t);            
+            topFace.transform.position = Vector3.Lerp(topFacePosition, topFaceTargetPosition, t);
+            bottomFace.transform.position = Vector3.Lerp(bottomFacePosition, bottomFaceTargetPosition, t);
 
             elapsedTime += Time.deltaTime;
-            yield return null;           
+            yield return null;
         }
 
-        backFace.transform.localScale = new Vector3(1f,0f,1f);
+        backFace.transform.localScale = new Vector3(1f, 0f, 1f);
         topFace.transform.localScale = new Vector3(1f, 0f, 1f);
         bottomFace.transform.localScale = new Vector3(1f, 0f, 1f);
         leftFace.transform.localScale = new Vector3(0f, 1f, 1f);
@@ -471,7 +541,7 @@ public class CustomizePieceController : MonoBehaviour
         expandRect = expandFace.GetComponent<RectTransform>();
         contractRect = contractFace.GetComponent<RectTransform>();
 
-        float elapsTime = 0f;      
+        float elapsTime = 0f;
 
         Vector2 expandStartPos = expandRect.anchoredPosition;
         Vector2 contractStartPos = contractRect.anchoredPosition;
@@ -591,5 +661,140 @@ public class CustomizePieceController : MonoBehaviour
         rightTurnButton.gameObject.SetActive(false);
         upTurnButton.gameObject.SetActive(false);
         downTurnButton.gameObject.SetActive(false);
+    }
+
+    public void OnClickCompleteButton()
+    {
+        if(frontFace.GetComponent<StickerFace>().draggableSticker == null ||
+           backFace.GetComponent<StickerFace>().draggableSticker == null ||
+           leftFace.GetComponent<StickerFace>().draggableSticker == null ||
+           rightFace.GetComponent<StickerFace>().draggableSticker == null ||
+           topFace.GetComponent<StickerFace>().draggableSticker == null ||
+           bottomFace.GetComponent<StickerFace>().draggableSticker == null)
+        {
+            Debug.Log("모든 면에 스티커가 있어야 합니다.");
+            return;
+        }
+        else
+        {
+            if (pieceMode)
+            {
+                int pieceIndex = InventoryManager.Instance.pieces.FindIndex(x => x == piece);
+                if(pieceIndex == -1)
+                {
+                    return; // 해당 Piece가 존재하지 않음
+                }
+                else
+                {
+                    // Update existing piece
+                    InventoryManager.Instance.pieces[pieceIndex].faces[0].classData = backFace.GetComponent<StickerFace>().draggableSticker.classSticker.classData;
+                    InventoryManager.Instance.pieces[pieceIndex].faces[1].classData = leftFace.GetComponent<StickerFace>().draggableSticker.classSticker.classData;
+                    InventoryManager.Instance.pieces[pieceIndex].faces[2].classData = frontFace.GetComponent<StickerFace>().draggableSticker.classSticker.classData;
+                    InventoryManager.Instance.pieces[pieceIndex].faces[3].classData = rightFace.GetComponent<StickerFace>().draggableSticker.classSticker.classData;
+                    InventoryManager.Instance.pieces[pieceIndex].faces[4].classData = bottomFace.GetComponent<StickerFace>().draggableSticker.classSticker.classData;
+                    InventoryManager.Instance.pieces[pieceIndex].faces[5].classData = topFace.GetComponent<StickerFace>().draggableSticker.classSticker.classData;
+
+                    // 업데이트 종료. 
+                    Debug.Log("Piece 업데이트 완료: " + InventoryManager.Instance.pieces[pieceIndex].name);
+                    DiceCustomizeManager.Instance.UpdateCaruselUI();
+                    DiceCustomizeManager.Instance.OnClickBackToSelectPanelButton();
+                }
+            }
+            else
+            {
+                // 새로운 기물 추가
+
+                foreach (var piece in InventoryManager.Instance.pieces)
+                {
+                    if(piece.isAvailable == false)
+                    {
+                        piece.isAvailable = true; // 사용 가능으로 설정
+
+                        piece.faces[2].classData = frontFace.GetComponent<StickerFace>().draggableSticker.classSticker.classData;
+                        piece.faces[1].classData = leftFace.GetComponent<StickerFace>().draggableSticker.classSticker.classData;
+                        piece.faces[3].classData = rightFace.GetComponent<StickerFace>().draggableSticker.classSticker.classData;
+                        piece.faces[5].classData = topFace.GetComponent<StickerFace>().draggableSticker.classSticker.classData;
+                        piece.faces[4].classData = bottomFace.GetComponent<StickerFace>().draggableSticker.classSticker.classData;
+                        piece.faces[0].classData = backFace.GetComponent<StickerFace>().draggableSticker.classSticker.classData;
+
+                        piece.faces[2].color = frontFace.GetComponent<StickerFace>().tileColor;
+                        piece.faces[0].color = backFace.GetComponent<StickerFace>().tileColor;
+                        piece.faces[1].color = leftFace.GetComponent<StickerFace>().tileColor;
+                        piece.faces[3].color = rightFace.GetComponent<StickerFace>().tileColor;
+                        piece.faces[5].color = topFace.GetComponent<StickerFace>().tileColor;
+                        piece.faces[4].color = bottomFace.GetComponent<StickerFace>().tileColor;
+
+                        InventoryManager.Instance.pieceNets.Remove(pieceNet);
+
+                        DiceCustomizeManager.Instance.UpdateCaruselUI();
+                        DiceCustomizeManager.Instance.OnClickBackToSelectPanelButton();
+                        Debug.Log("새로운 Piece 추가 완료: " + piece.name);
+                        return;
+                    }
+                }
+                // 만약 사용 가능한 Piece가 없다면
+                Debug.Log("사용 가능한 Piece가 없습니다.");
+            }
+        }
+    }
+
+    public void OnClickDeleteButton()
+    {
+        int pieceIndex = InventoryManager.Instance.pieces.FindIndex(x => x == piece);
+        if (pieceIndex != -1)
+        {
+            // 해당 Piece 삭제
+            InventoryManager.Instance.pieces[pieceIndex].isAvailable = false; // 사용 불가능으로 설정
+
+            PieceNet pieceNet = new PieceNet();
+
+            pieceNet.faces[0].color = backFace.GetComponent<StickerFace>().tileColor;
+            pieceNet.faces[1].color = leftFace.GetComponent<StickerFace>().tileColor;
+            pieceNet.faces[2].color = frontFace.GetComponent<StickerFace>().tileColor;
+            pieceNet.faces[3].color = rightFace.GetComponent<StickerFace>().tileColor;
+            pieceNet.faces[4].color = bottomFace.GetComponent<StickerFace>().tileColor;
+            pieceNet.faces[5].color = topFace.GetComponent<StickerFace>().tileColor;
+
+            InventoryManager.Instance.AddPieceNet(pieceNet);
+
+            ClassSticker classSticker = new ClassSticker();
+
+            if(backFace.GetComponent<StickerFace>().draggableSticker != null)
+            {
+                classSticker.classData = backFace.GetComponent<StickerFace>().draggableSticker.classSticker.classData;
+                InventoryManager.Instance.AddSticker(classSticker);
+            }
+            if(leftFace.GetComponent<StickerFace>().draggableSticker != null)
+            {
+                classSticker.classData = leftFace.GetComponent<StickerFace>().draggableSticker.classSticker.classData;
+                InventoryManager.Instance.AddSticker(classSticker);
+            }
+            if (frontFace.GetComponent<StickerFace>().draggableSticker != null)
+            {
+                classSticker.classData = frontFace.GetComponent<StickerFace>().draggableSticker.classSticker.classData;
+                InventoryManager.Instance.AddSticker(classSticker);
+            }
+            if (rightFace.GetComponent<StickerFace>().draggableSticker != null)
+            {
+                classSticker.classData = rightFace.GetComponent<StickerFace>().draggableSticker.classSticker.classData;
+                InventoryManager.Instance.AddSticker(classSticker);
+            }
+            if (topFace.GetComponent<StickerFace>().draggableSticker != null)
+            {
+                classSticker.classData = topFace.GetComponent<StickerFace>().draggableSticker.classSticker.classData;
+                InventoryManager.Instance.AddSticker(classSticker);
+            }
+            if (bottomFace.GetComponent<StickerFace>().draggableSticker != null)
+            {
+                classSticker.classData = bottomFace.GetComponent<StickerFace>().draggableSticker.classSticker.classData;
+                InventoryManager.Instance.AddSticker(classSticker);
+            }
+
+            Debug.Log("Piece 삭제 완료: " + InventoryManager.Instance.pieces[pieceIndex].name);
+
+            DiceCustomizeManager.Instance.UpdateCaruselUI();
+            DiceCustomizeManager.Instance.UpdateStickerDrawer();
+            DiceCustomizeManager.Instance.OnClickBackToSelectPanelButton();
+        }
     }
 }

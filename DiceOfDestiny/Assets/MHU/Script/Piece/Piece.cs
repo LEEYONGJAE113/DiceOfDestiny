@@ -3,6 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Piece", menuName = "Piece/Piece", order = 10)]
 public class Piece : ScriptableObject
 {
+    [SerializeField] public bool isAvailable; // 사용 가능 여부
     [SerializeField] public Face[] faces = new Face[6]; // 6개 면 데이터
     //   4
     // 1 2 3 0

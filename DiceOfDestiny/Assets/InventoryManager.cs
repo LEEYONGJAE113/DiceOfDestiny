@@ -152,4 +152,19 @@ public class InventoryManager : Singletone<InventoryManager>
         else
             classStickers[key] = 1;
     }
+
+    public void RemoveSticker(ClassSticker sticker)
+    {
+        var key = sticker.classData;
+        if (classStickers.ContainsKey(key))
+        {
+            classStickers[key]--;
+            if (classStickers[key] <= 0)
+                classStickers.Remove(key);
+        }
+        else
+        {
+            Debug.LogWarning($"스티커 제거 실패 - 스티커를 찾을 수 없음: {sticker.classData.name}");
+        }
+    }
 }

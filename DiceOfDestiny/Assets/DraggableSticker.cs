@@ -7,7 +7,7 @@ public class DraggableSticker : MonoBehaviour, IPointerDownHandler, IPointerUpHa
 {
     bool isDragging = false;
     bool createdByDrawer = false; // 스티커가 서랍에서 생성되었는지 여부
-    ClassSticker classSticker;
+    [HideInInspector] public ClassSticker classSticker;
     private Transform originalParent;
 
     private RectTransform rectTransform;
@@ -105,12 +105,21 @@ public class DraggableSticker : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     {
         if (stickerFace.draggableSticker == null)
         {
+            stickerFace.draggableSticker = this;
             this.transform.SetParent(stickerFace.transform, false);
             this.rectTransform.anchoredPosition = Vector2.zero;
             isDragging = false;
             gameObject.GetComponent<Image>().raycastTarget = true;
-
-            Debug.Log("스티커 붙이기 가능");
+            if (createdByDrawer)
+            {
+                InventoryManager.Instance.RemoveSticker(classSticker);
+                DiceCustomizeManager.Instance.UpdateStickerDrawer();
+                createdByDrawer = false; // 드래그 후에는 서랍에서 생성된 것이 아님
+            }
+            else
+            {
+                originalParent.GetComponent<StickerFace>().draggableSticker = null;
+            }
         }
         else
         {
@@ -122,8 +131,18 @@ public class DraggableSticker : MonoBehaviour, IPointerDownHandler, IPointerUpHa
     private void HandleDropInDrawer(StickerDrawer stickerDrawer)
     {
         Debug.Log("드래그한 스티커를 스티커 서랍에 넣었습니다.");
-        InventoryManager.Instance.AddSticker(classSticker);
-        Destroy(gameObject);
+        if (createdByDrawer)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            originalParent.GetComponent<StickerFace>().draggableSticker = null;
+            InventoryManager.Instance.AddSticker(classSticker);
+            DiceCustomizeManager.Instance.UpdateStickerDrawer();
+            Destroy(gameObject);
+        }
+
     }
 
     public void ReturnToOriginalPosition()
@@ -134,10 +153,11 @@ public class DraggableSticker : MonoBehaviour, IPointerDownHandler, IPointerUpHa
         }
         else
         {
+            Debug.Log("드래그한 스티커를 원래 위치로 되돌렸습니다.");
             transform.SetParent(originalParent, false);
             rectTransform.anchoredPosition = Vector2.zero;
             rectTransform.localScale = Vector3.one; // 원래 크기로 되돌리기
-            Debug.Log("드래그한 스티커를 원래 위치로 되돌렸습니다.");
+
             isDragging = false;
             gameObject.GetComponent<Image>().raycastTarget = true;
         }

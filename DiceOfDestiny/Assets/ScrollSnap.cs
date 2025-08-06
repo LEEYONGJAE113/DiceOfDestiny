@@ -15,12 +15,6 @@ public class ScrollSnap : MonoBehaviour, IEndDragHandler, IBeginDragHandler
     private bool isSnapping = false;
     private Coroutine snapCoroutine = null;
 
-
-    void Start()
-    {
-        itemCount = scrollRect.content.childCount;
-    }
-
     private void Update()
     {
         UpdateVisuals();
@@ -28,6 +22,7 @@ public class ScrollSnap : MonoBehaviour, IEndDragHandler, IBeginDragHandler
 
     void UpdateVisuals()
     {
+        itemCount = scrollRect.content.childCount;
         // 스크롤 위치 (0~1)
         float scrollPos = scrollRect.horizontalNormalizedPosition;
 

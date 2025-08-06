@@ -49,6 +49,7 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
         {
             Destroy(button.gameObject);
         }
+        pieceNetPreviewButtonList.Clear();
         InitializePiecesCaruselUI();
         InitializePieceNetCaruselUI();
     }
@@ -58,6 +59,7 @@ public class DiceCustomizeManager : Singletone<DiceCustomizeManager>
         for (int i = 0; i < InventoryManager.Instance.pieces.Count; i++)
         {
             Piece piece = InventoryManager.Instance.pieces[i];
+            if(!piece.isAvailable) continue; // 사용 가능한 조각만 표시
             PiecePreviewButton button = Instantiate(piecePreviewButtonPrefab, piecesContent.transform).GetComponent<PiecePreviewButton>();
             button.InitializePiecePreviewButton(BoardManager.Instance.GetColor(piece.faces[2].color), piece.faces[2].classData.sprite, () => OnClickPiecePreviewButton(piece));
             piecePreviewButtonList.Add(button);
